@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class CardList extends Component {
   render() {
     return (
-      <div>CardList</div>
+      <div><h2 style={{color: 'white'}}>CardList</h2></div>
     );
   }
 }
