@@ -1,9 +1,13 @@
 {
   "name": "cards-editor",
+  "author": {
+    "name": "Paul Laffitte",
+    "email": "paul.laffitte@epitech.eu"
+  },
+  "description": "A cards editor",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "electron": "^4.0.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.3"
@@ -13,9 +17,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron ."
+    "electron": "electron .",
+    "pack": "build --dir",
+    "dist": "build"
   },
-  "main": "src/electron.js",
+  "main": "public/electron.js",
+  "homepage": "./",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -26,6 +33,15 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "antd": "^3.12.3"
+    "antd": "^3.12.3",
+    "electron-builder": "^20.38.5", 
+    "electron": "^4.0.1"
+  },
+  "build": {
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {}
   }
 }
