@@ -2,28 +2,20 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 import './App.css';
-import CardList from './components/CardList';
-import CardEditor from './components/CardEditor';
-import exampleCard from './example_card.json';
+import DeckEditor from './components/DeckEditor';
+import DeckStorage from './services/DeckStorage';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer } = Layout;
+
+DeckStorage.registerListeners();
 
 class App extends Component {
-
-  state = {
-    editedCard: exampleCard
-  };
 
   render() {
     return (
       <Layout className="app">
         <Header></Header>
-        <Layout>
-          <Content>
-            <CardEditor data={ this.state.editedCard }/>
-          </Content>
-          <Sider><CardList/></Sider>
-        </Layout>
+        <DeckEditor></DeckEditor>
         <Footer></Footer>
       </Layout>
     );

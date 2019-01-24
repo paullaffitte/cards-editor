@@ -19,8 +19,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "pack": "build -c.extraMetadata.main=src/electron/main.js --dir",
-    "dist": "build -c.extraMetadata.main=src/electron/main.js"
+    "pack": "electron-builder -c.extraMetadata.main=src/electron/main.js --dir",
+    "dist": "electron-builder -c.extraMetadata.main=src/electron/main.js -wl",
+    "release": "yarn build && yarn dist"
   },
   "main": "src/electron/main.js",
   "homepage": "./",

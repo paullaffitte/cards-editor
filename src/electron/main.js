@@ -1,8 +1,60 @@
-const { app, /*crashReporter,*/ BrowserWindow, Menu } = require('electron');
+const { app, /*crashReporter,*/ BrowserWindow, Menu, ipcMain } = require('electron');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
+const MenuActions = require('./MenuActions');
 
 let mainWindow;
+
+function sendAppEvent(name, callback, ...args) {
+  mainWindow.webContents.send(name + '-event', ...args);
+  let replyName = name + '-event-reply';
+  ipcMain.once(replyName, (event, ...replyArgs) => {
+    console.log(replyName, replyArgs);
+    callback(event, ...replyArgs);
+  });
+}
+
+function menuLabelWithEvent(label, ...args) {
+  return {
+    label,
+    click: () => sendAppEvent(label, MenuActions[label], ...args)
+  };
+}
+
+const menuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      menuLabelWithEvent('open'),
+      menuLabelWithEvent('save'),
+      menuLabelWithEvent('saveAs'),
+      {type: 'separator'},
+      {role: 'quit'},
+    ]
+  },
+  /*
+  {
+    label: 'Edit',
+    submenu: [
+      {role: 'undo'},
+      {role: 'redo'},
+    ]
+  },
+  */
+  {
+    label: 'View',
+    submenu: [
+      {role: 'reload'},
+      {role: 'forceReload'},
+      {role: 'toggleDevTools'},
+      {type: 'separator'},
+      {role: 'resetZoom'},
+      {role: 'zoomIn'},
+      {role: 'zoomOut'},
+      {role: 'toggleFullScreen'},
+    ]
+  }
+];
 
 app.on('ready', createWindow);
 
@@ -41,9 +93,21 @@ async function createWindow() {
     mainWindow = null;
   });
 
-  mainWindow.webContents.once('did-finish-load', () => {
-    mainWindow.show();
+  mainWindow.once('ready-to-show', async () => {
+    const menu = Menu.buildFromTemplate(menuTemplate)
+    Menu.setApplicationMenu(menu)
+
+    await mainWindow.show();
+
+    console.log('send event');
+    mainWindow.webContents.send('my-custom-event', 23, 98, 3, 61);
+    ipcMain.once('my-custom-event-reply', (event, sum) => {
+      console.log('result', sum)
+    })
   });
+
+  mainWindow.webContents.once('dom-ready', () => {
+  })
 }
 
 async function installExtensions() {
