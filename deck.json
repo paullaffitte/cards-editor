@@ -1,0 +1,26 @@
+[
+    {
+        "name": "card name",
+        "hp": 3,
+        "mana": 7,
+        "description": "this is a description"
+    },
+    {
+        "name": "card name 2",
+        "hp": 3,
+        "mana": 27,
+        "description": "this is a description!!!"
+    },
+    {
+        "name": "card name 3",
+        "hp": 31,
+        "mana": 7,
+        "description": "this is not a description"
+    },
+    {
+        "name": "card name 4",
+        "hp": 3,
+        "mana": 5,
+        "description": "this is another description"
+    }
+]

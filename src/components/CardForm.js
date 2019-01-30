@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class CardForm extends Component {
 
   componentDidMount() {
-    this.props.form.setFieldsValue(this.props.data);
+    this.props.form.setFieldsValue({...this.props.data, id: undefined});
     this.props.form.validateFields();
   }
 
@@ -15,6 +15,8 @@ class CardForm extends Component {
       if (err) {
         return;
       }
+
+      values.id = this.props.data.id;
       this.props.onSave(values);
     });
   }

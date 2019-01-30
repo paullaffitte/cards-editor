@@ -6,23 +6,15 @@ import DeckStorage from '../services/DeckStorage';
 
 class CardEditor extends Component {
 
-  state = {
-    data: this.props.data
-  }
-
-  onSave = async (data) => {
-    this.setState({ data });
-  }
-
   render() {
-    return !this.state.data ? (
+    return !this.props.data ? (
       <div>
         No card selected
       </div>
     ) : (
       <Row>
-        <Col span={12}><Card data={ this.state.data }/></Col>
-        <Col span={12}><CardForm data={ this.state.data } onSave={this.onSave}/></Col>
+        <Col span={12}><Card data={ this.props.data }/></Col>
+        <Col span={12}><CardForm data={ this.props.data } onSave={data => this.props.onSave(data)}/></Col>
       </Row>
     );
   }
