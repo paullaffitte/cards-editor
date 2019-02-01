@@ -1,17 +1,13 @@
 const { app, /*crashReporter,*/ BrowserWindow, Menu, ipcMain } = require('electron');
-const fs = require('fs');
 const isDev = require('electron-is-dev');
 const MenuActions = require('./MenuActions');
 
 let mainWindow;
 
-function sendAppEvent(name, callback, ...args) {
-  mainWindow.webContents.send(name + '-event', ...args);
-  let replyName = name + '-event-reply';
-  ipcMain.once(replyName, (event, ...replyArgs) => {
-    console.log(replyName, replyArgs);
-    callback(event, ...replyArgs);
-  });
+ipcMain.on('exportAsPDF', MenuActions.exportAsPDF);
+
+function sendAppEvent(name) {
+  mainWindow.webContents.send(name);
 }
 
 function camelize(str) {
@@ -26,7 +22,7 @@ function menuLabelWithEvent(label, accelerator=null) {
   return {
     label,
     ...accelerator,
-    click: () => sendAppEvent(name, MenuActions[name])
+    click: () => sendAppEvent(name)
   };
 }
 
@@ -109,16 +105,7 @@ async function createWindow() {
     Menu.setApplicationMenu(menu)
 
     await mainWindow.show();
-
-    console.log('send event');
-    mainWindow.webContents.send('my-custom-event', 23, 98, 3, 61);
-    ipcMain.once('my-custom-event-reply', (event, sum) => {
-      console.log('result', sum)
-    })
   });
-
-  mainWindow.webContents.once('dom-ready', () => {
-  })
 }
 
 async function installExtensions() {

@@ -54,7 +54,16 @@ class DeckEditor extends Component {
 
   onExport = () => this.setState({ showExport: true });
 
-  onExportDone = () => this.setState({ showExport: false });
+  exportAsPDF = async () => {
+    await DeckStorage.exportAsPDF()
+    this.closeExportModal();
+  };
+
+  closeExportModal = () => {
+    if (this.exportResponse)
+      this.exportResponse.resolve(false);
+    this.setState({ showExport: false });
+  }
 
   updateFilename = filename => {
     if (!filename)
@@ -74,7 +83,7 @@ class DeckEditor extends Component {
       <Layout>
         <Content>
           <CardEditor/>
-          <ExportModal visible={this.state.showExport} onClose={this.onExportDone} />
+          <ExportModal visible={ this.state.showExport } onExport={ this.exportAsPDF } onCancel={ this.closeExportModal } />
         </Content>
         <Sider width={250}>
           <Tabs defaultActiveKey={ this.state.cardType } onChange={ this.onChangeCardType }>

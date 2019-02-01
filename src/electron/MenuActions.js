@@ -1,23 +1,20 @@
+const fs = require('fs');
+
 class MenuActions {
 
-  static new(callback, ...args) {
-    console.log('new callback success!');
-  }
-
-  static open(callback, ...args) {
-    console.log('open callback success!');
-  }
-
-  static save(callback, ...args) {
-    console.log('save callback success!');
-  }
-
-  static saveAs(callback, ...args) {
-    console.log('saveAs callback success!');
-  }
-
-  static exportAsPDF(callback, ...args) {
-    console.log('exportAsPdf callback success!');
+  static exportAsPDF(event) {
+    event.sender.printToPDF({printBackground: true}, (err, data) => {
+      if (err) {
+        event.sender.send('exportAsPDF-reply', { err });
+        return;
+      }
+      try {
+        fs.writeFileSync('./output.pdf', data);
+        event.sender.send('exportAsPDF-reply', {});
+      } catch (e) {
+        event.sender.send('exportAsPDF-reply', { err: e });
+      }
+    });
   }
 }
 

@@ -5,17 +5,14 @@ import 'antd/dist/antd.css';
 
 class ExportModal extends Component {
 
-  onClose = () => {
-    if (this.props.onClose)
-      this.props.onClose();
-  }
-
   handleOk = (e) => {
-    this.onClose();
+    if (this.props.onExport)
+      this.props.onExport();
   }
 
   handleCancel = (e) => {
-    this.onClose();
+    if (this.props.onCancel)
+      this.props.onCancel();
   }
 
   render() {

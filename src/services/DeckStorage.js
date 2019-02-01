@@ -10,6 +10,8 @@ const cleanDeck = ({filename, cards, effects, ...data}) => ({
   effects: effects.map(cleanList)
 });
 
+let pdfPromise = null;
+
 class DeckStorage {
 
   static read(filename) {
@@ -17,7 +19,6 @@ class DeckStorage {
   }
 
   static write(filename, data) {
-    console.log('save', data);
     fs.writeFileSync(filename, JSON.stringify(cleanDeck(data)));
   }
 
@@ -63,12 +64,18 @@ class DeckStorage {
     }));
   }
 
+  static exportAsPDF() {
+    return new Promise(async (resolve, reject) => {
+      pdfPromise = { resolve, reject };
+      ipcRenderer.send('exportAsPDF');
+    });
+  }
+
   static registerListeners({onNew, onOpen, onSave, onExport, updateFilename}) {
     const register = (name, callback) => {
-      let eventName = name + '-event';
-      ipcRenderer.on(eventName, async (event, ...args) => {
+      ipcRenderer.on(name, async (event, ...args) => {
         console.log(`${name} event received`);
-        event.sender.send(eventName + '-reply', await callback(event, ...args));
+        await callback(event, ...args);
       });
     };
 
@@ -83,6 +90,13 @@ class DeckStorage {
     register('save', async (e, ...args) => updateFilename(await DeckStorage.save()));
     register('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs()));
     register('exportAsPDF', onExport);
+    register('exportAsPDF-reply', (e, response) => {
+      if ( !pdfPromise )
+        return;
+
+      response.err ? pdfPromise.reject(response.err) : pdfPromise.resolve(response.data);
+      pdfPromise = null;
+    });
   }
 }
 
