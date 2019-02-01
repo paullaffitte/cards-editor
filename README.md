@@ -1,68 +1,58 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Cards Editor
+Cards Editor is an open source software based on Electron and React. Its goal is firstly to offer an easy and intuitive way to create and customize cards, secondly to export them in pdf format to be printed.
 
-## Available Scripts
+## Getting started
 
-In the project directory, you can run:
+### Download release
+not available yet.
 
-### `npm start`
+### Build
+Install the dependencies and build.
+```yarn && yarn release```
+Installers can then be found at `./dist`.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Developpement mode
+Install the dependencies.
+```yarn```
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Start react
+```yarn start```
 
-### `npm test`
+Start electron
+```yarn electron```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+### package.json scripts
+#### React
+```bash
+# Start the developement react server
+yarn start
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Build the react application
+yarn build
+```
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+#### Electron
+```bash
+# Start the developement electron server
+yarn electron
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Build the electron application (needs react to be already built)
+yarn dist
+```
 
-### `npm run eject`
+#### Common
+```bash
+# Build the complete Electron + React application and create installers for windows and linux
+yarn release
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## How to
+not available yet.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Screenshots
+not available yet.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Authors
+- [Paul Laffitte](https://github.com/paullaffitte)
+- [Arthur Chaloin](https://github.com/arthurchaloin)
