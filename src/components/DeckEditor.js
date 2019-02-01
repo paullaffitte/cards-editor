@@ -44,14 +44,14 @@ class DeckEditor extends Component {
       newCard.id = ++this.lastCardId;
 
     let updatedDeck = this.state.deck.map(card => (card.id != newCard.id) ? card : newCard);
-    this.setState({deck: updatedDeck});
+    this.setState({deck: updatedDeck, editedCard: newCard});
   }
 
   render() {
     return (
       <Layout>
         <Content>
-          <CardEditor data={ this.state.editedCard } onSave={this.updateCard}/>
+          <CardEditor data={ this.state.editedCard } onSave={ this.updateCard }/>
         </Content>
         <Sider><CardList/></Sider>
       </Layout>

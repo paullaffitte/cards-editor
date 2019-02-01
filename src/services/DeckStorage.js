@@ -4,13 +4,22 @@ const fs = remote.require('fs');
 
 class DeckStorage {
 
-  static open() {
+  static read(filename) {
+    return JSON.parse(fs.readFileSync(filename));
+  }
+
+  static write(filename, data) {
+    fs.writeFileSync(filename, JSON.stringify(data));
+  }
+
+  static open(filename) {
+    if (filename)
+      return DeckStorage.onOpen(DeckStorage.read(filename));
     return new Promise((resolve, reject) => dialog.showOpenDialog((filenames) => {
       if (!filenames || !filenames.length)
         reject('No file selected');
 
-      let filename  = filenames[0];
-      let content   = JSON.parse(fs.readFileSync(filename));
+      let content = DeckStorage.read(filenames[0]);
       resolve(content);
     }));
   }
@@ -19,9 +28,14 @@ class DeckStorage {
     return DeckStorage.saveAs(data);
   }
 
-  static saveAs(data) {
+  static saveAs(data, filename) {
+    if (filename) {
+      DeckStorage.write(filename, data);
+      return filename;
+    }
+
     return new Promise((resolve, reject) => dialog.showSaveDialog((filename) => {
-      fs.writeFileSync(filename, JSON.stringify(data));
+      DeckStorage.write(filename, data);
       resolve(filename);
     }));
   }
@@ -35,6 +49,9 @@ class DeckStorage {
       });
     };
 
+
+    DeckStorage.onOpen = onOpen;
+    DeckStorage.open('./deck.json'); // TODO remove this line
     register('open', async () => onOpen(await DeckStorage.open()));
     register('save', (e, ...args) => DeckStorage.save(onSave()));
     register('saveAs', (e, ...args) => DeckStorage.save(onSave()));
