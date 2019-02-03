@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 import CardList from './CardList';
 import CardEditor from './CardEditor';
 import DeckStorage from '../services/DeckStorage';
+import DeckActions from '../state/actions/deck';
 
 const { Sider, Content } = Layout;
 
 class DeckEditor extends Component {
-
-  state = {
-    deck: null,
-    editedCard: null,
-  };
-
-  lastCardId = 0;
 
   componentDidMount() {
     DeckStorage.registerListeners({
@@ -27,31 +22,18 @@ class DeckEditor extends Component {
     if (!deck)
       return;
 
-    this.lastCardId = 0;
-    deck = deck.map(card => ({...card, id: ++this.lastCardId}));
-    this.setState({deck});
-    if (deck.length) {
-      this.setState({editedCard: deck[0]});
-    }
+    this.props.dispatch(DeckActions.openDeck(deck));
   }
 
   onSave = () => {
     return this.state.deck;
   }
 
-  updateCard = (newCard) => {
-    if (!newCard.id)
-      newCard.id = ++this.lastCardId;
-
-    let updatedDeck = this.state.deck.map(card => (card.id != newCard.id) ? card : newCard);
-    this.setState({deck: updatedDeck, editedCard: newCard});
-  }
-
   render() {
     return (
       <Layout>
         <Content>
-          <CardEditor data={ this.state.editedCard } onSave={ this.updateCard }/>
+          <CardEditor data={ this.props.editedCard } onSave={ card => this.props.dispatch(DeckActions.updateCard(card)) }/>
         </Content>
         <Sider><CardList/></Sider>
       </Layout>
@@ -59,4 +41,10 @@ class DeckEditor extends Component {
   }
 }
 
-export default DeckEditor;
+// this.props.dispatch({type: 'SAVE', data})}
+const mapStateToProps = state => ({
+  deck: state.deck ? state.deck.current : null,
+  editedCard: state.deck ? state.deck.editedCard : null
+});
+
+export default connect(mapStateToProps)(DeckEditor);

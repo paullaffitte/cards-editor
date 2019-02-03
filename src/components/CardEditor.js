@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Row, Col } from 'antd';
 import Card from './Card';
 import CardForm from './CardForm';
@@ -13,11 +14,16 @@ class CardEditor extends Component {
       </div>
     ) : (
       <Row>
+        {this.props.count}
         <Col span={12}><Card data={ this.props.data }/></Col>
-        <Col span={12}><CardForm data={ this.props.data } onSave={data => this.props.onSave(data)}/></Col>
+        <Col span={12}><CardForm data={ this.props.data } onSave={data => this.props.dispatch({type: 'SAVE', data})}/></Col>
       </Row>
     );
   }
 }
 
-export default CardEditor;
+const mapStateToProps = state => ({
+  count: state.count
+});
+
+export default connect(mapStateToProps)(CardEditor);
