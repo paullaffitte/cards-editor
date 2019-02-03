@@ -8,7 +8,7 @@ class Card extends Component {
         <h3>{this.props.data.name}</h3>
         <div>{this.props.data.description}</div>
         <div>HP: {this.props.data.hp}</div>
-        <div>Mana: {this.props.data.mana}</div>
+        <div>Attack: {this.props.data.attack}</div>
       </div>
     );
   }

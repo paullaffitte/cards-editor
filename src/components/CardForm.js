@@ -47,8 +47,8 @@ class CardForm extends Component {
             <InputNumber  />
             )}
           </Form.Item>
-          <Form.Item label="Mana">
-            {getFieldDecorator('mana', {
+          <Form.Item label="Attack">
+            {getFieldDecorator('attack', {
               rules: [],
             })(
             <InputNumber  />
