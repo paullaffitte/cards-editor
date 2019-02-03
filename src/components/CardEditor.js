@@ -4,8 +4,11 @@ import { Row, Col } from 'antd';
 import Card from './Card';
 import CardForm from './CardForm';
 import DeckStorage from '../services/DeckStorage';
+import DeckActions from '../state/actions/deck';
 
 class CardEditor extends Component {
+
+  onSave = data => this.props.dispatch(DeckActions.updateCard(data));
 
   render() {
     return !this.props.data ? (
@@ -14,16 +17,15 @@ class CardEditor extends Component {
       </div>
     ) : (
       <Row>
-        {this.props.count}
         <Col span={12}><Card data={ this.props.data }/></Col>
-        <Col span={12}><CardForm data={ this.props.data } onSave={data => this.props.dispatch({type: 'SAVE', data})}/></Col>
+        <Col span={12}><CardForm data={ this.props.data } onSave={this.onSave}/></Col>
       </Row>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  count: state.count
+  data: state.deck.editedCard
 });
 
 export default connect(mapStateToProps)(CardEditor);

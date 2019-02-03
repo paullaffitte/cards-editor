@@ -26,14 +26,15 @@ class DeckEditor extends Component {
   }
 
   onSave = () => {
-    return this.state.deck;
+    console.log('on save', this.props.deck);
+    return this.props.deck;
   }
 
   render() {
     return (
       <Layout>
         <Content>
-          <CardEditor data={ this.props.editedCard } onSave={ card => this.props.dispatch(DeckActions.updateCard(card)) }/>
+          <CardEditor/>
         </Content>
         <Sider><CardList/></Sider>
       </Layout>

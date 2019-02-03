@@ -6,11 +6,11 @@ function deckUpdate(data) {
 
 const deck = {
   [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => deckUpdate({
-    current: state.deck.map(card => (card.id != updatedCard.id) ? card : updatedCard),
+    current: state.deck.current.map(card => (card.id != updatedCard.id) ? card : updatedCard),
     editedCard: updatedCard
   }),
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
-    deck = deck.map(card => ({...card, id: ++state.lastCardId}));
+    deck = deck.map(card => ({...card, id: ++state.deck.lastCardId}));
     if (deck.length)
       return deckUpdate({
         current: deck,
