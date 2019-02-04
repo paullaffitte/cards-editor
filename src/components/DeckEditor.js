@@ -26,7 +26,6 @@ class DeckEditor extends Component {
   }
 
   onSave = () => {
-    console.log('on save', this.props.deck);
     return this.props.deck;
   }
 
@@ -42,7 +41,6 @@ class DeckEditor extends Component {
   }
 }
 
-// this.props.dispatch({type: 'SAVE', data})}
 const mapStateToProps = state => ({
   deck: state.deck ? state.deck.current : null,
   editedCard: state.deck ? state.deck.editedCard : null

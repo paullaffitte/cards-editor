@@ -5,7 +5,6 @@ import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 import './App.css';
 import reducers from './state/reducers/index';
-import initialState from './state/initialState.js'
 import DeckEditor from './components/DeckEditor';
 
 const { Header, Footer } = Layout;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, Divider, Form, Input, InputNumber } from 'antd'
-import PropTypes from 'prop-types';
+import DeckActions from '../state/actions/deck';
 
 class CardForm extends Component {
 
@@ -17,7 +18,7 @@ class CardForm extends Component {
       }
 
       values.id = this.props.data.id;
-      this.props.onSave(values);
+      this.props.dispatch(DeckActions.updateCard(values));
     });
   }
 
@@ -70,9 +71,8 @@ class CardForm extends Component {
   }
 }
 
-CardForm.propTypes = {
-  data: PropTypes.object,
-  onSave: PropTypes.func,
-};
+const mapStateToProps = state => ({
+  data: state.deck.editedCard
+});
 
-export default Form.create()(CardForm);
+export default connect(mapStateToProps)(Form.create()(CardForm));

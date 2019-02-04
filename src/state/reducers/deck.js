@@ -6,7 +6,7 @@ function deckUpdate(data) {
 
 const deck = {
   [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => deckUpdate({
-    current: state.deck.current.map(card => (card.id != updatedCard.id) ? card : updatedCard),
+    current: state.deck.current.map(card => (card.id !== updatedCard.id) ? card : updatedCard),
     editedCard: updatedCard
   }),
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
