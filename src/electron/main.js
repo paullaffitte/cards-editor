@@ -78,9 +78,8 @@ app.on('activate', () => {
 // });
 
 async function createWindow() {
-  mainWindow = new BrowserWindow({width: 1200, height: 720, show: false});
+  mainWindow = new BrowserWindow({width: 1200, height: 720, show: false, webPreferences: {webSecurity: !isDev}});
 
-  console.log(isDev);
   if (isDev) {
     mainWindow.loadURL('http://localhost:3000');
     await installExtensions();

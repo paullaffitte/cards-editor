@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Divider, Form, Input, InputNumber } from 'antd'
 import DeckActions from '../state/actions/deck';
+import ResourcesEditor from './ResourcesEditor';
 
 class CardForm extends Component {
 
@@ -56,6 +57,8 @@ class CardForm extends Component {
             )}
           </Form.Item>
 
+          <Divider />
+          <ResourcesEditor />
           <Divider />
 
           <Form.Item>

@@ -2,28 +2,34 @@
     "cards": [
         {
             "name": "card name",
+            "description": "this is a description",
             "hp": 3,
             "attack": 7,
-            "description": "this is a description"
+            "id": 1
         },
         {
             "name": "card name 2",
             "hp": 3,
             "attack": 27,
-            "description": "this is a description!!!"
+            "description": "this is a description!!!",
+            "id": 2
         },
         {
             "name": "card name 3",
             "hp": 31,
             "attack": 7,
-            "description": "this is not a description"
+            "description": "this is not a description",
+            "id": 3
         },
         {
             "name": "card name 4",
             "hp": 3,
             "attack": 5,
-            "description": "this is another description"
+            "description": "this is another description",
+            "id": 4
         }
     ],
-    "resources": []
+    "resources": {
+        "git_poule.png": "/home/onehandedpenguin/Pictures/git_poule.png"
+    }
 }

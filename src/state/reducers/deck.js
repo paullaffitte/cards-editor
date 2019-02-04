@@ -19,6 +19,17 @@ const deck = {
       current: {$set: deck},
       editedCard: {$set: deck.cards.length ? deck.cards[0] : null}
     });
+  },
+  [ActionsTypes.ADD_RESOURCE]: (state, {filename, path}) => {
+    return deckUpdate(state, {
+      current: {resources: {[filename]: {$set: path}}}
+    });
+  },
+  [ActionsTypes.REMOVE_RESOURCE]: (state, name) => {
+    const removeResource = ({[name]: path, ...resources}) => resources;
+    return deckUpdate(state, {
+      current: {resources: {$apply: removeResource}}
+    });
   }
 };
 
