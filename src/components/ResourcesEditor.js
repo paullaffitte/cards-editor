@@ -1,30 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Upload, Icon, Modal } from 'antd';
+import { Upload, Icon, Modal, Button } from 'antd';
 import DeckActions from '../state/actions/deck';
 
 class ResourcesEditor extends React.Component {
-
-  state = {
-    previewVisible: false,
-    previewImage: ''
-  };
-
-  hideModal = () => this.setState({ previewVisible: false });
-
-  handlePreview = (file) => {
-    this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true,
-    });
-  };
 
   handleRemove = (file) => {
     this.props.dispatch(DeckActions.removeResource(file.name));
     return true;
   };
 
-  uploadFile = ({file, onError, onSuccess}) => {
+  handleAdd = ({file, onError, onSuccess}) => {
     const onErrorCustom = error => { onError(error, null, file); alert(error) }
     if (Object.keys(this.props.resources).includes(file.name))
       onErrorCustom('Resource already exists.');
@@ -34,7 +20,6 @@ class ResourcesEditor extends React.Component {
   };
 
   render() {
-    const { previewVisible, previewImage } = this.state;
     const fileList = Object.keys(this.props.resources).map(filename => ({
       uid: filename,
       name: filename,
@@ -43,23 +28,18 @@ class ResourcesEditor extends React.Component {
     }));
 
     return (
-      <div className="clearfix">
-        <h2>Resources</h2>
+      <div className="clearfix" style={this.props.style}>
         <Upload
-          customRequest={this.uploadFile}
-          listType="picture-card"
+          customRequest={this.handleAdd}
+          listType="picture"
           fileList={fileList}
-          onPreview={this.handlePreview}
+          onPreview={this.props.onPreview}
           onRemove={this.handleRemove}
         >
-          <div>
-            <Icon type="plus" />
-            <div className="ant-upload-text">Upload</div>
-          </div>
+          <Button>
+            <Icon type="upload" /> Upload
+          </Button>
         </Upload>
-        <Modal visible={previewVisible} footer={null} onCancel={this.hideModal}>
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal>
       </div>
     );
   }
