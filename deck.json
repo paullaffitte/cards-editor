@@ -1,26 +1,29 @@
-[
-    {
-        "name": "card name",
-        "hp": 3,
-        "attack": 7,
-        "description": "this is a description"
-    },
-    {
-        "name": "card name 2",
-        "hp": 3,
-        "attack": 27,
-        "description": "this is a description!!!"
-    },
-    {
-        "name": "card name 3",
-        "hp": 31,
-        "attack": 7,
-        "description": "this is not a description"
-    },
-    {
-        "name": "card name 4",
-        "hp": 3,
-        "attack": 5,
-        "description": "this is another description"
-    }
-]
+{
+    "cards": [
+        {
+            "name": "card name",
+            "hp": 3,
+            "attack": 7,
+            "description": "this is a description"
+        },
+        {
+            "name": "card name 2",
+            "hp": 3,
+            "attack": 27,
+            "description": "this is a description!!!"
+        },
+        {
+            "name": "card name 3",
+            "hp": 31,
+            "attack": 7,
+            "description": "this is not a description"
+        },
+        {
+            "name": "card name 4",
+            "hp": 3,
+            "attack": 5,
+            "description": "this is another description"
+        }
+    ],
+    "resources": []
+}

@@ -1,22 +1,24 @@
 import ActionsTypes from '../../constants/ActionsTypes';
+import update from 'immutability-helper';
 
-function deckUpdate(data) {
-  return {deck: data};
+function deckUpdate(state, data) {
+  return update(state, {deck: data});
 }
 
 const deck = {
-  [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => deckUpdate({
-    current: state.deck.current.map(card => (card.id !== updatedCard.id) ? card : updatedCard),
-    editedCard: updatedCard
-  }),
+  [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => {
+    const updateCards = cards => cards.map(card => (card.id !== updatedCard.id) ? card : updatedCard);
+    return deckUpdate(state, {
+      current: {cards: {$apply: updateCards}},
+      editedCard: {$set: updatedCard}
+    })
+  },
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
-    deck = deck.map(card => ({...card, id: ++state.deck.lastCardId}));
-    if (deck.length)
-      return deckUpdate({
-        current: deck,
-        editedCard: deck[0]
-      });
-    return deckUpdate({current: deck});
+    deck.cards = deck.cards.map(card => ({...card, id: ++state.deck.lastCardId}));
+    return deckUpdate(state, {
+      current: {$set: deck},
+      editedCard: {$set: deck.cards.length ? deck.cards[0] : null}
+    });
   }
 };
 

@@ -42,8 +42,7 @@ class DeckEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  deck: state.deck ? state.deck.current : null,
-  editedCard: state.deck ? state.deck.editedCard : null
+  deck: state.deck.current
 });
 
 export default connect(mapStateToProps)(DeckEditor);

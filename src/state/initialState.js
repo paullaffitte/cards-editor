@@ -1,6 +1,9 @@
 const initialState = {
   deck: {
-    current: null,
+    current: {
+      cards: [],
+      resources :[],
+    },
     editedCard: null,
     lastCardId: 0,
   }

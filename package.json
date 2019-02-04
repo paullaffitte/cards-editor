@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "electron-is-dev": "^1.0.1",
+    "immutability-helper": "^3.0.0",
     "key-mirror": "^1.0.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
