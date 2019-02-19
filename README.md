@@ -55,4 +55,3 @@ not available yet.
 
 ## Authors
 - [Paul Laffitte](https://github.com/paullaffitte)
-- [Arthur Chaloin](https://github.com/arthurchaloin)

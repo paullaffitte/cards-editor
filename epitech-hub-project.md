@@ -18,7 +18,6 @@
 
 - pierre.pinet@epitech.eu
 - thomas.arbona@epitech.eu
-- pierre.pinet@epitech.eu
 - guillaume.berginat@epitech.eu
 - pierre.narcisi@epitech.eu
 - sebastien.le-gall@epitech.eu
