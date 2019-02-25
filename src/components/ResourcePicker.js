@@ -4,7 +4,7 @@ import { Row, Col, Icon, Modal, Button } from 'antd';
 import ResourcesEditor from './ResourcesEditor'
 import { getResources } from '../state/selectors/deck';
 
-class ResourcePicker extends React.Component {
+class ResourcePicker extends Component {
 
   state = {
     preview: {
@@ -28,7 +28,7 @@ class ResourcePicker extends React.Component {
   };
 
   toggleModal = visible => {
-    if (this.props.value) {
+    if (visible && this.props.value) {
       if (!(this.props.value in this.props.resources))
         alert(`Error: Resource ${this.props.value} not found`);
       else {
@@ -40,7 +40,7 @@ class ResourcePicker extends React.Component {
       }
     }
 
-    this.setState({ modalOpened: visible !== undefined ? (visible == true) : !this.state.modalOpened });
+    this.setState({ modalOpened: visible !== undefined ? (visible === true) : !this.state.modalOpened });
   };
 
   onSubmit = () => {

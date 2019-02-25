@@ -6,11 +6,6 @@ import ResourcePicker from './ResourcePicker';
 
 class CardForm extends Component {
 
-  componentDidMount() {
-    this.props.form.setFieldsValue({...this.props.data, id: undefined});
-    this.props.form.validateFields();
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -92,4 +87,19 @@ const mapStateToProps = state => ({
   data: state.deck.editedCard
 });
 
-export default connect(mapStateToProps)(Form.create()(CardForm));
+export default connect(mapStateToProps)(Form.create({
+  onFieldsChange(props, changedFields) {
+    if (props.onChange)
+      props.onChange(changedFields);
+  },
+
+  mapPropsToFields(props) {
+    return Object.keys(props.data).reduce((acc, name) => ({
+      ...acc,
+      [name]: Form.createFormField({value: props.data[name]})
+    }), {});
+  },
+
+  onValuesChange(_, values) {
+  },
+})(CardForm));

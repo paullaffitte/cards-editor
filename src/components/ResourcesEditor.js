@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Upload, Icon, Modal, Button } from 'antd';
+import { Upload, Icon, Button } from 'antd';
 import DeckActions from '../state/actions/deck';
 
-class ResourcesEditor extends React.Component {
+class ResourcesEditor extends Component {
 
   handleRemove = (file) => {
     this.props.dispatch(DeckActions.removeResource(file.name));
