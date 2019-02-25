@@ -5,38 +5,64 @@ import ResourcesEditor from './ResourcesEditor'
 class ResourcePicker extends React.Component {
 
   state = {
-    picked: {
+    preview: {
       name: null,
       url: null,
     },
+    value: {},
     modalOpened: false
   };
 
-  onPick = file => {
-    this.setState({picked: {name: file.name, url: file.url}});
-    console.log('onPreview picker', file.name, file.url, file);
+  static getDerivedStateFromProps(nextProps) {
+    if ('value' in nextProps) {
+      return {
+        value: { ...(nextProps.value || {}) },
+      };
+    }
+    return null;
+  }
+
+  onPreview = file => {
+    this.setState({preview: {name: file.name, url: file.url}});
   };
 
   toggleModal = visible => {
     this.setState({modalOpened: visible !== undefined ? (visible == true) : !this.state.modalOpened})
-  }
+  };
+
+  onSubmit = () => {
+    const onChange = this.props.onChange;
+    if (onChange) {
+      onChange({ ...this.state.preview });
+    }
+    this.toggleModal(false);
+  };
+
+  onCancel = () => this.toggleModal(false);
 
   render() {
-    const {picked, modalOpened} = this.state;
+    const {preview, modalOpened} = this.state;
     return (
       <div>
         <Button onClick={() => this.toggleModal(true)}>
           <Icon type="search" /> Choose
         </Button>
-        <Modal visible={modalOpened} width='900px' footer={null} onCancel={() => this.toggleModal(false)}>
+        <div>{ this.state.value.name }</div>
+        <Modal visible={modalOpened} width='900px' onCancel={this.onCancel}
+          footer={[
+            <Button key="back" onClick={this.onCancel}>Return</Button>,
+            <Button key="submit" type="primary" onClick={this.onSubmit}>
+              Submit
+            </Button>,
+          ]}>
           <h2>Resources</h2>
           <Row>
           <Col span={14}>
-            <ResourcesEditor onPreview={this.onPick} style={{ marginBottom: '1em' }} />
+            <ResourcesEditor onPreview={this.onPreview} style={{ marginBottom: '1em' }} />
           </Col>
           <Col span={9} offset={1}>
-            {!picked.url ? '' : (<img alt="example" style={{ width: '100%' }} src={picked.url} />)}
-            <span>{picked.name}</span>
+            {!preview.url ? '' : (<img alt="example" style={{ width: '100%' }} src={preview.url} />)}
+            <span>{preview.name}</span>
           </Col>
           </Row>
         </Modal>
