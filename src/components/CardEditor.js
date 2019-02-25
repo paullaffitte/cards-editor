@@ -13,7 +13,7 @@ class CardEditor extends Component {
       </div>
     ) : (
       <Row>
-        <Col span={12}><Card data={ this.props.data }/></Col>
+        <Col span={12}><Card { ...this.props.data }/></Col>
         <Col span={12}><CardForm data={ this.props.data }/></Col>
       </Row>
     );
