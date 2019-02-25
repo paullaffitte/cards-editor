@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Divider, Form, Input, InputNumber } from 'antd'
+import { Button, Divider, Form, Input, InputNumber, Row, Col } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 
@@ -58,7 +58,21 @@ class CardForm extends Component {
           </Form.Item>
 
           <Divider />
-          <ResourcePicker onPick={() => null} />
+
+          <Row>
+            <Col span={12}>
+              <Form.Item label="Thumbnail">
+                {getFieldDecorator('thumbnail')(<ResourcePicker />)}
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item label="Background">
+                {getFieldDecorator('background')(<ResourcePicker />)}
+              </Form.Item>
+            </Col>
+          </Row>
+
           <Divider />
 
           <Form.Item>

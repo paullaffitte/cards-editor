@@ -5,6 +5,8 @@
             "description": "this is a description",
             "hp": 3,
             "attack": 7,
+            "thumbnail": "bde-epic-no-problem.png",
+            "background": "packratjs.png",
             "id": 1
         },
         {
@@ -33,6 +35,7 @@
         "git_poule.png": "/home/onehandedpenguin/Pictures/git_poule.png",
         "placeholder2.png": "/home/onehandedpenguin/Pictures/placeholder2.png",
         "Screenshot from 2018-04-06 23-15-19.png": "/home/onehandedpenguin/Pictures/Screenshot from 2018-04-06 23-15-19.png",
-        "bde-epic-no-problem.png": "/home/onehandedpenguin/Pictures/bde-epic-no-problem.png"
+        "bde-epic-no-problem.png": "/home/onehandedpenguin/Pictures/bde-epic-no-problem.png",
+        "packratjs.png": "/home/onehandedpenguin/Pictures/packratjs.png"
     }
 }
