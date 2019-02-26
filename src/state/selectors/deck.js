@@ -19,3 +19,10 @@ export const getResourceByName = createSelector(
     return name in resources ? 'file://' + resources[name] : null;
   }
 );
+
+export const getCards = createSelector(
+  [ getCurrentDeck ],
+  deck => {
+    return deck.cards;
+  }
+);

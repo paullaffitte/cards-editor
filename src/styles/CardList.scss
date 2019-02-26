@@ -1,0 +1,40 @@
+.CardList {
+
+	$text-color: white;
+	$border-color: #111;
+	$border-color-hover: rgb(0, 99, 255);
+
+	.card .information {
+		margin-bottom: 0.5em;
+		padding-left: 0.5em;
+		padding-bottom: 0.5em;
+
+		color: $text-color;
+		h2 {
+			color: $text-color;
+			margin-bottom: 0.2em;
+		}
+		span {
+			height: 2em;
+		}
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		border-top: solid $border-color 1px;
+		border-bottom: solid $border-color 1px;
+	}
+
+	.card .information:hover {
+		border-top: solid $border-color-hover 1px;
+		border-bottom: solid $border-color-hover 1px;
+	}
+
+	.card .information:active {
+		background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
+	}
+
+	.card .background {
+		background-image: linear-gradient(to right, black, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))
+	}
+}
