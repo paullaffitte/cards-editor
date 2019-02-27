@@ -6,6 +6,11 @@ function deckUpdate(state, data) {
 }
 
 const deck = {
+  [ActionsTypes.SELECT_CARD]: (state, card) => {
+    return deckUpdate(state, {
+      editedCard: {$set: card}
+    })
+  },
   [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => {
     const updateCards = cards => cards.map(card => (card.id !== updatedCard.id) ? card : updatedCard);
     return deckUpdate(state, {

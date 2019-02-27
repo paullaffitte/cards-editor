@@ -3,6 +3,7 @@
 	$text-color: white;
 	$border-color: #111;
 	$border-color-hover: rgb(0, 99, 255);
+	$border-color-selected: rgb(0, 255, 99);
 
 	.card .information {
 		margin-bottom: 0.5em;
@@ -30,11 +31,12 @@
 		border-bottom: solid $border-color-hover 1px;
 	}
 
-	.card .information:active {
-		background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
+	.card.selected .information {
+		border-top: solid $border-color-selected 1px;
+		border-bottom: solid $border-color-selected 1px;
 	}
 
-	.card .background {
+	.card .shadow {
 		background-image: linear-gradient(to right, black, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))
 	}
 }

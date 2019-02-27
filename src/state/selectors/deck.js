@@ -26,3 +26,7 @@ export const getCards = createSelector(
     return deck.cards;
   }
 );
+
+export const getEditedCard = state => {
+  return state.deck ? state.deck.editedCard : null;
+};
