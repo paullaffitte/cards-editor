@@ -26,6 +26,7 @@ class DeckEditor extends Component {
   }
 
   onSave = () => {
+    this.props.dispatch(DeckActions.stageCards());
     return this.props.deck;
   }
 

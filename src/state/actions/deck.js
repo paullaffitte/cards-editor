@@ -13,6 +13,12 @@ const deck = {
       payload: card,
     };
   },
+  stageCards: cardId => {
+    return {
+      type: ActionsTypes.STAGE_CARDS,
+      payload: null,
+    };
+  },
   openDeck: deck => {
     return {
       type: ActionsTypes.OPEN_DECK,

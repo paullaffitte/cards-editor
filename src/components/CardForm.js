@@ -5,24 +5,11 @@ import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 
 class CardForm extends Component {
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-
-      values.id = this.props.data.id;
-      this.props.dispatch(DeckActions.updateCard(values));
-    });
-  }
-
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <Form onSubmit={this.handleSubmit}>
+        <Form>
           <Form.Item label="Card name">
             {getFieldDecorator('name', {
               rules: [{ required: true, message: 'Please set a name' }],
@@ -67,16 +54,6 @@ class CardForm extends Component {
               </Form.Item>
             </Col>
           </Row>
-
-          <Divider />
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              // disabled={hasErrors(getFieldsError())}
-            >Save</Button>
-        </Form.Item>
         </Form>
       </div>
     );
@@ -91,12 +68,15 @@ export default connect(mapStateToProps)(Form.create({
   onFieldsChange(props, changedFields) {
     if (props.onChange)
       props.onChange(changedFields);
+
+    const card = Object.keys(changedFields).reduce((acc, key) => ({...acc, [changedFields[key].name]: changedFields[key].value}), {id: props.data.id});
+    props.dispatch(DeckActions.updateCard(card));
   },
 
   mapPropsToFields(props) {
     return Object.keys(props.data).reduce((acc, name) => ({
       ...acc,
-      [name]: Form.createFormField({value: props.data[name]})
+      [name]: Form.createFormField({ value: props.data[name] })
     }), {});
   },
 

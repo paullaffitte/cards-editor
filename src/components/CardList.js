@@ -6,11 +6,14 @@ import '../styles/CardList.scss';
 
 class CardList extends Component {
 
-  selectCard = card => this.props.dispatch(DeckActions.selectCard(card));
+  selectCard = card => this.props.dispatch(DeckActions.selectCard(card.id));
 
   renderCardItem = (card) => {
+    const className       = 'card ' + (card.id == this.props.selectedCard.id ? 'selected' : '');
+    const backgroundImage = {backgroundImage: `url('${card.thumbnail}')`};
+
     return (
-      <div className={'card ' + (card.id == this.props.selectedCard.id ? 'selected' : '')} style={{backgroundImage: `url('${card.thumbnail}')`}} onClick={() => this.selectCard(card)}>
+      <div className={className} style={backgroundImage} onClick={() => this.selectCard(card)}>
         <div className="shadow">
           <div className="information">
             <h2>{card.name}</h2>

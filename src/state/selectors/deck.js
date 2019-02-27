@@ -5,7 +5,7 @@ export const getProps = (state, props) => {
 };
 
 export const getCurrentDeck = state => {
-  return state.deck ? state.deck.current : {};
+  return state.deck ? state.deck.current : {}; // FIXME replace all {} by values from initialState.js
 };
 
 export const getResources = createSelector(
@@ -15,18 +15,19 @@ export const getResources = createSelector(
 
 export const getResourceByName = createSelector(
   [ getResources, getProps ],
-  (resources, name) => {
-    return name in resources ? 'file://' + resources[name] : null;
-  }
+  (resources, name) => name in resources ? 'file://' + resources[name] : null
 );
 
 export const getCards = createSelector(
   [ getCurrentDeck ],
-  deck => {
-    return deck.cards;
-  }
+  deck => deck.cards
 );
 
 export const getEditedCard = state => {
-  return state.deck ? state.deck.editedCard : null;
+  return state.deck ? state.deck.editedCard : {};
 };
+
+export const getCardById = createSelector(
+  [ getCards, getProps ],
+  (cards, id) => cards.find(card => card.id == id)
+);

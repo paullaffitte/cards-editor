@@ -4,7 +4,7 @@ const initialState = {
       cards: [],
       resources: {},
     },
-    editedCard: null,
+    editedCard: {},
     lastCardId: 0,
   }
 };

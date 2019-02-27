@@ -7,7 +7,7 @@ import CardForm from './CardForm';
 class CardEditor extends Component {
 
   render() {
-    return !this.props.data ? (
+    return !this.props.data.id ? (
       <div>
         No card selected
       </div>
