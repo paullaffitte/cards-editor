@@ -14,10 +14,12 @@ function sendAppEvent(name, callback, ...args) {
   });
 }
 
-function menuLabelWithEvent(label, ...args) {
+function menuLabelWithEvent(label, accelerator=null) {
+  accelerator = accelerator ? {accelerator} : {};
   return {
     label,
-    click: () => sendAppEvent(label, MenuActions[label], ...args)
+    ...accelerator,
+    click: () => sendAppEvent(label, MenuActions[label])
   };
 }
 
@@ -25,11 +27,11 @@ const menuTemplate = [
   {
     label: 'File',
     submenu: [
-      menuLabelWithEvent('open'),
-      menuLabelWithEvent('save'),
-      menuLabelWithEvent('saveAs'),
+      menuLabelWithEvent('open', 'CmdOrCtrl+O'),
+      menuLabelWithEvent('save', 'CmdOrCtrl+S'),
+      menuLabelWithEvent('saveAs', 'Shift+CmdOrCtrl+S'),
       {type: 'separator'},
-      {role: 'quit'},
+      {role: 'quit', accelerator: 'Shift+CmdOrCtrl+S'},
     ]
   },
   /*
@@ -50,7 +52,7 @@ const menuTemplate = [
       {type: 'separator'},
       {role: 'resetZoom'},
       {role: 'zoomIn'},
-      {role: 'zoomOut'},
+      {role: 'zoomOut' },
       {role: 'toggleFullScreen'},
     ]
   }

@@ -13,7 +13,7 @@ class CardList extends Component {
     const backgroundImage = {backgroundImage: `url('${card.thumbnail}')`};
 
     return (
-      <div className={className} style={backgroundImage} onClick={() => this.selectCard(card)}>
+      <div key={card.id} className={className} style={backgroundImage} onClick={() => this.selectCard(card)}>
         <div className="shadow">
           <div className="information">
             <h2>{card.name}</h2>
