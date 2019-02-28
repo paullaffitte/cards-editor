@@ -47,6 +47,9 @@ const deck = {
     deck.cards = deck.cards.map(card => ({...card, id: ++state.deck.lastCardId}));
     return deckUpdate(state, { current: {$set: deck} });
   },
+  [ActionsTypes.UPDATE_FILENAME]: (state, filename) => {
+    return deckUpdate(state, { current: {filename: {$set: filename}} });
+  },
 
 
   [ActionsTypes.ADD_RESOURCE]: (state, {filename, path}) => {

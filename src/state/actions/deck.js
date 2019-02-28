@@ -19,12 +19,20 @@ const deck = {
       payload: null,
     };
   },
+
   openDeck: deck => {
     return {
       type: ActionsTypes.OPEN_DECK,
       payload: deck,
     };
   },
+  updateFilename: filename => {
+    return {
+      type: ActionsTypes.UPDATE_FILENAME,
+      payload: filename,
+    };
+  },
+
   addResource: resource => {
     return {
       type: ActionsTypes.ADD_RESOURCE,

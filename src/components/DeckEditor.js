@@ -13,8 +13,9 @@ class DeckEditor extends Component {
 
   componentDidMount() {
     DeckStorage.registerListeners({
-      onOpen: this.onOpen,
-      onSave: this.onSave
+      onOpen:         this.onOpen,        // TODO  move this code in App
+      onSave:         this.onSave,        //       create a ContextListener class and move register listener inside it
+      updateFilename: this.updateFilename //       use DeckStorage in onOpen or onSave callbacks
     });
   }
 
@@ -23,12 +24,16 @@ class DeckEditor extends Component {
       return;
 
     this.props.dispatch(DeckActions.openDeck(deck));
-  }
+  };
 
   onSave = () => {
     this.props.dispatch(DeckActions.stageCards());
     return this.props.deck;
-  }
+  };
+
+  updateFilename = filename => {
+    this.props.dispatch(DeckActions.updateFilename(filename));
+  };
 
   render() {
     return (

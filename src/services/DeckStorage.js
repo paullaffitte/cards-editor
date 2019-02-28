@@ -13,36 +13,45 @@ class DeckStorage {
   }
 
   static open(filename) {
+    const loadDeck = (filename) => ({ ...DeckStorage.read(filename), filename });
+
     if (filename)
-      return DeckStorage.onOpen(DeckStorage.read(filename));
+      return DeckStorage.onOpen(loadDeck(filename));
     return new Promise((resolve, reject) => dialog.showOpenDialog((filenames) => {
       if (!filenames || !filenames.length) {
         resolve(null);
         return;
       }
 
-      let content = DeckStorage.read(filenames[0]);
+      let content = loadDeck(filenames[0]);
       resolve(content);
     }));
   }
 
-  static save(data) {
-    return DeckStorage.saveAs(data);
+  static save({filename, ...data}) {
+    if (!filename)
+      return DeckStorage.saveAs(data);
+
+    DeckStorage.write(filename, data);
+    return filename;
   }
 
-  static saveAs(data, filename) {
-    if (filename) {
-      DeckStorage.write(filename, data);
-      return filename;
+  static saveAs({filename, ...data}, newFilename) {
+    if (newFilename) {
+      DeckStorage.write(newFilename, data);
+      return newFilename;
     }
 
-    return new Promise((resolve, reject) => dialog.showSaveDialog((filename) => {
-      DeckStorage.write(filename, data);
-      resolve(filename);
+    return new Promise((resolve, reject) => dialog.showSaveDialog((newFilename) => {
+      if (!newFilename)
+        resolve(null);
+
+      DeckStorage.write(newFilename, data);
+      resolve(newFilename);
     }));
   }
 
-  static registerListeners({onOpen, onSave}) {
+  static registerListeners({onOpen, onSave, updateFilename}) {
     const register = (name, callback) => {
       let eventName = name + '-event';
       ipcRenderer.on(eventName, async (event, ...args) => {
@@ -53,14 +62,13 @@ class DeckStorage {
 
 
     DeckStorage.onOpen = onOpen;
-    DeckStorage.open('./deck.json'); // TODO remove this line
     register('open', async () => {
       const deck = await DeckStorage.open();
       if (deck)
         onOpen(deck)
     });
-    register('save', (e, ...args) => DeckStorage.save(onSave()));
-    register('saveAs', (e, ...args) => DeckStorage.save(onSave()));
+    register('save', async (e, ...args) => updateFilename(await DeckStorage.save(onSave())));
+    register('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs(onSave())));
   }
 }
 

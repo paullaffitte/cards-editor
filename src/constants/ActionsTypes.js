@@ -4,7 +4,10 @@ const ActionsTypes = keyMirror({
     SELECT_CARD: null,
     UPDATE_CARD: null,
     STAGE_CARDS: null,
+
     OPEN_DECK: null,
+    UPDATE_FILENAME: null,
+
     ADD_RESOURCE: null,
     REMOVE_RESOURCE: null
 });

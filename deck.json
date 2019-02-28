@@ -5,8 +5,8 @@
             "description": "this is a description",
             "hp": 3,
             "attack": 7,
-            "thumbnail": "bde-epic-no-problem.png",
-            "background": "packratjs.png",
+            "thumbnail": "card-thumbnail.png",
+            "background": "card-background.png",
             "id": 1
         },
         {
@@ -14,28 +14,35 @@
             "hp": 3,
             "attack": 27,
             "description": "this is a description!!!",
-            "id": 2
+            "id": 2,
+            "background": "card-background.png",
+            "thumbnail": "placeholder2.png"
         },
         {
             "name": "card name 3",
             "hp": 31,
             "attack": 7,
             "description": "this is not a description",
-            "id": 3
+            "id": 3,
+            "background": "card-background.png",
+            "thumbnail": "git_poule.png"
         },
         {
             "name": "card name 4",
             "hp": 3,
             "attack": 5,
             "description": "this is another description",
-            "id": 4
+            "id": 4,
+            "background": "card-background.png",
+            "thumbnail": "packratjs.png"
         }
     ],
     "resources": {
         "git_poule.png": "/home/onehandedpenguin/Pictures/git_poule.png",
         "placeholder2.png": "/home/onehandedpenguin/Pictures/placeholder2.png",
         "Screenshot from 2018-04-06 23-15-19.png": "/home/onehandedpenguin/Pictures/Screenshot from 2018-04-06 23-15-19.png",
-        "bde-epic-no-problem.png": "/home/onehandedpenguin/Pictures/bde-epic-no-problem.png",
-        "packratjs.png": "/home/onehandedpenguin/Pictures/packratjs.png"
+        "packratjs.png": "/home/onehandedpenguin/Pictures/packratjs.png",
+        "card-background.png": "/home/onehandedpenguin/Pictures/card-background.png",
+        "card-thumbnail.png": "/home/onehandedpenguin/Pictures/card-thumbnail.png"
     }
 }
