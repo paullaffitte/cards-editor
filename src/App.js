@@ -7,7 +7,7 @@ import './App.css';
 import reducers from './state/reducers/index';
 import DeckEditor from './components/DeckEditor';
 
-const { Header, Footer } = Layout;
+const { Header } = Layout;
 
 const store = createStore(reducers);
 
@@ -19,7 +19,6 @@ class App extends Component {
         <Layout className="app">
           <Header></Header>
           <DeckEditor></DeckEditor>
-          <Footer></Footer>
         </Layout>
       </Provider>
     );

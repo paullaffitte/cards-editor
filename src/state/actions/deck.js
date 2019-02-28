@@ -13,11 +13,17 @@ const deck = {
       payload: card,
     };
   },
-  stageCards: cardId => {
+  stageCards: () => {
     return {
       type: ActionsTypes.STAGE_CARDS,
       payload: null,
     };
+  },
+  addCard: () => {
+    return {
+      type: ActionsTypes.ADD_CARD,
+      payload: null,
+    }
   },
 
   openDeck: deck => {

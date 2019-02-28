@@ -4,39 +4,77 @@
 	$border-color: #111;
 	$border-color-hover: rgb(0, 99, 255);
 	$border-color-selected: rgb(0, 255, 99);
+	$transition-speed: 0.07s;
 
-	.card .information {
+	height: 100%;
+	overflow-y: hidden;
+	display: flex;
+	flex-direction: column;
+
+	.cards {
+		bottom: 0;
+		overflow-y: auto;
+		height: 100%;
+	}
+
+	.list-item {
 		margin-bottom: 0.5em;
-		padding-left: 0.5em;
-		padding-bottom: 0.5em;
+		border-top: solid $border-color 1px;
+		border-bottom: solid $border-color 1px;
 
+		border-left: solid black 0;
+		transition: border-width $transition-speed linear;
+	}
+
+	.card {
+		height: 4em;
 		color: $text-color;
+		text-shadow: rgba(255, 255, 255, 0.4) 0 0 15px, black 0 0 3px, black 0 0 1px;
+
 		h2 {
 			color: $text-color;
 			margin-bottom: 0.2em;
+			min-height: 1em;
 		}
 		span {
 			height: 2em;
+			min-height: 1em;
 		}
+
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 
-		border-top: solid $border-color 1px;
-		border-bottom: solid $border-color 1px;
+		.content {
+			padding-left: 0.5em;
+			padding-bottom: 0.5em;
+			background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+			height: 100%;
+		}
 	}
 
-	.card .information:hover {
-		border-top: solid $border-color-hover 1px;
-		border-bottom: solid $border-color-hover 1px;
+	.card:hover {
+		border-left: solid $border-color-hover 3px;
+		transition: border-width $transition-speed linear;
 	}
 
-	.card.selected .information {
-		border-top: solid $border-color-selected 1px;
-		border-bottom: solid $border-color-selected 1px;
+	.card.selected {
+		border-left: solid $border-color-selected 3px;
+		transition: border-width $transition-speed linear;
 	}
 
-	.card .shadow {
-		background-image: linear-gradient(to right, black, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))
+	button.new {
+		width: 100%;
+		background-color: #eee;
+		border: none;
+		font-size: 20pt;
+	}
+
+	button.new:hover {
+		background-color: #ddd;
+	}
+
+	button.new:active {
+		background-color: #bbb;
 	}
 }

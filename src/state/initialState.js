@@ -5,8 +5,7 @@ const initialState = {
       cards: [],
       resources: {},
     },
-    editedCard: {},
-    lastCardId: 0,
+    editedCard: {}
   }
 };
 

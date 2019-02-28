@@ -2,6 +2,7 @@ import update from 'immutability-helper';
 import ActionsTypes from '../../constants/ActionsTypes';
 import { getEditedCard, getCardById } from '../selectors/deck';
 import initialState from '../initialState';
+import uuid from 'uuid/v1';
 
 function deckUpdate(state, data) {
   return update(state, {deck: data});
@@ -35,17 +36,24 @@ const deck = {
     return deckUpdate(state, {
       current: {cards: {$apply: updateCard}},
       editedCard: {$set: updatedCard}
-    })
+    });
   },
   [ActionsTypes.STAGE_CARDS]: state => {
     const stageCards = cards => cards.map(card => card.original ? card.original : card);
     return deckUpdate(state, {
       current: {cards: {$apply: stageCards}}
-    })
+    });
+  },
+  [ActionsTypes.ADD_CARD]: state => {
+    const newCard = { id: uuid() };
+    return deckUpdate(state, {
+      current: { cards: {$push: [newCard]} },
+      editedCard: {$set: newCard}
+    });
   },
 
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
-    deck.cards = deck.cards.map(card => ({...card, id: ++state.deck.lastCardId}));
+    deck.lastCardId = initialState.deck.lastCardId;
     return deckUpdate(initialState, { current: { $set: deck } });
   },
   [ActionsTypes.UPDATE_FILENAME]: (state, filename) => {
