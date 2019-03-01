@@ -11,8 +11,12 @@ class CardList extends Component {
   addCard = () => this.props.dispatch(DeckActions.addCard());
 
   renderCardItem = card => {
-    const className       = 'list-item card ' + (card.id == this.props.selectedCard.id ? 'selected' : '');
     const backgroundImage = {backgroundImage: `url('${card.thumbnail}')`};
+    const className       =  [
+      'list-item card ',
+      card.id == this.props.selectedCard.id ? 'selected' : '',
+      card.updated ? 'updated' : ''
+    ].join(' ');
 
     return (
       <div key={card.id} className={className} style={backgroundImage} onClick={() => this.selectCard(card)}>

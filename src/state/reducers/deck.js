@@ -15,16 +15,18 @@ function updateCard(cards, id, updateCard) {
 const deck = {
   [ActionsTypes.SELECT_CARD]: (state, cardId) => {
     const card        = getCardById(state, cardId);
-    const backupCard  = cards => cards.map(c => (c.id !== cardId) ? c : { ...card, original: card });
-    const updates     = { editedCard: {$set: card} };
+    const backupCard  = cards => cards.map(c => (c.id !== cardId) ? c : selectedCard);
+    const selectedCard = { ...card, original: card };
+    const updates     = { editedCard: {$set: selectedCard} };
 
     if (!('original' in card))
-      updates.current = {cards: {$apply: backupCard}};
+      updates.current = { cards: {$apply: backupCard} };
 
     return deckUpdate(state, updates);
   },
   [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => {
     const editedCard  = getEditedCard(state);
+    console.table(updatedCard);
     const updateCard  = cards => cards.map(card => (card.id !== updatedCard.id) ? card : updatedCard);
 
     if (updatedCard.id !== editedCard.id) {
@@ -33,13 +35,17 @@ const deck = {
     }
 
     updatedCard = update(editedCard, {$merge: updatedCard});
+    updatedCard.updated = true;
     return deckUpdate(state, {
       current: {cards: {$apply: updateCard}},
       editedCard: {$set: updatedCard}
     });
   },
   [ActionsTypes.STAGE_CARDS]: state => {
-    const stageCards = cards => cards.map(card => card.original ? card.original : card);
+    const stageCards = cards => cards.map(card => {
+      const {updated, original, ...stagedCard} = card;
+      return stagedCard;
+    });
     return deckUpdate(state, {
       current: {cards: {$apply: stageCards}}
     });
@@ -47,8 +53,7 @@ const deck = {
   [ActionsTypes.ADD_CARD]: state => {
     const newCard = { id: uuid() };
     return deckUpdate(state, {
-      current: { cards: {$push: [newCard]} },
-      editedCard: {$set: newCard}
+      current: { cards: {$push: [newCard]} }
     });
   },
 

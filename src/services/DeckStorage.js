@@ -43,8 +43,10 @@ class DeckStorage {
     }
 
     return new Promise((resolve, reject) => dialog.showSaveDialog((newFilename) => {
-      if (!newFilename)
+      if (!newFilename) {
         resolve(null);
+        return;
+      }
 
       DeckStorage.write(newFilename, data);
       resolve(newFilename);

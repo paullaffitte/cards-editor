@@ -32,6 +32,9 @@ class DeckEditor extends Component {
   };
 
   updateFilename = filename => {
+    if (!filename)
+      return;
+
     this.props.dispatch(DeckActions.updateFilename(filename));
   };
 

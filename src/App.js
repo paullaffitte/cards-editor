@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
@@ -9,7 +10,10 @@ import DeckEditor from './components/DeckEditor';
 
 const { Header } = Layout;
 
-const store = createStore(reducers);
+const store = createStore(
+  reducers,
+  applyMiddleware(thunk),
+);
 
 class App extends Component {
 
