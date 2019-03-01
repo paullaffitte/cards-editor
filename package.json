@@ -54,6 +54,13 @@
       "node_modules/**/*",
       "src/electron/**/*"
     ],
-    "directories": {}
+    "directories": {},
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage",
+        "snap"
+      ]
+    }
   }
 }
