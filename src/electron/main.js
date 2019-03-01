@@ -32,7 +32,7 @@ const menuTemplate = [
       menuLabelWithEvent('save', 'CmdOrCtrl+S'),
       menuLabelWithEvent('saveAs', 'Shift+CmdOrCtrl+S'),
       {type: 'separator'},
-      {role: 'quit', accelerator: 'Shift+CmdOrCtrl+Q'},
+      {role: 'quit', accelerator: 'Alt+F4'},
     ]
   },
   /*
