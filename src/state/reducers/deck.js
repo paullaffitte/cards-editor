@@ -26,7 +26,6 @@ const deck = {
   },
   [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => {
     const editedCard  = getEditedCard(state);
-    console.table(updatedCard);
     const updateCard  = cards => cards.map(card => (card.id !== updatedCard.id) ? card : updatedCard);
 
     if (updatedCard.id !== editedCard.id) {

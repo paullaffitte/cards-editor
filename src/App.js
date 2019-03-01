@@ -8,8 +8,6 @@ import './App.css';
 import reducers from './state/reducers/index';
 import DeckEditor from './components/DeckEditor';
 
-const { Header } = Layout;
-
 const store = createStore(
   reducers,
   applyMiddleware(thunk),
@@ -21,7 +19,6 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Layout className="app">
-          <Header></Header>
           <DeckEditor></DeckEditor>
         </Layout>
       </Provider>

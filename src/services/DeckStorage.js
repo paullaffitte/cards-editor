@@ -2,6 +2,11 @@ const { remote, ipcRenderer } = window.require('electron');
 const { dialog } = remote;
 const fs = remote.require('fs');
 
+const cleanDeck = ({filename, cards, ...data}) => ({
+  ...data,
+  cards: cards.map(({original, ...card}) => card)
+});
+
 class DeckStorage {
 
   static read(filename) {
@@ -28,17 +33,18 @@ class DeckStorage {
     }));
   }
 
-  static save({filename, ...data}) {
+  static save() {
+    const {filename, ...data} = DeckStorage.onSave();
     if (!filename)
-      return DeckStorage.saveAs(data);
+      return DeckStorage.saveAs();
 
-    DeckStorage.write(filename, data);
+    DeckStorage.write(filename, cleanDeck(data));
     return filename;
   }
 
-  static saveAs({filename, ...data}, newFilename) {
+  static saveAs(newFilename) {
     if (newFilename) {
-      DeckStorage.write(newFilename, data);
+      DeckStorage.write(newFilename, cleanDeck(DeckStorage.onSave()));
       return newFilename;
     }
 
@@ -48,7 +54,7 @@ class DeckStorage {
         return;
       }
 
-      DeckStorage.write(newFilename, data);
+      DeckStorage.write(newFilename, cleanDeck(DeckStorage.onSave()));
       resolve(newFilename);
     }));
   }
@@ -64,13 +70,14 @@ class DeckStorage {
 
 
     DeckStorage.onOpen = onOpen;
+    DeckStorage.onSave = onSave;
     register('open', async () => {
       const deck = await DeckStorage.open();
       if (deck)
         onOpen(deck)
     });
-    register('save', async (e, ...args) => updateFilename(await DeckStorage.save(onSave())));
-    register('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs(onSave())));
+    register('save', async (e, ...args) => updateFilename(await DeckStorage.save()));
+    register('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs()));
   }
 }
 

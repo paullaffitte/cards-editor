@@ -27,7 +27,6 @@ class DeckEditor extends Component {
   };
 
   onSave = () => {
-    this.props.dispatch(DeckActions.stageCards());
     return this.props.deck;
   };
 
@@ -36,6 +35,7 @@ class DeckEditor extends Component {
       return;
 
     this.props.dispatch(DeckActions.updateFilename(filename));
+    this.props.dispatch(DeckActions.stageCards());
   };
 
   render() {
@@ -44,7 +44,7 @@ class DeckEditor extends Component {
         <Content>
           <CardEditor/>
         </Content>
-        <Sider><CardList/></Sider>
+        <Sider width={250}><CardList/></Sider>
       </Layout>
     );
   }
