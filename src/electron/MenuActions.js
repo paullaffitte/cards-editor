@@ -1,5 +1,9 @@
 class MenuActions {
 
+  static new(callback, ...args) {
+    console.log('new callback success!');
+  }
+
   static open(callback, ...args) {
     console.log('open callback success!');
   }

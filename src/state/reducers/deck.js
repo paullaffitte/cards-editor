@@ -62,6 +62,7 @@ const deck = {
     });
   },
 
+  [ActionsTypes.NEW_DECK]: (state, deck) => initialState,
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
     deck.lastCardId = initialState.deck.lastCardId;
     return deckUpdate(initialState, { current: { $set: deck } });

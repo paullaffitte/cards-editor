@@ -20,12 +20,20 @@ const actions = {
       payload: null,
     };
   },
+
+  newDeck: () => {
+    return {
+      type: ActionsTypes.NEW_DECK,
+      payload: null,
+    };
+  },
   updateFilename: filename => {
     return {
       type: ActionsTypes.UPDATE_FILENAME,
       payload: filename,
     };
   },
+
   addResource: resource => {
     return {
       type: ActionsTypes.ADD_RESOURCE,

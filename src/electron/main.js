@@ -27,6 +27,7 @@ const menuTemplate = [
   {
     label: 'File',
     submenu: [
+      menuLabelWithEvent('new', 'CmdOrCtrl+N'),
       menuLabelWithEvent('open', 'CmdOrCtrl+O'),
       menuLabelWithEvent('save', 'CmdOrCtrl+S'),
       menuLabelWithEvent('saveAs', 'Shift+CmdOrCtrl+S'),

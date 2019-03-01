@@ -59,7 +59,7 @@ class DeckStorage {
     }));
   }
 
-  static registerListeners({onOpen, onSave, updateFilename}) {
+  static registerListeners({onNew, onOpen, onSave, updateFilename}) {
     const register = (name, callback) => {
       let eventName = name + '-event';
       ipcRenderer.on(eventName, async (event, ...args) => {
@@ -68,9 +68,9 @@ class DeckStorage {
       });
     };
 
-
     DeckStorage.onOpen = onOpen;
     DeckStorage.onSave = onSave;
+    register('new', onNew);
     register('open', async () => {
       const deck = await DeckStorage.open();
       if (deck)

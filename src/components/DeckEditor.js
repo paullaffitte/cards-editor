@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout } from 'antd';
+import { Layout, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import CardList from './CardList';
 import CardEditor from './CardEditor';
@@ -13,11 +13,25 @@ class DeckEditor extends Component {
 
   componentDidMount() {
     DeckStorage.registerListeners({
+      onNew:          this.onNew,
       onOpen:         this.onOpen,        // TODO  move this code in App
       onSave:         this.onSave,        //       create a ContextListener class and move register listener inside it
       updateFilename: this.updateFilename //       use DeckStorage in onOpen or onSave callbacks
     });
   }
+
+  onNew = () => {
+    console.log(this.confirm);
+    Modal.confirm({
+      'title': 'Confirmation',
+      content: 'Are you sure to create a new deck. This will discard current changes if there are any.',
+      okText: 'New deck',
+      onOk : close => {
+        this.props.dispatch(DeckActions.newDeck())
+        close();
+      }
+    });
+  };
 
   onOpen = (deck) => {
     if (!deck)
