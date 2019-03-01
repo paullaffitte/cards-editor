@@ -1,11 +1,11 @@
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getCards } from '../selectors/deck';
+import { getCards, getEditedCard } from '../selectors/deck';
 
 const actions = {
-  selectCard: card => {
+  selectCard: cardId => {
     return {
       type: ActionsTypes.SELECT_CARD,
-      payload: card,
+      payload: cardId,
     };
   },
   updateCard: card => {
@@ -40,6 +40,8 @@ const actions = {
   }
 };
 
+const selectFirstCard = (cards) => actions.selectCard(cards[0].id);
+
 const thunkActions = {
   addCard: () => {
     return (dispatch, getState) => {
@@ -49,12 +51,22 @@ const thunkActions = {
         dispatch(actions.selectCard(cards[cards.length - 1].id));
     };
   },
+  deleteCard: cardId => {
+    return (dispatch, getState) => {
+      const state = getState();
+      if (getEditedCard(state).id == cardId)
+        dispatch(selectFirstCard(getCards(state)));
+
+      dispatch({ type: ActionsTypes.DELETE_CARD, payload: cardId });
+    };
+  },
+
   openDeck: deck => {
     return (dispatch, getState) => {
       dispatch({ type: ActionsTypes.OPEN_DECK, payload: deck });
       const cards = getCards(getState());
       if (cards.length)
-        dispatch(actions.selectCard(cards[0].id));
+        dispatch(selectFirstCard(cards));
     };
   },
 };

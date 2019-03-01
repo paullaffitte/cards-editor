@@ -5,6 +5,7 @@ const ActionsTypes = keyMirror({
     UPDATE_CARD: null,
     STAGE_CARDS: null,
     ADD_CARD: null,
+    DELETE_CARD: null,
 
     OPEN_DECK: null,
     UPDATE_FILENAME: null,

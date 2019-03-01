@@ -55,6 +55,12 @@ const deck = {
       current: { cards: {$push: [newCard]} }
     });
   },
+  [ActionsTypes.DELETE_CARD]: (state, cardId) => {
+    const deleteCard = cards => cards.filter(card => card.id != cardId);
+    return deckUpdate(state, {
+      current: { cards: {$apply: deleteCard} }
+    });
+  },
 
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
     deck.lastCardId = initialState.deck.lastCardId;
