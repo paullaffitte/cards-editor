@@ -21,9 +21,8 @@ class DeckEditor extends Component {
   }
 
   onNew = () => {
-    console.log(this.confirm);
     Modal.confirm({
-      'title': 'Confirmation',
+      title: 'Confirmation',
       content: 'Are you sure to create a new deck. This will discard current changes if there are any.',
       okText: 'New deck',
       onOk : close => {

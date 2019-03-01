@@ -4,7 +4,7 @@ const fs = remote.require('fs');
 
 const cleanDeck = ({filename, cards, ...data}) => ({
   ...data,
-  cards: cards.map(({original, ...card}) => card)
+  cards: cards.map(({original, updated, ...card}) => card)
 });
 
 class DeckStorage {
@@ -14,7 +14,8 @@ class DeckStorage {
   }
 
   static write(filename, data) {
-    fs.writeFileSync(filename, JSON.stringify(data));
+    console.log(data, cleanDeck(data));
+    fs.writeFileSync(filename, JSON.stringify(cleanDeck(data)));
   }
 
   static open(filename) {
@@ -38,13 +39,13 @@ class DeckStorage {
     if (!filename)
       return DeckStorage.saveAs();
 
-    DeckStorage.write(filename, cleanDeck(data));
+    DeckStorage.write(filename, data);
     return filename;
   }
 
   static saveAs(newFilename) {
     if (newFilename) {
-      DeckStorage.write(newFilename, cleanDeck(DeckStorage.onSave()));
+      DeckStorage.write(newFilename, DeckStorage.onSave());
       return newFilename;
     }
 
@@ -54,7 +55,7 @@ class DeckStorage {
         return;
       }
 
-      DeckStorage.write(newFilename, cleanDeck(DeckStorage.onSave()));
+      DeckStorage.write(newFilename, DeckStorage.onSave());
       resolve(newFilename);
     }));
   }
