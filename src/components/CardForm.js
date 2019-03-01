@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Divider, Form, Input, InputNumber, Row, Col } from 'antd'
+import { Divider, Form, Input, InputNumber, Row, Col } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 

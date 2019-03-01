@@ -8,10 +8,6 @@ function deckUpdate(state, data) {
   return update(state, {deck: data});
 }
 
-function updateCard(cards, id, updateCard) {
-  return cards.map(c => (c.id !== id) ? c : updateCard(c));
-}
-
 const deck = {
   [ActionsTypes.SELECT_CARD]: (state, cardId) => {
     const card        = getCardById(state, cardId);
@@ -56,7 +52,7 @@ const deck = {
     });
   },
   [ActionsTypes.DELETE_CARD]: (state, cardId) => {
-    const deleteCard = cards => cards.filter(card => card.id != cardId);
+    const deleteCard = cards => cards.filter(card => card.id !== cardId);
     return deckUpdate(state, {
       current: { cards: {$apply: deleteCard} }
     });

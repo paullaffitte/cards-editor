@@ -14,7 +14,6 @@ class DeckStorage {
   }
 
   static write(filename, data) {
-    console.log(data, cleanDeck(data));
     fs.writeFileSync(filename, JSON.stringify(cleanDeck(data)));
   }
 

@@ -18,7 +18,7 @@ class CardList extends Component {
     const backgroundImage = {backgroundImage: `url('${card.thumbnail}')`};
     const className       =  [
       'list-item card ',
-      card.id == this.props.selectedCard.id ? 'selected' : '',
+      card.id === this.props.selectedCard.id ? 'selected' : '',
       card.updated ? 'updated' : ''
     ].join(' ');
 

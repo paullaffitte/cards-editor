@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getResourceByName, getResourceAsImage } from '../state/selectors/deck';
+import { getResourceByName } from '../state/selectors/deck';
 
 class Card extends Component {
 
@@ -11,10 +11,8 @@ class Card extends Component {
 
   async componentDidMount() {
     const refs = [this.refs.thumbnail, this.refs.background];
-    const refCount = refs.length;
-    let refsReady = [];
 
-    refs.map(ref => {
+    refs.forEach(ref => {
       ref.onload = () => {
         if (refs.every(ref => ref.complete))
           this.renderCanvas();
@@ -28,7 +26,7 @@ class Card extends Component {
     const { width, height } = background;
     const ctx = canvas.getContext("2d");
 
-    if (this.state.width != width || this.state.height != height)
+    if (this.state.width !== width || this.state.height !== height)
       this.setState({ width, height });
 
     ctx.drawImage(thumbnail, background.width / 2 - thumbnail.width / 2, 0);
@@ -44,8 +42,8 @@ class Card extends Component {
         <div>Attack: {this.props.attack}</div>
 
         <canvas ref="canvas" width={this.state.width} height={this.state.height} />
-        <img ref="thumbnail" src={this.props.thumbnail} className="hidden" />
-        <img ref="background" src={this.props.background} className="hidden" />
+        <img ref="thumbnail" src={this.props.thumbnail} className="hidden" alt="canvas_source" />
+        <img ref="background" src={this.props.background} className="hidden" alt="canvas_source" />
       </div>
     );
   }

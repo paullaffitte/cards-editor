@@ -62,7 +62,7 @@ const thunkActions = {
   deleteCard: cardId => {
     return (dispatch, getState) => {
       const state = getState();
-      if (getEditedCard(state).id == cardId)
+      if (getEditedCard(state).id === cardId)
         dispatch(selectFirstCard(getCards(state)));
 
       dispatch({ type: ActionsTypes.DELETE_CARD, payload: cardId });

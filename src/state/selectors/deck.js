@@ -30,5 +30,5 @@ export const getEditedCard = state => {
 
 export const getCardById = createSelector(
   [ getCards, getProps ],
-  (cards, id) => cards.find(card => card.id == id)
+  (cards, id) => cards.find(card => card.id === id)
 );
