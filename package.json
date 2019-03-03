@@ -5,7 +5,7 @@
     "email": "paul.laffitte@epitech.eu"
   },
   "description": "A cards editor",
-  "version": "0.1.0",
+  "version": "0.1.0-follow-up-1",
   "private": true,
   "dependencies": {
     "electron-is-dev": "^1.0.1",
@@ -29,7 +29,8 @@
     "electron": "electron .",
     "pack": "electron-builder -c.extraMetadata.main=src/electron/main.js --dir",
     "dist": "electron-builder -c.extraMetadata.main=src/electron/main.js",
-    "release": "yarn build && yarn dist"
+    "publish-github": "./publish.sh",
+    "release": "yarn build && yarn dist && yarn publish-github"
   },
   "main": "src/electron/main.js",
   "homepage": "./",
