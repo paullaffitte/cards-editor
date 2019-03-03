@@ -23,7 +23,7 @@ read -p "Github OAuth TOKEN [$env_token]: " -r TOKEN
 LOGIN=${LOGIN:-$default_login}
 TOKEN=${TOKEN:-$env_token}
 
-VERSION=$(cat .semver)
+VERSION=$(semver.sh $@)
 default_version_name="v$VERSION"
 
 read -p "Release name [$default_version_name]: " RELEASE_NAME
@@ -31,6 +31,7 @@ read -p "Description: " DESCRIPTION
 read -p "It's a prerelease (y/N): " -n 1 -r && echo
 RELEASE_NAME=${RELEASE_NAME:-$default_version_name}
 
+yarn release
 cd ./dist
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
