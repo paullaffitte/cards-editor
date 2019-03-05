@@ -4,7 +4,7 @@ Cards Editor is an open source software based on Electron and React. Its goal is
 ## Getting started
 
 ### Download release
-not available yet.
+[Latest (0.1.1-follow-up-1)](https://github.com/paullaffitte/cards-editor/releases/tag/0.1.1-follow-up-1)
 
 ### Build
 Install the dependencies and build.
