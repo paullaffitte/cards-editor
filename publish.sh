@@ -5,6 +5,7 @@ function release() {
 	local version="$2"
 	local release_name="$3"
 
+	cd ./dist
 	github-release "$type" \
 		--owner "$LOGIN" \
 		--repo cards-editor \
@@ -13,7 +14,7 @@ function release() {
 		--body "$DESCRIPTION" \
 		$prerelease \
 		-T "$TOKEN" \
-		cards-editor*
+		*"$VERSION"*
 }
 
 default_login='paullaffitte'
@@ -32,7 +33,6 @@ read -p "It's a prerelease (y/N): " -n 1 -r && echo
 RELEASE_NAME=${RELEASE_NAME:-$default_version_name}
 
 yarn release
-cd ./dist
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     prerelease='--prerelease=true'
