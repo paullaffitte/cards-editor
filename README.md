@@ -1,10 +1,12 @@
 # Cards Editor
-Cards Editor is an open source software based on Electron and React. Its goal is firstly to offer an easy and intuitive way to create and customize cards, secondly to export them in pdf format to be printed.
+Cards Editor is an open source software based on Electron and React. Its goal is firstly to offer an easy and intuitive way to create and customize cards, secondly to export them in pdf format to be printed. Installers are currently availables for Linux and Windows.
 
 ## Getting started
 
 ### Download release
-[Latest (0.1.1-follow-up-1)](https://github.com/paullaffitte/cards-editor/releases/tag/0.1.1-follow-up-1)
+You can find installers for Windows and Linux in project's releases.
+
+[`latest (0.1.1-follow-up-1)`](https://github.com/paullaffitte/cards-editor/releases/latest)
 
 ### Build
 Install the dependencies and build.
@@ -12,15 +14,20 @@ Install the dependencies and build.
 Installers can then be found at `./dist`.
 
 ### Developpement mode
-Install the dependencies.
-```yarn```
+To enter in developpment mode, you need dependencies to be installed. Then you can start react and electron. Be careful, react can takes time to start, so you will propably need to refresh the page when it's ready, or restarting electron.
 
-Start react
-```yarn start```
+When you start react, it opens a tab in your main browser, you can close it. It will display some errors, you can ignore them, it's because the editor is not meant to be runned outside of electron.
 
-Start electron
-```yarn electron```
+``` bash
+# Install dependencies
+yarn
 
+# Start react
+yarn start
+
+# Start electron
+yarn electron
+```
 
 ### package.json scripts
 #### React
@@ -52,6 +59,3 @@ not available yet.
 
 ## Screenshots
 not available yet.
-
-## Authors
-- [Paul Laffitte](https://github.com/paullaffitte)
