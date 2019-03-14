@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Row, Col } from 'antd';
 import Card from './Card';
 import CardForm from './CardForm';
+import { getEditedCard } from '../state/selectors/deck'
 
 class CardEditor extends Component {
 
@@ -21,7 +22,7 @@ class CardEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: state.deck.editedCard
+  data: getEditedCard(state)
 });
 
 export default connect(mapStateToProps)(CardEditor);

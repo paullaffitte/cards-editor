@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getEditedCard, getCardById } from '../selectors/deck';
+import { getEditedCard, getItemById } from '../selectors/deck';
 import initialState from '../initialState';
 import uuid from 'uuid/v1';
 
@@ -9,14 +9,15 @@ function deckUpdate(state, data) {
 }
 
 const deck = {
-  [ActionsTypes.SELECT_CARD]: (state, cardId) => {
-    const card        = getCardById(state, cardId);
-    const backupCard  = cards => cards.map(c => (c.id !== cardId) ? c : selectedCard);
-    const selectedCard = { ...card, original: card };
-    const updates     = { editedCard: {$set: selectedCard} };
+  [ActionsTypes.SELECT_ITEM]: (state, { type, id }) => {
+    type = ActionsTypes.Item[type].toLowerCase();
+    const item        = getItemById(state, { type, id });
+    const backupItem  = items => items.map(c => (c.id !== id) ? c : selectedItem);
+    const selectedItem = { ...item, original: item };
+    const updates     = { edited: {$set: {[type]: selectedItem}} };
 
-    if (!('original' in card))
-      updates.current = { cards: {$apply: backupCard} };
+    if (!('original' in item))
+      updates.current = { [`${type}s`]: {$apply: backupItem} };
 
     return deckUpdate(state, updates);
   },
@@ -60,7 +61,6 @@ const deck = {
 
   [ActionsTypes.NEW_DECK]: (state, deck) => initialState,
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
-    deck.lastCardId = initialState.deck.lastCardId;
     return deckUpdate(initialState, { current: { $set: deck } });
   },
   [ActionsTypes.UPDATE_FILENAME]: (state, filename) => {

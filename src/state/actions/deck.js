@@ -1,13 +1,15 @@
 import ActionsTypes from '../../constants/ActionsTypes';
 import { getCards, getEditedCard } from '../selectors/deck';
 
+const selectItem = (type, id) => {
+  return {
+    type: ActionsTypes.SELECT_ITEM,
+    payload: { type, id }
+  };
+};
+
 const actions = {
-  selectCard: cardId => {
-    return {
-      type: ActionsTypes.SELECT_CARD,
-      payload: cardId,
-    };
-  },
+  selectCard: cardId => selectItem(ActionsTypes.Item.CARD, cardId),
   updateCard: card => {
     return {
       type: ActionsTypes.UPDATE_CARD,

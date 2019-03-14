@@ -3,9 +3,13 @@ const initialState = {
     current: {
       filename: null,
       cards: [],
+      effects: [],
       resources: {},
     },
-    editedCard: {}
+    edited: {
+      card: {},
+      effect: {}
+    }
   }
 };
 

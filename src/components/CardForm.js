@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Divider, Form, Input, InputNumber, Row, Col } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
+import { getEditedCard } from '../state/selectors/deck';
 
 class CardForm extends Component {
   render() {
@@ -61,7 +62,7 @@ class CardForm extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: state.deck.editedCard
+  data: getEditedCard(state)
 });
 
 export default connect(mapStateToProps)(Form.create({

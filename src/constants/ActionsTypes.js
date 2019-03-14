@@ -1,7 +1,8 @@
 import keyMirror from 'key-mirror';
 
-const ActionsTypes = keyMirror({
-    SELECT_CARD: null,
+const ActionsTypes = {
+  ...keyMirror({
+    SELECT_ITEM: null,
     UPDATE_CARD: null,
     STAGE_CARDS: null,
     ADD_CARD: null,
@@ -13,6 +14,11 @@ const ActionsTypes = keyMirror({
 
     ADD_RESOURCE: null,
     REMOVE_RESOURCE: null
-});
+  }),
+  Item: keyMirror({
+    CARD: null,
+    EFFECT: null
+  })
+};
 
 export default ActionsTypes;
