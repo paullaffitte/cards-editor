@@ -1,4 +1,4 @@
-.CardList {
+.List {
 
 	$text-color: white;
 	$border-color: #111;
@@ -12,7 +12,7 @@
 	display: flex;
 	flex-direction: column;
 
-	.cards {
+	.items {
 		bottom: 0;
 		overflow-y: auto;
 		height: 100%;
@@ -25,9 +25,7 @@
 
 		border-left: solid black 0;
 		transition: border-width $transition-speed linear;
-	}
 
-	.card {
 		height: 4em;
 		color: $text-color;
 		text-shadow: rgba(255, 255, 255, 0.4) 0 0 15px, black 0 0 3px, black 0 0 1px;
@@ -64,7 +62,7 @@
 		}
 	}
 
-	.card:hover {
+	.list-item:hover {
 		border-left: solid $border-color-hover 3px;
 		transition: border-width $transition-speed linear;
 
@@ -74,12 +72,12 @@
 		}
 	}
 
-	.card.selected {
+	.list-item.selected {
 		border-left: solid $border-color-selected 3px;
 		transition: border-width $transition-speed linear;
 	}
 
-	.card.updated:not(.selected) {
+	.list-item.updated:not(.selected) {
 		border-left: solid $border-color-updated 3px;
 		transition: border-width $transition-speed linear;
 	}

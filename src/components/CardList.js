@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon } from 'antd';
 import { getEditedCard, getCards, getResourceByName } from '../state/selectors/deck';
-import { Popconfirm } from 'antd';
 import DeckActions from '../state/actions/deck';
-import '../styles/CardList.scss';
+import List from './List';
 
 class CardList extends Component {
 
@@ -14,39 +12,21 @@ class CardList extends Component {
 
   deleteCard = card => this.props.dispatch(DeckActions.deleteCard(card.id));
 
-  renderCardItem = card => {
-    const backgroundImage = {backgroundImage: `url('${card.thumbnail}')`};
-    const className       =  [
-      'list-item card ',
+  cardToItem = card => ({ ...card,
+    className: [
       card.id === this.props.selectedCard.id ? 'selected' : '',
       card.updated ? 'updated' : ''
-    ].join(' ');
-
-    return (
-      <div key={card.id} className={className} style={backgroundImage}>
-        <Popconfirm className="delete"
-          title="Are you sure to delete this card ? (it can't be undone)" placement="left"
-          onConfirm={() => this.deleteCard(card)}
-          okText="Yes" cancelText="No">
-          <Icon type="close" />
-        </Popconfirm>
-        <div className="content" onClick={() => this.selectCard(card)}>
-          <h2>{card.name}</h2>
-          <span>{card.description}</span>
-        </div>
-      </div>
-    );
-  };
+    ].join(' ')
+  });
 
   render() {
     return (
-      <div className="CardList">
-        <h2 style={{color: 'white'}}>CardList</h2>
-        <div className="cards">
-          {this.props.cards.map(this.renderCardItem)}
-        </div>
-        <button className="new" onClick={this.addCard}>+</button>
-      </div>
+      <List
+        deleteItem={this.deleteCard}
+        selectItem={this.selectCard}
+        addItem={this.addCard}
+        items={this.props.cards.map(this.cardToItem)}
+      />
     );
   }
 }
