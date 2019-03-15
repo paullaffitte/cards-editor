@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
-import './App.css';
+import './App.scss';
 import reducers from './state/reducers/index';
 import DeckEditor from './components/DeckEditor';
 

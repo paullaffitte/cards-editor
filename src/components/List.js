@@ -35,7 +35,6 @@ class List extends Component {
   render() {
     return (
       <div className="List">
-        <h2 style={{color: 'white'}}>List</h2>
         <div className="items">
           {this.props.items.map(this.renderItem)}
         </div>

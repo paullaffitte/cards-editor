@@ -16,7 +16,7 @@ const deck = {
     const item        = getItemById(state, { type, id });
     const backupItem  = items => items.map(i => (i.id !== id) ? i : selectedItem);
     const selectedItem = { ...item, original: item };
-    const updates     = { edited: {$set: {[getItemKey(type)]: selectedItem}} };
+    const updates     = { edited: {[getItemKey(type)]: {$set: selectedItem}} };
 
     if (!('original' in item))
       updates.current = { [getItemKey(type, true)]: {$apply: backupItem} };
@@ -36,8 +36,8 @@ const deck = {
     item = update(editedItem, {$merge: item});
     item.updated = true;
     return deckUpdate(state, {
-      current: {[getItemKey(type, true)]: {$apply: updateItem}},
-      editedItem: {$set: item}
+      current: { [getItemKey(type, true)]: {$apply: updateItem} },
+      edited: { [getItemKey(type)]: {$set: item} }
     });
   },
   [ActionsTypes.STAGE_ITEMS]: (state, type) => {

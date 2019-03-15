@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout, Modal } from 'antd';
+import { Layout, Modal, Tabs } from 'antd';
 import 'antd/dist/antd.css';
 import CardList from './CardList';
+import EffectList from './EffectList';
 import CardEditor from './CardEditor';
 import DeckStorage from '../services/DeckStorage';
 import DeckActions from '../state/actions/deck';
 import ActionsTypes from '../constants/ActionsTypes';
 
 const { Sider, Content } = Layout;
+const TabPane = Tabs.TabPane;
 
 class DeckEditor extends Component {
 
@@ -59,7 +61,12 @@ class DeckEditor extends Component {
         <Content>
           <CardEditor/>
         </Content>
-        <Sider width={250}><CardList/></Sider>
+        <Sider width={250}>
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="Cards" key="1"><CardList/></TabPane>
+            <TabPane tab="Effects" key="2"><EffectList/></TabPane>
+          </Tabs>
+        </Sider>
       </Layout>
     );
   }

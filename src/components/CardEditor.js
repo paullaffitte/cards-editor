@@ -22,7 +22,8 @@ class CardEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: getEditedCard(state)
+  data: getEditedCard(state),
+  state: state
 });
 
 export default connect(mapStateToProps)(CardEditor);
