@@ -1,6 +1,5 @@
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getCards, getEditedItem } from '../selectors/deck';
-import keyMirror from 'key-mirror';
+import { getItems, getEditedItem } from '../selectors/deck';
 
 const selectItem = (type, id) => {
   return {
@@ -55,33 +54,38 @@ const actions = {
   }
 };
 
-const selectFirstCard = (cards) => actions.selectCard(cards[0].id);
+const selectFirstItem = (type, items) => selectItem(type, items[0].id);
+
+const addItem = type => {
+  return (dispatch, getState) => {
+    dispatch({ type: ActionsTypes.ADD_ITEM, payload: type });
+
+    const items = getItems(getState(), type);
+    if (items.length)
+      dispatch(selectItem(type, items[items.length - 1].id));
+  };
+};
+
+const deleteItem = (type, id) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (getEditedItem(type, state).id === id)
+      dispatch(selectFirstItem(type, getItems(state, type)));
+
+    dispatch({ type: ActionsTypes.DELETE_ITEM, payload: { type, id } });
+  };
+};
 
 const thunkActions = {
-  addCard: () => {
-    return (dispatch, getState) => {
-      dispatch({ type: ActionsTypes.ADD_CARD, payload: null });
-      const cards = getCards(getState());
-      if (cards.length)
-        dispatch(actions.selectCard(cards[cards.length - 1].id));
-    };
-  },
-  deleteCard: cardId => {
-    return (dispatch, getState) => {
-      const state = getState();
-      if (getEditedItem(state, 'CARD').id === cardId)
-        dispatch(selectFirstCard(getCards(state)));
-
-      dispatch({ type: ActionsTypes.DELETE_CARD, payload: cardId });
-    };
-  },
+  addCard:    () => addItem(ActionsTypes.Item.CARD),
+  deleteCard: id => deleteItem(ActionsTypes.Item.CARD, id),
 
   openDeck: deck => {
     return (dispatch, getState) => {
       dispatch({ type: ActionsTypes.OPEN_DECK, payload: deck });
-      const cards = getCards(getState());
+      const cards = getItems(getState(), ActionsTypes.Item.CARD);
       if (cards.length)
-        dispatch(selectFirstCard(cards));
+        dispatch(selectFirstItem(ActionsTypes.Item.CARD, cards));
     };
   },
 };

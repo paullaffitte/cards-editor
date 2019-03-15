@@ -5,8 +5,8 @@ const ActionsTypes = {
     SELECT_ITEM: null,
     UPDATE_ITEM: null,
     STAGE_ITEMS: null,
-    ADD_CARD: null,
-    DELETE_CARD: null,
+    ADD_ITEM: null,
+    DELETE_ITEM: null,
 
     NEW_DECK: null,
     OPEN_DECK: null,

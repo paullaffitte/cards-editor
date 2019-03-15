@@ -50,16 +50,16 @@ const deck = {
       current: {[getItemKey(type, true)]: {$apply: stageCards}}
     });
   },
-  [ActionsTypes.ADD_CARD]: state => {
-    const newCard = { id: uuid() };
+  [ActionsTypes.ADD_ITEM]: (state, type) => {
+    const newItem = { id: uuid() };
     return deckUpdate(state, {
-      current: { cards: {$push: [newCard]} }
+      current: { [getItemKey(type, true)]: {$push: [newItem]} }
     });
   },
-  [ActionsTypes.DELETE_CARD]: (state, cardId) => {
-    const deleteCard = cards => cards.filter(card => card.id !== cardId);
+  [ActionsTypes.DELETE_ITEM]: (state, {type, id}) => {
+    const deleteItem = items => items.filter(item => item.id !== id);
     return deckUpdate(state, {
-      current: { cards: {$apply: deleteCard} }
+      current: { [getItemKey(type, true)]: {$apply: deleteItem} }
     });
   },
 
