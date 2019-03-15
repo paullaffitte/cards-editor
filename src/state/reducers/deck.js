@@ -8,7 +8,7 @@ function deckUpdate(state, data) {
   return update(state, {deck: data});
 }
 
-const getItemKey = (type, list) => type.toLowerCase() + (list ? 's' : '');
+const getItemKey = ActionsTypes.getItemKey;
 
 const deck = {
   [ActionsTypes.SELECT_ITEM]: (state, { type, id }) => {
@@ -47,7 +47,7 @@ const deck = {
       return stagedCard;
     });
     return deckUpdate(state, {
-      current: {[getItemKey(type, true)]: {$apply: stageCards}}
+      current: { [getItemKey(type, true)]: {$apply: stageCards} }
     });
   },
   [ActionsTypes.ADD_ITEM]: (state, type) => {

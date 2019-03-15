@@ -15,7 +15,7 @@ const updateItem = (type, item) => {
   };
 };
 
-const stageItems = (type) => {
+const stageItems = type => {
   return {
     type: ActionsTypes.STAGE_ITEMS,
     payload: type,
@@ -23,9 +23,10 @@ const stageItems = (type) => {
 };
 
 const actions = {
-  selectCard: cardId => selectItem(ActionsTypes.Item.CARD, cardId),
+  selectItem,
+  stageItems,
+
   updateCard: card => updateItem(ActionsTypes.Item.CARD, card),
-  stageCards: () => stageItems(ActionsTypes.Item.CARD),
 
   newDeck: () => {
     return {
@@ -60,7 +61,7 @@ const addItem = type => {
   return (dispatch, getState) => {
     dispatch({ type: ActionsTypes.ADD_ITEM, payload: type });
 
-    const items = getItems(getState(), type);
+    const items = getItems(type, getState());
     if (items.length)
       dispatch(selectItem(type, items[items.length - 1].id));
   };
@@ -70,20 +71,20 @@ const deleteItem = (type, id) => {
   return (dispatch, getState) => {
     const state = getState();
     if (getEditedItem(type, state).id === id)
-      dispatch(selectFirstItem(type, getItems(state, type)));
+      dispatch(selectFirstItem(type, getItems(type, state)));
 
     dispatch({ type: ActionsTypes.DELETE_ITEM, payload: { type, id } });
   };
 };
 
 const thunkActions = {
-  addCard:    () => addItem(ActionsTypes.Item.CARD),
-  deleteCard: id => deleteItem(ActionsTypes.Item.CARD, id),
+  addItem,
+  deleteItem,
 
   openDeck: deck => {
     return (dispatch, getState) => {
       dispatch({ type: ActionsTypes.OPEN_DECK, payload: deck });
-      const cards = getItems(getState(), ActionsTypes.Item.CARD);
+      const cards = getItems(ActionsTypes.Item.CARD, getState());
       if (cards.length)
         dispatch(selectFirstItem(ActionsTypes.Item.CARD, cards));
     };

@@ -28,4 +28,6 @@ ActionsTypes.safeItem = type => {
   return safeType;
 }
 
+ActionsTypes.getItemKey = (safeType, list) => safeType.toLowerCase() + (list ? 's' : '');
+
 export default ActionsTypes;

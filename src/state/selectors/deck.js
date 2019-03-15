@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import initialState from '../initialState';
-import ActionTypes from '../../constants/ActionsTypes';
+import ActionsTypes from '../../constants/ActionsTypes';
 
 export const getProps = (state, props) => {
   return props;
@@ -20,21 +20,24 @@ export const getResourceByName = createSelector(
   (resources, name) => name in resources ? 'file://' + resources[name] : null
 );
 
-export const getItems = createSelector(
+const _getItems = createSelector(
   [ getCurrentDeck, getProps ],
-  (deck, { type }) => deck.cards
+  (deck, { type }) => {
+    return deck[ActionsTypes.getItemKey(type, true)];
+  }
 );
 
+export const getItems = (type, state) => _getItems(state, { type });
+
 export const getEditedItem = (type, state) => {
-  return state.deck ? state.deck.edited[type.toLowerCase()] : getEditedItem(type, initialState);
+  return state.deck ? state.deck.edited[ActionsTypes.getItemKey(type)] : getEditedItem(type, initialState);
 };
 
 export const getItemById = createSelector(
-  [ getItems, getProps ],
+  [ _getItems, getProps ],
   (items, { type, id }) => {
     return items.find(item => item.id === id)
   }
 );
 
-export const getCards = state => getItems(state, ActionTypes.Item.CARD);
-export const getEditedCard = state => getEditedItem(ActionTypes.Item.CARD, state);
+export const getEditedCard = state => getEditedItem(ActionsTypes.Item.CARD, state);

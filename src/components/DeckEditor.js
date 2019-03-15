@@ -6,6 +6,7 @@ import CardList from './CardList';
 import CardEditor from './CardEditor';
 import DeckStorage from '../services/DeckStorage';
 import DeckActions from '../state/actions/deck';
+import ActionsTypes from '../constants/ActionsTypes';
 
 const { Sider, Content } = Layout;
 
@@ -48,7 +49,8 @@ class DeckEditor extends Component {
       return;
 
     this.props.dispatch(DeckActions.updateFilename(filename));
-    this.props.dispatch(DeckActions.stageCards());
+    for (let itemType in ActionsTypes.Item)
+      this.props.dispatch(DeckActions.stageItems(itemType));
   };
 
   render() {
