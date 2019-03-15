@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getEditedCard, getItemById } from '../selectors/deck';
+import { getEditedItem, getItemById } from '../selectors/deck';
 import initialState from '../initialState';
 import uuid from 'uuid/v1';
 
@@ -8,42 +8,46 @@ function deckUpdate(state, data) {
   return update(state, {deck: data});
 }
 
+const getItemKey = (type, list) => type.toLowerCase() + (list ? 's' : '');
+
 const deck = {
   [ActionsTypes.SELECT_ITEM]: (state, { type, id }) => {
-    type = ActionsTypes.Item[type].toLowerCase();
+    type = ActionsTypes.safeItem(type);
     const item        = getItemById(state, { type, id });
-    const backupItem  = items => items.map(c => (c.id !== id) ? c : selectedItem);
+    const backupItem  = items => items.map(i => (i.id !== id) ? i : selectedItem);
     const selectedItem = { ...item, original: item };
-    const updates     = { edited: {$set: {[type]: selectedItem}} };
+    const updates     = { edited: {$set: {[getItemKey(type)]: selectedItem}} };
 
     if (!('original' in item))
-      updates.current = { [`${type}s`]: {$apply: backupItem} };
+      updates.current = { [getItemKey(type, true)]: {$apply: backupItem} };
 
     return deckUpdate(state, updates);
   },
-  [ActionsTypes.UPDATE_CARD]: (state, updatedCard) => {
-    const editedCard  = getEditedCard(state);
-    const updateCard  = cards => cards.map(card => (card.id !== updatedCard.id) ? card : updatedCard);
+  [ActionsTypes.UPDATE_ITEM]: (state, { type, item }) => {
+    type = ActionsTypes.safeItem(type);
+    const editedItem  = getEditedItem(type, state);
+    const updateItem  = items => items.map(i => (i.id !== item.id) ? i : item);
 
-    if (updatedCard.id !== editedCard.id) {
-      alert("An unexpected error occured: updated card id is different than edited card id.");
+    if (item.id !== editedItem.id) {
+      alert("An unexpected error occured: updated item id is different than edited item id.");
       return state;
     }
 
-    updatedCard = update(editedCard, {$merge: updatedCard});
-    updatedCard.updated = true;
+    item = update(editedItem, {$merge: item});
+    item.updated = true;
     return deckUpdate(state, {
-      current: {cards: {$apply: updateCard}},
-      editedCard: {$set: updatedCard}
+      current: {[getItemKey(type, true)]: {$apply: updateItem}},
+      editedItem: {$set: item}
     });
   },
-  [ActionsTypes.STAGE_CARDS]: state => {
+  [ActionsTypes.STAGE_ITEMS]: (state, type) => {
+    type = ActionsTypes.safeItem(type);
     const stageCards = cards => cards.map(card => {
       const {updated, original, ...stagedCard} = card;
       return stagedCard;
     });
     return deckUpdate(state, {
-      current: {cards: {$apply: stageCards}}
+      current: {[getItemKey(type, true)]: {$apply: stageCards}}
     });
   },
   [ActionsTypes.ADD_CARD]: state => {

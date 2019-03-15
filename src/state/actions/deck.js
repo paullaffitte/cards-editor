@@ -1,5 +1,6 @@
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getCards, getEditedCard } from '../selectors/deck';
+import { getCards, getEditedItem } from '../selectors/deck';
+import keyMirror from 'key-mirror';
 
 const selectItem = (type, id) => {
   return {
@@ -8,20 +9,24 @@ const selectItem = (type, id) => {
   };
 };
 
+const updateItem = (type, item) => {
+  return {
+    type: ActionsTypes.UPDATE_ITEM,
+    payload: { type, item }
+  };
+};
+
+const stageItems = (type) => {
+  return {
+    type: ActionsTypes.STAGE_ITEMS,
+    payload: type,
+  };
+};
+
 const actions = {
   selectCard: cardId => selectItem(ActionsTypes.Item.CARD, cardId),
-  updateCard: card => {
-    return {
-      type: ActionsTypes.UPDATE_CARD,
-      payload: card,
-    };
-  },
-  stageCards: () => {
-    return {
-      type: ActionsTypes.STAGE_CARDS,
-      payload: null,
-    };
-  },
+  updateCard: card => updateItem(ActionsTypes.Item.CARD, card),
+  stageCards: () => stageItems(ActionsTypes.Item.CARD),
 
   newDeck: () => {
     return {
@@ -64,7 +69,7 @@ const thunkActions = {
   deleteCard: cardId => {
     return (dispatch, getState) => {
       const state = getState();
-      if (getEditedCard(state).id === cardId)
+      if (getEditedItem(state, 'CARD').id === cardId)
         dispatch(selectFirstCard(getCards(state)));
 
       dispatch({ type: ActionsTypes.DELETE_CARD, payload: cardId });
