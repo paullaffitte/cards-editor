@@ -25,8 +25,7 @@ class List extends Component {
           <Icon type="close" />
         </Popconfirm>
         <div className="content" onClick={() => this.selectItem(item)}>
-          <h2>{item.name}</h2>
-          <span>{item.description}</span>
+          {this.props.renderItem(item)}
         </div>
       </div>
     );
@@ -34,7 +33,7 @@ class List extends Component {
 
   render() {
     return (
-      <div className="List">
+      <div className={'List ' + this.props.type.toLowerCase() + '-list' }>
         <div className="items">
           {this.props.items.map(this.renderItem)}
         </div>
@@ -46,6 +45,7 @@ class List extends Component {
 
 const mapStateToProps = props => state => ({
   type: props.type,
+  renderItem: props.renderItem,
   items: props.preprocess(state, getItems(props.type, state)).map(item => ({
     ...item,
     className: [
