@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Icon, Button } from 'antd';
 import DeckActions from '../state/actions/deck';
+import ActionsTypes from '../constants/ActionsTypes';
 import EffectList from './EffectList';
 
 class EffectPicker extends Component {
@@ -11,7 +14,7 @@ class EffectPicker extends Component {
   static getDerivedStateFromProps(nextProps) {
     if ('value' in nextProps) {
       return {
-        selected: nextProps.value,
+        selected: nextProps.value ? nextProps.value : [],
       };
     }
     return null;
@@ -30,6 +33,8 @@ class EffectPicker extends Component {
     }
   }
 
+  addEffect = () => this.props.dispatch(DeckActions.addItem(ActionsTypes.Item.EFFECT));
+
   preprocess = item => {
     return {
       ...item,
@@ -39,12 +44,19 @@ class EffectPicker extends Component {
 
   render() {
     return (
+      <div>
       <EffectList
         onSelect={this.onSelect}
         preprocess={this.preprocess}
         />
+        <Button onClick={() => this.addEffect()}>
+          <Icon type="plus" /> New effect
+        </Button>
+      </div>
     );
   }
 }
 
-export default EffectPicker;
+const mapStateToProps = state => ({});
+
+export default connect(mapStateToProps)(EffectPicker);

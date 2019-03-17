@@ -94,3 +94,9 @@
 		background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
 	}
 }
+
+.List.effect-list {
+	.list-item:hover {
+		font-weight: bold;
+	}
+}
