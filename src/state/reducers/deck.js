@@ -65,7 +65,7 @@ const deck = {
 
   [ActionsTypes.NEW_DECK]: (state, deck) => initialState,
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
-    return deckUpdate(initialState, { current: { $set: deck } });
+    return deckUpdate(initialState, { current: { $merge: deck } });
   },
   [ActionsTypes.UPDATE_FILENAME]: (state, filename) => {
     return deckUpdate(state, { current: {filename: {$set: filename}} });
