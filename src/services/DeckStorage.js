@@ -2,9 +2,12 @@ const { remote, ipcRenderer } = window.require('electron');
 const { dialog } = remote;
 const fs = remote.require('fs');
 
-const cleanDeck = ({filename, cards, ...data}) => ({
+const cleanList = ({original, updated, ...item}) => item;
+
+const cleanDeck = ({filename, cards, effects, ...data}) => ({
   ...data,
-  cards: cards.map(({original, updated, ...card}) => card)
+  cards: cards.map(cleanList),
+  effects: effects.map(cleanList)
 });
 
 class DeckStorage {

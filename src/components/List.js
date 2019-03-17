@@ -8,7 +8,12 @@ import '../styles/List.scss';
 
 class List extends Component {
 
-  selectItem = item => this.props.dispatch(DeckActions.selectItem(this.props.type, item.id));
+  selectItem = item => {
+    this.props.dispatch(DeckActions.selectItem(this.props.type, item.id))
+
+    if (this.props.onSelect)
+      this.props.onSelect(item);
+  };
 
   deleteItem = item => this.props.dispatch(DeckActions.deleteItem(this.props.type, item.id));
 
@@ -32,20 +37,19 @@ class List extends Component {
   };
 
   render() {
+    const preprocess = this.props.preprocess ? this.props.preprocess : item => item;
     return (
       <div className={'List ' + this.props.type.toLowerCase() + '-list' }>
         <div className="items">
-          {this.props.items.map(this.renderItem)}
+          {this.props.items(this.props.type, this.props.preprocess).map(this.renderItem)}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = props => state => ({
-  type: props.type,
-  renderItem: props.renderItem,
-  items: props.preprocess(state, getItems(props.type, state))
+const mapStateToProps = state => ({
+  items: (type, preprocess) => getItems(type, state).map(item => preprocess(item, state))
 });
 
-export default props => connect(mapStateToProps(props))(List);
+export default connect(mapStateToProps)(List);

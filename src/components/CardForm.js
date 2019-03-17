@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Divider, Form, Input, InputNumber, Row, Col } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
+import EffectPicker from './EffectPicker';
 import { getEditedCard } from '../state/selectors/deck';
 
 class CardForm extends Component {
@@ -22,22 +23,26 @@ class CardForm extends Component {
             {getFieldDecorator('description', {
               rules: [{ required: true, message: 'Please set a description' }],
             })(
-              <Input.TextArea  placeholder='Some words about the card' rows={4} />
+              <Input.TextArea placeholder='Some words about the card' rows={4} />
             )}
           </Form.Item>
           <Form.Item label="HP">
             {getFieldDecorator('hp', {
               rules: [],
             })(
-            <InputNumber  />
+            <InputNumber />
             )}
           </Form.Item>
           <Form.Item label="Attack">
             {getFieldDecorator('attack', {
               rules: [],
             })(
-            <InputNumber  />
+            <InputNumber />
             )}
+          </Form.Item>
+
+          <Form.Item label="Effects">
+            {getFieldDecorator('effects')(<EffectPicker />)}
           </Form.Item>
 
           <Divider />

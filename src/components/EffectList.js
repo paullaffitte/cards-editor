@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ActionsTypes from '../constants/ActionsTypes';
 import List from './List';
+import { getEditedItem } from '../state/selectors/deck';
 
-export default List({
-  type: ActionsTypes.Item.EFFECT,
-  preprocess: (state, items) => items,
-  renderItem: item => (
-    <span>effect {item.id}</span>
-  )
-});
+class EffectList extends Component {
+
+  render() {
+    return (
+      <List
+        type={ ActionsTypes.Item.EFFECT }
+        preprocess={ this.props.preprocess }
+        renderItem={ item => (
+          <div> item {item.id}</div>
+        ) }
+        onSelect={ this.props.onSelect }
+      />
+    );
+  }
+}
+
+export default EffectList

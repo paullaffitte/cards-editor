@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Layout, Modal, Tabs } from 'antd';
 import 'antd/dist/antd.css';
 import CardList from './CardList';
-import EffectList from './EffectList';
 import CardEditor from './CardEditor';
 import DeckStorage from '../services/DeckStorage';
 import DeckActions from '../state/actions/deck';
