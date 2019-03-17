@@ -1,6 +1,5 @@
 .List {
 
-	$text-color: white;
 	$border-color-hover: rgb(0, 99, 255);
 	$border-color-selected: rgb(0, 255, 99);
 	$border-color-updated: rgb(255, 165, 0);
@@ -20,18 +19,6 @@
 	.list-item {
 		border-left: solid black 0;
 		transition: border-width $transition-speed linear;
-
-		color: $text-color;
-
-		h2 {
-			color: $text-color;
-			margin-bottom: 0.2em;
-			min-height: 1em;
-		}
-		span {
-			height: 2em;
-			min-height: 1em;
-		}
 
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -73,25 +60,12 @@
 		border-left: solid $border-color-updated 3px;
 		transition: border-width $transition-speed linear;
 	}
-
-	button.new {
-		width: 100%;
-		background-color: #eee;
-		border: none;
-		font-size: 20pt;
-	}
-
-	button.new:hover {
-		background-color: #ddd;
-	}
-
-	button.new:active {
-		background-color: #bbb;
-	}
 }
 
 .List.card-list {
+
 	$border-color: #111;
+	$text-color: white;
 
 	.list-item {
 		margin-bottom: 0.5em;
@@ -101,6 +75,19 @@
 
 		border-top: solid $border-color 1px;
 		border-bottom: solid $border-color 1px;
+
+		color: $text-color;
+
+		h2 {
+			color: $text-color;
+			margin-bottom: 0.2em;
+			min-height: 1em;
+		}
+		span {
+			height: 2em;
+			min-height: 1em;
+		}
+
 	}
 
 	.content {

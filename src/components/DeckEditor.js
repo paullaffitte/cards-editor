@@ -55,6 +55,8 @@ class DeckEditor extends Component {
       this.props.dispatch(DeckActions.stageItems(itemType));
   };
 
+  addCard = () => this.props.dispatch(DeckActions.addItem(ActionsTypes.Item.CARD));
+
   render() {
     return (
       <Layout>
@@ -63,9 +65,11 @@ class DeckEditor extends Component {
         </Content>
         <Sider width={250}>
           <Tabs defaultActiveKey="1">
-            <TabPane tab="Cards" key="1"><CardList/></TabPane>
-            <TabPane tab="Effects" key="2"><EffectList/></TabPane>
+            <TabPane tab="Minions" key="1"></TabPane>
+            <TabPane tab="Spells" key="2"></TabPane>
           </Tabs>
+          <CardList/>
+          <button className="new" onClick={this.addCard}>+</button>
         </Sider>
       </Layout>
     );

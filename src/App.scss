@@ -8,7 +8,6 @@
 
 .ant-layout-sider {
 	.ant-tabs {
-		height: 100%;
 		.ant-tabs-nav {
 			width: 100%;
 		}
@@ -19,7 +18,25 @@
 			text-align: center;
 		}
 	}
-	.ant-tabs-content {
-		height: calc(100% - 60px);
+
+	.List.card-list {
+		height: calc(100% - 100px);
+	}
+
+	button.new {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		background-color: #eee;
+		border: none;
+		font-size: 20pt;
+	}
+
+	button.new:hover {
+		background-color: #ddd;
+	}
+
+	button.new:active {
+		background-color: #bbb;
 	}
 }
