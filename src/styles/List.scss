@@ -30,7 +30,7 @@
 			height: 100%;
 		}
 
-		.delete {
+		.list-item-button {
 			float: right;
 			position: relative;
 			right: 0.5em;
@@ -39,15 +39,23 @@
 			color: rgba(255, 255, 255, 0);
 			transition: color $transition-speed linear;
 		}
+
+		.list-item-button.edit {
+			right: 0.7em;
+		}
 	}
 
 	.list-item:hover {
 		border-left: solid $border-color-hover 3px;
 		transition: border-width $transition-speed linear;
 
-		.delete {
+		.list-item-button {
 			color: red;
 			transition: color $transition-speed linear;
+		}
+
+		.list-item-button.edit {
+			color: black;
 		}
 	}
 

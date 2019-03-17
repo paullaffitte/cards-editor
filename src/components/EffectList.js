@@ -14,6 +14,7 @@ class EffectList extends Component {
           <div> item {item.id}</div>
         ) }
         onSelect={ this.props.onSelect }
+        onEdit={this.props.onEdit}
       />
     );
   }

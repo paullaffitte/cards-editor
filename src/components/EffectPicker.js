@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon, Button } from 'antd';
+import { Button, Icon } from 'antd';
 import DeckActions from '../state/actions/deck';
+import { getEditedItem } from '../state/selectors/deck';
 import ActionsTypes from '../constants/ActionsTypes';
 import EffectList from './EffectList';
 
@@ -23,7 +24,7 @@ class EffectPicker extends Component {
   onSelect = async item => {
     let selected;
     if (this.state.selected.includes(item.id))
-      selected = this.state.selected.filter(id => id != item.id);
+      selected = this.state.selected.filter(id => id !== item.id);
     else
       selected = [...this.state.selected, item.id];
 
@@ -35,6 +36,10 @@ class EffectPicker extends Component {
 
   addEffect = () => this.props.dispatch(DeckActions.addItem(ActionsTypes.Item.EFFECT));
 
+  onEdit = item => {
+    console.log('edit', item);
+  }
+
   preprocess = item => {
     return {
       ...item,
@@ -45,9 +50,10 @@ class EffectPicker extends Component {
   render() {
     return (
       <div>
-      <EffectList
-        onSelect={this.onSelect}
-        preprocess={this.preprocess}
+        <EffectList
+          onSelect={this.onSelect}
+          preprocess={this.preprocess}
+          onEdit={this.onEdit}
         />
         <Button onClick={() => this.addEffect()}>
           <Icon type="plus" /> New effect
@@ -57,6 +63,8 @@ class EffectPicker extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  edited: getEditedItem(ActionsTypes.Item.EFFECT, state)
+});
 
 export default connect(mapStateToProps)(EffectPicker);

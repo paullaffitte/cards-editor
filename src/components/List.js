@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon } from 'antd';
+import { Icon, Button } from 'antd';
 import { Popconfirm } from 'antd';
 import { getItems } from '../state/selectors/deck';
 import DeckActions from '../state/actions/deck';
@@ -23,12 +23,13 @@ class List extends Component {
 
     return (
       <div key={item.id} className={item.className} style={backgroundImage}>
-        <Popconfirm className="delete"
+        <Popconfirm className="list-item-button delete"
           title="Are you sure to delete this item ? (it can't be undone)" placement="left"
           onConfirm={() => this.deleteItem(item)}
           okText="Yes" cancelText="No">
           <Icon type="close" />
         </Popconfirm>
+        { !this.props.onEdit ? null : <Icon type="edit" className="list-item-button edit" onClick={() => this.props.onEdit(item)} /> }
         <div className="content" onClick={() => this.selectItem(item)}>
           {this.props.renderItem(item)}
         </div>
