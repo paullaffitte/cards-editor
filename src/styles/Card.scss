@@ -1,0 +1,17 @@
+@import './Mixins.scss';
+
+.Card {
+	position: relative;
+	overflow: hidden;
+
+	.background, .thumbnail, .informations {
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.thumbnail {
+		@include transform(translate(-50%, -50%));
+	}
+}

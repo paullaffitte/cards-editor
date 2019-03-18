@@ -76,10 +76,28 @@ class CardForm extends Component {
                 {getFieldDecorator('thumbnail')(<ResourcePicker />)}
               </Form.Item>
             </Col>
-
             <Col span={12}>
               <Form.Item label="Background">
                 {getFieldDecorator('background')(<ResourcePicker />)}
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row>
+            <h3>Thumbnail</h3>
+            <Col span={8}>
+              <Form.Item label="X(%)">
+                {getFieldDecorator('thumbnailX')(<InputNumber step={5}/>)}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Y(%)">
+                {getFieldDecorator('thumbnailY')(<InputNumber step={5}/>)}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Scale">
+                {getFieldDecorator('thumbnailScale')(<InputNumber step={0.1} />)}
               </Form.Item>
             </Col>
           </Row>
