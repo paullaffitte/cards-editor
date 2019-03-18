@@ -65,7 +65,11 @@ const deck = {
 
   [ActionsTypes.NEW_DECK]: (state, deck) => initialState,
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
-    return deckUpdate(initialState, { current: { $merge: deck } });
+    const sanitizeCards = cards => cards.map(card => ({ effects: [], ...card }));
+    state = deckUpdate(initialState, { current: { $merge: deck } });
+    return deckUpdate(state, {
+      current: { [getItemKey(ActionsTypes.Item.CARD, true)]: {$apply: sanitizeCards} }
+    });
   },
   [ActionsTypes.UPDATE_FILENAME]: (state, filename) => {
     return deckUpdate(state, { current: {filename: {$set: filename}} });
