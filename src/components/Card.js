@@ -3,30 +3,34 @@ import { connect } from 'react-redux';
 import { getResourceByName, getEffectsByIds } from '../state/selectors/deck';
 import '../styles/Card.scss';
 
+const userToUnit = unit => num => parseInt(num ? num : '0') + unit;
+
 class Card extends Component {
 
   state = {
-    images: {
-      background: { ratio: 1 }
-    }
+    sizes: {
+      background: { width: 0, height: 0 },
+      thumbnail: { width: 0, height: 0 },
+    },
+    scale: 1
   }
 
-  updateImage = name => async image => {
-    await this.setState({images: {...this.state.images, [name]: {
-      ratio: image.target.naturalHeight / image.target.naturalWidth,
+  updateImage = name => image => {
+    this.setState({sizes: {...this.state.sizes, [name]: {
       height: image.target.naturalHeight,
       width: image.target.naturalWidth
     }}});
+
+    if (this.props.width && name == 'background') {
+      this.setState({ scale: 1 / image.target.naturalWidth * this.props.width });
+    }
   }
 
   getThumbnailStyle() {
-    const userToPercent = num => parseInt(num ? num : '0') + '%';
-    const thumbnail = this.state.images.thumbnail ? this.state.images.thumbnail : {
-      width: 1,
-      height: 1
-    };
-
+    const userToPercent = userToUnit('%');
+    const thumbnail = this.state.sizes.thumbnail;
     const thumbnailScale = this.props.thumbnailScale ? this.props.thumbnailScale : 1;
+
     return {
       width: thumbnail.width * thumbnailScale,
       height: thumbnail.height * thumbnailScale,
@@ -37,8 +41,10 @@ class Card extends Component {
 
   render() {
     const effects = this.props.effects.map(({ description }) => description).filter(Boolean).join('. ');
+    let size = this.state.sizes.background;
+
     return (
-      <div className="Card" style={{ ...this.props.style, paddingTop: `calc(${this.state.images.background.ratio} * 100%)`}}>
+      <div className="Card" style={{ ...this.props.style, width: size.width, height: size.height, transform: `scale(${this.state.scale})` }}>
         <img className="thumbnail" src={ this.props.thumbnail } onLoad={ this.updateImage("thumbnail") } style={ this.getThumbnailStyle() } />
         <img className="background" src={ this.props.background } onLoad={ this.updateImage("background") } />
         <div className="informations">

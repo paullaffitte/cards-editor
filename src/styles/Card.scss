@@ -1,8 +1,6 @@
-@import './Mixins.scss';
-
 .Card {
-	position: relative;
 	overflow: hidden;
+	transform-origin: top left;
 
 	.background, .thumbnail, .informations {
 		width: 100%;
@@ -12,6 +10,6 @@
 	}
 
 	.thumbnail {
-		@include transform(translate(-50%, -50%));
+		transform: translate(-50%, -50%);
 	}
 }

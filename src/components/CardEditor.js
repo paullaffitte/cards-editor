@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Row, Col } from 'antd';
 import Card from './Card';
 import CardForm from './CardForm';
 import { getEditedCard } from '../state/selectors/deck'
@@ -9,15 +8,22 @@ import '../styles/CardEditor.scss';
 class CardEditor extends Component {
 
   render() {
+    const cardWidth = 400;
+    const cardCssWidth = `${cardWidth}px + 4em`;
+
     return !this.props.data.id ? (
       <div className="CardEditor">
         No card selected
       </div>
     ) : (
-      <Row className="CardEditor">
-        <Col span={10} className="column left"><Card { ...this.props.data } /></Col>
-        <Col span={14} className="column right"><CardForm data={ this.props.data } /></Col>
-      </Row>
+      <div className="CardEditor">
+        <div className="panel card-preview" style={{ width: `calc(${cardCssWidth})` }}>
+          <Card { ...this.props.data } width={ cardWidth } />
+        </div>
+        <div className="panel" style={{ width: `calc(100% - (${cardCssWidth}))` }}>
+          <CardForm data={ this.props.data } />
+        </div>
+      </div>
     );
   }
 }
