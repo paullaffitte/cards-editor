@@ -56,7 +56,7 @@ class List extends Component {
 }
 
 const mapStateToProps = state => ({
-  items: (type, preprocess) => getItems(type, state).map(item => preprocess(item, state))
+  items: (type, preprocess) => getItems(type, state).map(item => preprocess(item, state)).filter(Boolean)
 });
 
 export default connect(mapStateToProps)(List);

@@ -58,9 +58,9 @@ const actions = {
 
 const selectFirstItem = (type, items) => selectItem(type, items[0].id);
 
-const addItem = type => {
+const addItem = (type, item) => {
   return (dispatch, getState) => {
-    dispatch({ type: ActionsTypes.ADD_ITEM, payload: type });
+    dispatch({ type: ActionsTypes.ADD_ITEM, payload: { type, item } });
 
     const items = getItems(type, getState());
     if (items.length)

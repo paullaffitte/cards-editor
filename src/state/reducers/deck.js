@@ -8,6 +8,16 @@ function deckUpdate(state, data) {
   return update(state, {deck: data});
 }
 
+const sanitizeCard = card => ({ effects: [], ...card });
+const sanitizeItem = (type, item) => {
+  const sanitizers = {
+    [ActionsTypes.Item.CARD]: sanitizeCard,
+  };
+  return Object.keys(sanitizers).includes(type)
+    ? sanitizers[type](item)
+    : item;
+}
+
 const getItemKey = ActionsTypes.getItemKey;
 
 const deck = {
@@ -50,10 +60,10 @@ const deck = {
       current: { [getItemKey(type, true)]: {$apply: stageCards} }
     });
   },
-  [ActionsTypes.ADD_ITEM]: (state, type) => {
-    const newItem = { id: uuid() };
+  [ActionsTypes.ADD_ITEM]: (state, { type, item }) => {
+    const newItem = { ...item, id: uuid() };
     return deckUpdate(state, {
-      current: { [getItemKey(type, true)]: {$push: [newItem]} }
+      current: { [getItemKey(type, true)]: {$push: [sanitizeItem(type, newItem)]} }
     });
   },
   [ActionsTypes.DELETE_ITEM]: (state, {type, id}) => {
@@ -65,7 +75,7 @@ const deck = {
 
   [ActionsTypes.NEW_DECK]: (state, deck) => initialState,
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
-    const sanitizeCards = cards => cards.map(card => ({ effects: [], ...card }));
+    const sanitizeCards = cards => cards.map(sanitizeCard);
     state = deckUpdate(initialState, { current: { $merge: deck } });
     return deckUpdate(state, {
       current: { [getItemKey(ActionsTypes.Item.CARD, true)]: {$apply: sanitizeCards} }

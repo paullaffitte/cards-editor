@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Divider, Form, Input, InputNumber, Row, Col } from 'antd'
+import { Divider, Form, Input, InputNumber, Row, Col, Select } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 import EffectPicker from './EffectPicker';
 import { getEditedCard } from '../state/selectors/deck';
+
+const { Option } = Select;
 
 class CardForm extends Component {
   render() {
@@ -12,6 +14,16 @@ class CardForm extends Component {
     return (
       <div>
         <Form>
+          <Form.Item label="Type">
+            {getFieldDecorator('type', {
+              rules: [{ required: true, message: 'Please choose a type type' }],
+            })(
+              <Select>
+                <Option value="minion">Minion</Option>
+                <Option value="spell">Spell</Option>
+              </Select>
+            )}
+          </Form.Item>
           <Form.Item label="Card name">
             {getFieldDecorator('name', {
               rules: [{ required: true, message: 'Please set a name' }],
@@ -26,20 +38,31 @@ class CardForm extends Component {
               <Input.TextArea placeholder='Some words about the card' rows={4} />
             )}
           </Form.Item>
-          <Form.Item label="HP">
-            {getFieldDecorator('hp', {
-              rules: [],
-            })(
-            <InputNumber />
-            )}
-          </Form.Item>
-          <Form.Item label="Attack">
-            {getFieldDecorator('attack', {
-              rules: [],
-            })(
-            <InputNumber />
-            )}
-          </Form.Item>
+
+          { this.props.data.type !== 'minion' ? null :
+            (
+              <Row>
+                <Col span={12}>
+                  <Form.Item label="HP">
+                    {getFieldDecorator('hp', {
+                      rules: [],
+                    })(
+                    <InputNumber />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Attack">
+                    {getFieldDecorator('attack', {
+                      rules: [],
+                    })(
+                    <InputNumber />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+            )
+          }
 
           <Form.Item label="Effects">
             {getFieldDecorator('effects')(<EffectPicker />)}
