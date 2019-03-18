@@ -8,11 +8,17 @@ import '../styles/List.scss';
 
 class List extends Component {
 
-  selectItem = item => {
-    this.props.dispatch(DeckActions.selectItem(this.props.type, item.id))
-
-    if (this.props.onSelect)
-      this.props.onSelect(item);
+  selectItem = (item, edit) => {
+    if (!edit) {
+      if (!this.props.onEdit)
+        this.props.dispatch(DeckActions.selectItem(this.props.type, item.id))
+      if (this.props.onSelect)
+        this.props.onSelect(item);
+    } else {
+      this.props.dispatch(DeckActions.selectItem(this.props.type, item.id))
+      if (this.props.onEdit)
+        this.props.onEdit(item);
+    }
   };
 
   deleteItem = item => this.props.dispatch(DeckActions.deleteItem(this.props.type, item.id));
@@ -29,7 +35,7 @@ class List extends Component {
           okText="Yes" cancelText="No">
           <Icon type="close" />
         </Popconfirm>
-        { !this.props.onEdit ? null : <Icon type="edit" className="list-item-button edit" onClick={() => this.props.onEdit(item)} /> }
+        { !this.props.onEdit ? null : <Icon type="edit" className="list-item-button edit" onClick={() => this.selectItem(item, true)} /> }
         <div className="content" onClick={() => this.selectItem(item)}>
           {this.props.renderItem(item)}
         </div>

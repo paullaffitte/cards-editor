@@ -11,7 +11,9 @@ class EffectList extends Component {
         type={ ActionsTypes.Item.EFFECT }
         preprocess={ this.props.preprocess }
         renderItem={ item => (
-          <div> item {item.id}</div>
+          <div>{ item.description
+            ? <span>{ item.description }</span>
+            : <span style={{ color: 'grey', fontStyle: 'oblique' }}>empty</span> }</div>
         ) }
         onSelect={ this.props.onSelect }
         onEdit={this.props.onEdit}

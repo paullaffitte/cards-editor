@@ -27,6 +27,7 @@ const actions = {
   stageItems,
 
   updateCard: card => updateItem(ActionsTypes.Item.CARD, card),
+  updateEffect: effect => updateItem(ActionsTypes.Item.EFFECT, effect),
 
   newDeck: () => {
     return {

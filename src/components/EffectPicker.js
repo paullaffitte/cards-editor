@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Icon } from 'antd';
+import { Button, Icon, Modal } from 'antd';
 import DeckActions from '../state/actions/deck';
-import { getEditedItem } from '../state/selectors/deck';
+import { getEditedEffect } from '../state/selectors/deck';
 import ActionsTypes from '../constants/ActionsTypes';
 import EffectList from './EffectList';
+import EffectForm from './EffectForm'
 
 class EffectPicker extends Component {
 
@@ -37,7 +38,7 @@ class EffectPicker extends Component {
   addEffect = () => this.props.dispatch(DeckActions.addItem(ActionsTypes.Item.EFFECT));
 
   onEdit = item => {
-    console.log('edit', item);
+    this.toggleModal(true);
   }
 
   preprocess = item => {
@@ -47,9 +48,26 @@ class EffectPicker extends Component {
     };
   }
 
+  toggleModal = visible => {
+    this.setState({ modalOpened: visible !== undefined ? (visible === true) : !this.state.modalOpened });
+  };
+
+  onSubmit = () => {
+    this.refs.effectForm.validateFields((err, effect) => {
+      if (!err) {
+        this.props.dispatch(DeckActions.updateEffect(effect));
+        this.toggleModal(false);
+      } else {
+        console.error(err);
+      }
+    });
+  };
+
+  onCancel = () => this.toggleModal(false);
+
   render() {
     return (
-      <div>
+      <div className="EffectPicker">
         <EffectList
           onSelect={this.onSelect}
           preprocess={this.preprocess}
@@ -58,13 +76,22 @@ class EffectPicker extends Component {
         <Button onClick={() => this.addEffect()}>
           <Icon type="plus" /> New effect
         </Button>
+
+        <Modal
+          ref="modal"
+          visible={this.state.modalOpened}
+          onCancel={this.onCancel}
+          onOk={this.onSubmit}
+        >
+          <EffectForm ref='effectForm' data={this.props.edited}/>
+        </Modal>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  edited: getEditedItem(ActionsTypes.Item.EFFECT, state)
+  edited: getEditedEffect(state)
 });
 
 export default connect(mapStateToProps)(EffectPicker);

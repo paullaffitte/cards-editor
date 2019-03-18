@@ -40,4 +40,14 @@ export const getItemById = createSelector(
   }
 );
 
+export const getItemsByIds = createSelector(
+  [ _getItems, getProps ],
+  (items, { type, ids }) => {
+    return items.filter(item => ids.includes(item.id))
+  }
+);
+
 export const getEditedCard = state => getEditedItem(ActionsTypes.Item.CARD, state);
+export const getEditedEffect = state => getEditedItem(ActionsTypes.Item.EFFECT, state);
+
+export const getEffectsByIds = (state, ids) => getItemsByIds(state, {type: ActionsTypes.Item.EFFECT, ids});
