@@ -24,7 +24,7 @@ read -p "Github OAuth TOKEN [$env_token]: " -r TOKEN
 LOGIN=${LOGIN:-$default_login}
 TOKEN=${TOKEN:-$env_token}
 
-VERSION=$(cat .semver)
+VERSION=$(semver)
 default_version_name="v$VERSION"
 
 read -p "Release name [$default_version_name]: " RELEASE_NAME

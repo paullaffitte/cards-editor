@@ -30,7 +30,7 @@
     "pack": "electron-builder -c.extraMetadata.main=src/electron/main.js --dir",
     "dist": "electron-builder -c.extraMetadata.main=src/electron/main.js",
     "release": "yarn build && yarn dist",
-    "github-release": "./publish.sh"
+    "release-on-github": "./publish.sh"
   },
   "main": "src/electron/main.js",
   "homepage": "./",
