@@ -119,8 +119,8 @@ class CardForm extends Component {
               {this.renderImages(getFieldDecorator)}
 
               <TabPane tab="Transforms" key="transforms">
-                {getFieldDecorator('thumbnailTransform')(<TransformInput name="Thumbnail" scaleUnit="%" />)}
                 {this.renderTransforms(getFieldDecorator)}
+                {getFieldDecorator('thumbnailTransform')(<TransformInput name="Thumbnail" scaleUnit="%" />)}
               </TabPane>
 
               <TabPane tab="Global" key="global">

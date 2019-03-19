@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getResourceByName, getEffectsByIds } from '../state/selectors/deck';
+import { getResourceByName, getEffectsByIds, getCardsConfig } from '../state/selectors/deck';
 import '../styles/Card.scss';
 
 const userToUnit = unit => num => parseInt(num ? num : '0') + unit;
@@ -77,10 +77,26 @@ class Card extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  thumbnail: getResourceByName(state, props.thumbnail),
-  background: getResourceByName(state, props.background),
-  effects: getEffectsByIds(state, props.effects)
-});
+const mapStateToProps = (state, props) => {
+  const cardConfig = getCardsConfig(state);
+  const transforms = ['name', 'description', 'attack', 'hp'].reduce((acc, name) => {
+    const transformName = name + 'Transform';
+    const cardTransform = props[transformName] ? props[transformName] : {};
+    const configTransform = cardConfig[transformName] ? cardConfig[transformName] : {};
+
+    return { ...acc, [transformName]: {
+      x: cardTransform.x ? cardTransform.x : configTransform.x,
+      y: cardTransform.y ? cardTransform.y : configTransform.y,
+      scale: cardTransform.scale ? cardTransform.scale : configTransform.scale,
+    }}
+  }, {});
+
+  return {
+    thumbnail: getResourceByName(state, props.thumbnail),
+    background: getResourceByName(state, props.background),
+    effects: getEffectsByIds(state, props.effects),
+    ...transforms
+  }
+};
 
 export default connect(mapStateToProps)(Card);

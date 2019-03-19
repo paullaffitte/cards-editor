@@ -14,6 +14,9 @@ class TransformInput extends Component {
   static getDerivedStateFromProps(nextProps) {
     if ('value' in nextProps) {
       return {
+        x: undefined,
+        y: undefined,
+        scale: undefined,
         ...(nextProps.value || {}),
       };
     }
@@ -34,7 +37,6 @@ class TransformInput extends Component {
 
   triggerChange = (changedValue) => {
     const onChange = this.props.onChange;
-
     if (onChange) {
       onChange({ ...this.state, ...changedValue });
     }
