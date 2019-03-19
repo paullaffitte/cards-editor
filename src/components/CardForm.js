@@ -1,106 +1,143 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Divider, Form, Input, InputNumber, Row, Col, Select } from 'antd'
+import { Form, Input, InputNumber, Row, Col, Select, Tabs } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 import EffectPicker from './EffectPicker';
 import { getEditedCard } from '../state/selectors/deck';
 
 const { Option } = Select;
+const TabPane = Tabs.TabPane;
 
 class CardForm extends Component {
+
+  renderStats = getFieldDecorator => (
+    <TabPane tab="Information & stats" key="stats">
+      <Form.Item label="Type">
+        {getFieldDecorator('type', {
+          rules: [{ required: true, message: 'Please choose a type type' }],
+        })(
+          <Select>
+            <Option value="minion">Minion</Option>
+            <Option value="spell">Spell</Option>
+          </Select>
+        )}
+      </Form.Item>
+      <Form.Item label="Card name">
+        {getFieldDecorator('name', {
+          rules: [{ required: true, message: 'Please set a name' }],
+        })(
+          <Input placeholder='Zavata' />
+        )}
+      </Form.Item>
+      <Form.Item label="Description">
+        {getFieldDecorator('description', {
+          rules: [{ required: true, message: 'Please set a description' }],
+        })(
+          <Input.TextArea placeholder='Some words about the card' rows={4} />
+        )}
+      </Form.Item>
+
+      { this.props.data.type !== 'minion' ? null :
+        (
+          <Row>
+            <Col span={12}>
+              <Form.Item label="HP">
+                {getFieldDecorator('hp', {
+                  rules: [],
+                })(
+                <InputNumber />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Attack">
+                {getFieldDecorator('attack', {
+                  rules: [],
+                })(
+                <InputNumber />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        )
+      }
+      <Form.Item label="Effects">
+        {getFieldDecorator('effects')(<EffectPicker />)}
+      </Form.Item>
+    </TabPane>
+  );
+
+  renderImages = getFieldDecorator => (
+    <TabPane tab="Images" key="images">
+      <Row>
+        <Col span={12}>
+          <Form.Item label="Thumbnail">
+            {getFieldDecorator('thumbnail')(<ResourcePicker />)}
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Background">
+            {getFieldDecorator('background')(<ResourcePicker />)}
+          </Form.Item>
+        </Col>
+      </Row>
+    </TabPane>
+  );
+
+  renderTransforms = getFieldDecorator => (
+    <TabPane tab="Transforms" key="transforms">
+      {[
+        { name: 'Thumbnail', hasRealSize: true },
+        { name: 'Name' },
+        { name: 'Description' },
+        ...(this.props.data.type !== 'minion' ? [] : [
+          { name: 'HP' }, { name: 'Attack' }
+        ])
+      ].map(opts => this.renderTransform(opts, getFieldDecorator))}
+    </TabPane>
+  );
+
+  renderTransform = ({ name, hasRealSize }, getFieldDecorator) => {
+    const lowercaseName = name.toLowerCase();
+
+    return (
+      <Row key={name}>
+        <h2>{name}</h2>
+        <Col span={8}>
+          <Form.Item label="X(%)">
+            {getFieldDecorator(`${lowercaseName}X`)(<InputNumber step={5}/>)}
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="Y(%)">
+            {getFieldDecorator(`${lowercaseName}Y`)(<InputNumber step={5}/>)}
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          { hasRealSize
+          ? <Form.Item label="Scale">
+              {getFieldDecorator(`${lowercaseName}Scale`)(<InputNumber step={0.1} />)}
+            </Form.Item>
+          : <Form.Item label="Size">
+              {getFieldDecorator(`${lowercaseName}Scale`)(<InputNumber step={1} />)}
+            </Form.Item>
+          }
+        </Col>
+      </Row>
+    );
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
         <Form>
-          <Form.Item label="Type">
-            {getFieldDecorator('type', {
-              rules: [{ required: true, message: 'Please choose a type type' }],
-            })(
-              <Select>
-                <Option value="minion">Minion</Option>
-                <Option value="spell">Spell</Option>
-              </Select>
-            )}
-          </Form.Item>
-          <Form.Item label="Card name">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, message: 'Please set a name' }],
-            })(
-              <Input placeholder='Zavata' />
-            )}
-          </Form.Item>
-          <Form.Item label="Description">
-            {getFieldDecorator('description', {
-              rules: [{ required: true, message: 'Please set a description' }],
-            })(
-              <Input.TextArea placeholder='Some words about the card' rows={4} />
-            )}
-          </Form.Item>
-
-          { this.props.data.type !== 'minion' ? null :
-            (
-              <Row>
-                <Col span={12}>
-                  <Form.Item label="HP">
-                    {getFieldDecorator('hp', {
-                      rules: [],
-                    })(
-                    <InputNumber />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Attack">
-                    {getFieldDecorator('attack', {
-                      rules: [],
-                    })(
-                    <InputNumber />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-            )
-          }
-
-          <Form.Item label="Effects">
-            {getFieldDecorator('effects')(<EffectPicker />)}
-          </Form.Item>
-
-          <Divider />
-
-          <Row>
-            <Col span={12}>
-              <Form.Item label="Thumbnail">
-                {getFieldDecorator('thumbnail')(<ResourcePicker />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Background">
-                {getFieldDecorator('background')(<ResourcePicker />)}
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row>
-            <h3>Thumbnail</h3>
-            <Col span={8}>
-              <Form.Item label="X(%)">
-                {getFieldDecorator('thumbnailX')(<InputNumber step={5}/>)}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Y(%)">
-                {getFieldDecorator('thumbnailY')(<InputNumber step={5}/>)}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Scale">
-                {getFieldDecorator('thumbnailScale')(<InputNumber step={0.1} />)}
-              </Form.Item>
-            </Col>
-          </Row>
+          <Tabs defaultActiveKey="stats">
+              {this.renderStats(getFieldDecorator)}
+              {this.renderImages(getFieldDecorator)}
+              {this.renderTransforms(getFieldDecorator)}
+          </Tabs>
         </Form>
       </div>
     );

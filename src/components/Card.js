@@ -4,6 +4,8 @@ import { getResourceByName, getEffectsByIds } from '../state/selectors/deck';
 import '../styles/Card.scss';
 
 const userToUnit = unit => num => parseInt(num ? num : '0') + unit;
+const userToPercent = userToUnit('%');
+const userToPt = userToUnit('pt');
 
 class Card extends Component {
 
@@ -27,7 +29,6 @@ class Card extends Component {
   }
 
   getThumbnailStyle() {
-    const userToPercent = userToUnit('%');
     const thumbnail = this.state.sizes.thumbnail;
     const thumbnailScale = this.props.thumbnailScale ? this.props.thumbnailScale : 1;
 
@@ -39,20 +40,34 @@ class Card extends Component {
     };
   }
 
+  renderText = (name, customValue) => {
+    return (
+      <div className={name + ' positionable'} style={{
+        left: userToPercent(this.props[`${name}X`]),
+        top: userToPercent(this.props[`${name}Y`]),
+        fontSize: userToPt(this.props[`${name}Scale`])
+      }}>
+        {customValue ? customValue : this.props[name]}
+      </div>
+    );
+  };
+
   render() {
     const effects = this.props.effects.map(({ description }) => description).filter(Boolean).join('. ');
     let size = this.state.sizes.background;
 
     return (
       <div className="Card" style={{ ...this.props.style, width: size.width, height: size.height, transform: `scale(${this.state.scale})` }}>
-        <img className="thumbnail" src={ this.props.thumbnail } onLoad={ this.updateImage("thumbnail") } style={ this.getThumbnailStyle() } />
+        <img className="thumbnail positionable" src={ this.props.thumbnail } onLoad={ this.updateImage("thumbnail") } style={ this.getThumbnailStyle() } />
         <img className="background" src={ this.props.background } onLoad={ this.updateImage("background") } />
-        <div className="informations">
-          <h3>{this.props.name}</h3>
-          <div>{effects}{effects ? (<span>.<br /></span>) : ''}{this.props.description}</div>
-          <div>HP: {this.props.hp}</div>
-          <div>Attack: {this.props.attack}</div>
-        </div>
+        {this.renderText('name')}
+        {this.renderText('description', [effects, effects ? '.\n' : '', this.props.description])}
+        {this.props.type !== 'minion' ? null : (
+          <div>
+            {this.renderText('hp')}
+            {this.renderText('attack')}
+          </div>
+        )}
       </div>
     );
   }

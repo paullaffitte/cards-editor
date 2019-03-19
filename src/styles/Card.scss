@@ -2,14 +2,19 @@
 	overflow: hidden;
 	transform-origin: top left;
 
-	.background, .thumbnail, .informations {
+	.positionable, .background {
 		width: 100%;
 		position: absolute;
 		top: 0;
 		left: 0;
+		text-align: center;
 	}
 
-	.thumbnail {
+	.positionable {
 		transform: translate(-50%, -50%);
+	}
+
+	.description span {
+		width: 100%;
 	}
 }
