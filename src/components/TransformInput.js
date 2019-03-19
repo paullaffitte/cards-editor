@@ -22,12 +22,7 @@ class TransformInput extends Component {
 
   constructor(props) {
     super(props);
-
-    const value = props.value || {};
-    this.state = {
-      number: value.number || 0,
-      currency: value.currency || 'rmb',
-    };
+    this.state = { ...props.value };
   }
 
   handleChange = (change) => {

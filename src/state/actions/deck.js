@@ -53,6 +53,13 @@ const actions = {
       type: ActionsTypes.REMOVE_RESOURCE,
       payload: name
     }
+  },
+
+  updateCardsConfig: cardsConfig => {
+    return {
+      type: ActionsTypes.UPDATE_CARDS_CONFIG,
+      payload: cardsConfig
+    };
   }
 };
 

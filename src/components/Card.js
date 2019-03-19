@@ -36,8 +36,8 @@ class Card extends Component {
     return {
       width: thumbnail.width * thumbnailScale,
       height: thumbnail.height * thumbnailScale,
-      top: userToPercent(this.props.thumbnailY),
-      left: userToPercent(this.props.thumbnailX),
+      top: userToPercent(transform.y),
+      left: userToPercent(transform.x),
     };
   }
 

@@ -88,15 +88,21 @@ const deck = {
 
   [ActionsTypes.ADD_RESOURCE]: (state, {filename, path}) => {
     return deckUpdate(state, {
-      current: {resources: {[filename]: {$set: path}}}
+      current: { resources: {[filename]: {$set: path}} }
     });
   },
   [ActionsTypes.REMOVE_RESOURCE]: (state, name) => {
     const removeResource = ({[name]: path, ...resources}) => resources;
     return deckUpdate(state, {
-      current: {resources: {$apply: removeResource}}
+      current: { resources: {$apply: removeResource} }
     });
-  }
+  },
+
+  [ActionsTypes.UPDATE_CARDS_CONFIG]: (state, cardsConfig) => {
+    return deckUpdate(state, {
+      current: { cardsConfig: {$merge: cardsConfig} }
+    })
+  },
 };
 
 export default deck;

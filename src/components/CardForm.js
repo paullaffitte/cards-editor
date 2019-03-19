@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Input, InputNumber, Row, Col, Select, Tabs } from 'antd'
+import { Form, Input, InputNumber, Row, Col, Select, Tabs, Switch } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 import EffectPicker from './EffectPicker';
 import TransformInput from './TransformInput';
-import { getEditedCard } from '../state/selectors/deck';
+import { getEditedCard, getCardsConfig } from '../state/selectors/deck';
 
 const { Option } = Select;
 const TabPane = Tabs.TabPane;
 
 class CardForm extends Component {
+
+  state = { globalTransform: false }
 
   renderStats = getFieldDecorator => (
     <TabPane tab="Information & stats" key="stats">
@@ -86,35 +88,44 @@ class CardForm extends Component {
     </TabPane>
   );
 
-  renderTransforms = getFieldDecorator => (
-    <TabPane tab="Transforms" key="transforms">
-      {getFieldDecorator('thumbnailTransform')(<TransformInput name="Thumbnail" scaleUnit="%" />)}
-      {[
-        { name: 'Name' },
-        { name: 'Description' },
-        ...(this.props.data.type !== 'minion' ? [] : [
-          { name: 'HP' },
-          { name: 'Attack' }
-        ])
-      ].map(opts => this.renderTransform(opts, getFieldDecorator))}
-    </TabPane>
-  );
+  renderTransforms = (getFieldDecorator, isGlobal) => [
+    'Name',
+    'Description',
+    ...(!isGlobal && this.props.data.type !== 'minion' ? [] : [
+      'HP',
+      'Attack'
+    ])
+  ].map(opts => this.renderTransform(isGlobal, opts, getFieldDecorator));
 
-  renderTransform = ({ name }, getFieldDecorator) => {
-    const decoratorName = name.toLowerCase() + 'Transform';
+  renderTransform = (isGlobal, name, getFieldDecorator) => {
+    const valueName = name.toLowerCase() + 'Transform';
 
-    return getFieldDecorator(decoratorName)(<TransformInput key={ name } name={ name } />);
+    return isGlobal
+      ? <TransformInput key={ 'global-' + valueName } name={ name } value={this.props.cardsConfig[valueName]} onChange={ this.updateCardsConfig(valueName) } />
+      : getFieldDecorator(valueName)(<TransformInput key={ valueName } name={ name } />);
   };
+
+  updateCardsConfig = name => configField => this.props.dispatch(DeckActions.updateCardsConfig({[name]: configField}));
+  toggleGlobalTransforms = enabled => this.setState({ globalTransform: enabled });
 
   render() {
     const { getFieldDecorator } = this.props.form;
+
     return (
       <div>
         <Form>
           <Tabs defaultActiveKey="stats">
               {this.renderStats(getFieldDecorator)}
               {this.renderImages(getFieldDecorator)}
-              {this.renderTransforms(getFieldDecorator)}
+
+              <TabPane tab="Transforms" key="transforms">
+                {getFieldDecorator('thumbnailTransform')(<TransformInput name="Thumbnail" scaleUnit="%" />)}
+                {this.renderTransforms(getFieldDecorator)}
+              </TabPane>
+
+              <TabPane tab="Global" key="global">
+                {this.renderTransforms(getFieldDecorator, true)}
+              </TabPane>
           </Tabs>
         </Form>
       </div>
@@ -123,7 +134,8 @@ class CardForm extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: getEditedCard(state)
+  data: getEditedCard(state),
+  cardsConfig: getCardsConfig(state)
 });
 
 export default connect(mapStateToProps)(Form.create({

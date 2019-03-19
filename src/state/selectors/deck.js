@@ -51,3 +51,10 @@ export const getEditedCard = state => getEditedItem(ActionsTypes.Item.CARD, stat
 export const getEditedEffect = state => getEditedItem(ActionsTypes.Item.EFFECT, state);
 
 export const getEffectsByIds = (state, ids) => getItemsByIds(state, {type: ActionsTypes.Item.EFFECT, ids});
+
+export const getCardsConfig = createSelector(
+  [ getCurrentDeck ],
+  deck => {
+    return deck.cardsConfig;
+  }
+);
