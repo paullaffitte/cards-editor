@@ -65,27 +65,25 @@ class CardForm extends Component {
           </Row>
         )
       }
+        <Row>
+          <Col span={12}>
+            <Form.Item label="Thumbnail">
+              {getFieldDecorator('thumbnail')(<ResourcePicker />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Background">
+              {getFieldDecorator('background')(<ResourcePicker />)}
+            </Form.Item>
+          </Col>
+        </Row>
       <Form.Item label="Effects">
         {getFieldDecorator('effects')(<EffectPicker />)}
       </Form.Item>
     </TabPane>
   );
 
-  renderImages = getFieldDecorator => (
-    <TabPane tab="Images" key="images">
-      <Row>
-        <Col span={12}>
-          <Form.Item label="Thumbnail">
-            {getFieldDecorator('thumbnail')(<ResourcePicker />)}
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Background">
-            {getFieldDecorator('background')(<ResourcePicker />)}
-          </Form.Item>
-        </Col>
-      </Row>
-    </TabPane>
+  renderImages = getFieldDecorator => (null
   );
 
   renderTransforms = (getFieldDecorator, isGlobal) => [
