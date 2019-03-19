@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ActionsTypes from '../constants/ActionsTypes';
 import List from './List';
-import { getEditedItem } from '../state/selectors/deck';
 
 class EffectList extends Component {
 

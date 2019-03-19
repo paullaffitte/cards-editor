@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon, Button } from 'antd';
+import { Icon } from 'antd';
 import { Popconfirm } from 'antd';
 import { getItems } from '../state/selectors/deck';
 import DeckActions from '../state/actions/deck';
@@ -44,7 +44,6 @@ class List extends Component {
   };
 
   render() {
-    const preprocess = this.props.preprocess ? this.props.preprocess : item => item;
     return (
       <div className={'List ' + this.props.type.toLowerCase() + '-list' }>
         <div className="items">

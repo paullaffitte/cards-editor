@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Form, Input, InputNumber, Row, Col, Select, Tabs } from 'antd'
-import DeckActions from '../state/actions/deck';
-import ResourcePicker from './ResourcePicker';
-import EffectPicker from './EffectPicker';
-import { getEditedCard } from '../state/selectors/deck';
-
-const { Option } = Select;
-const TabPane = Tabs.TabPane;
+import { Form, InputNumber, Row, Col } from 'antd'
 
 class TransformInput extends Component {
 
@@ -54,7 +46,6 @@ class TransformInput extends Component {
   }
 
   render() {
-    const lowercaseName = this.props.name.toLowerCase();
     const scaleConfig = this.getScaleConfig(this.props.scaleUnit);
 
     return (

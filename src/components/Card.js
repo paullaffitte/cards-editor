@@ -23,7 +23,7 @@ class Card extends Component {
       width: image.target.naturalWidth
     }}});
 
-    if (this.props.width && name == 'background') {
+    if (this.props.width && name === 'background') {
       this.setState({ scale: 1 / image.target.naturalWidth * this.props.width });
     }
   }
@@ -62,8 +62,8 @@ class Card extends Component {
 
     return (
       <div className="Card" style={{ ...this.props.style, width: size.width, height: size.height, transform: `scale(${this.state.scale})` }}>
-        <img className="thumbnail positionable" src={ this.props.thumbnail } onLoad={ this.updateImage("thumbnail") } style={ this.getThumbnailStyle() } />
-        <img className="background" src={ this.props.background } onLoad={ this.updateImage("background") } />
+        <img alt="thumbnail" className="thumbnail positionable" src={ this.props.thumbnail } onLoad={ this.updateImage("thumbnail") } style={ this.getThumbnailStyle() } />
+        <img alt="background" className="background" src={ this.props.background } onLoad={ this.updateImage("background") } />
         {this.renderText('name')}
         {this.renderText('description', [effects, effects ? '.\n' : '', this.props.description])}
         {this.props.type !== 'minion' ? null : (
