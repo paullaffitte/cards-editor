@@ -30,7 +30,8 @@ class Card extends Component {
 
   getThumbnailStyle() {
     const thumbnail = this.state.sizes.thumbnail;
-    const thumbnailScale = this.props.thumbnailScale ? this.props.thumbnailScale : 1;
+    const transform = this.props.thumbnailTransform ? this.props.thumbnailTransform : {};
+    const thumbnailScale = transform.scale ? transform.scale : 1;
 
     return {
       width: thumbnail.width * thumbnailScale,
@@ -41,11 +42,14 @@ class Card extends Component {
   }
 
   renderText = (name, customValue) => {
+    let transform = this.props[`${name}Transform`];
+    transform = transform ? transform : {};
+
     return (
       <div className={name + ' positionable'} style={{
-        left: userToPercent(this.props[`${name}X`]),
-        top: userToPercent(this.props[`${name}Y`]),
-        fontSize: userToPt(this.props[`${name}Scale`])
+        left: userToPercent(transform.x),
+        top: userToPercent(transform.y),
+        fontSize: userToPt(transform.scale)
       }}>
         {customValue ? customValue : this.props[name]}
       </div>

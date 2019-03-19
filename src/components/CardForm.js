@@ -4,6 +4,7 @@ import { Form, Input, InputNumber, Row, Col, Select, Tabs } from 'antd'
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 import EffectPicker from './EffectPicker';
+import TransformInput from './TransformInput';
 import { getEditedCard } from '../state/selectors/deck';
 
 const { Option } = Select;
@@ -87,45 +88,22 @@ class CardForm extends Component {
 
   renderTransforms = getFieldDecorator => (
     <TabPane tab="Transforms" key="transforms">
+      {getFieldDecorator('thumbnailTransform')(<TransformInput name="Thumbnail" scaleUnit="%" />)}
       {[
-        { name: 'Thumbnail', hasRealSize: true },
         { name: 'Name' },
         { name: 'Description' },
         ...(this.props.data.type !== 'minion' ? [] : [
-          { name: 'HP' }, { name: 'Attack' }
+          { name: 'HP' },
+          { name: 'Attack' }
         ])
       ].map(opts => this.renderTransform(opts, getFieldDecorator))}
     </TabPane>
   );
 
-  renderTransform = ({ name, hasRealSize }, getFieldDecorator) => {
-    const lowercaseName = name.toLowerCase();
+  renderTransform = ({ name }, getFieldDecorator) => {
+    const decoratorName = name.toLowerCase() + 'Transform';
 
-    return (
-      <Row key={name}>
-        <h2>{name}</h2>
-        <Col span={8}>
-          <Form.Item label="X(%)">
-            {getFieldDecorator(`${lowercaseName}X`)(<InputNumber step={5}/>)}
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item label="Y(%)">
-            {getFieldDecorator(`${lowercaseName}Y`)(<InputNumber step={5}/>)}
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          { hasRealSize
-          ? <Form.Item label="Scale">
-              {getFieldDecorator(`${lowercaseName}Scale`)(<InputNumber step={0.1} />)}
-            </Form.Item>
-          : <Form.Item label="Size">
-              {getFieldDecorator(`${lowercaseName}Scale`)(<InputNumber step={1} />)}
-            </Form.Item>
-          }
-        </Col>
-      </Row>
-    );
+    return getFieldDecorator(decoratorName)(<TransformInput key={ name } name={ name } />);
   };
 
   render() {
