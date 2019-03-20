@@ -1,6 +1,7 @@
 .Card {
 	overflow: hidden;
 	transform-origin: top left;
+	outline: solid black 1px;
 
 	.positionable, .background {
 		width: 100%;

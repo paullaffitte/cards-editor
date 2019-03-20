@@ -11,11 +11,17 @@ class Card extends Component {
 
   state = {
     sizes: {
-      background: { width: 0, height: 0 },
+      background: { width: 400, height: 600 },
       thumbnail: { width: 0, height: 0 },
     },
     scale: 1
   }
+
+  componentDidMount() {
+    this.updateScale(this.state.sizes.background.width);
+  }
+
+  updateScale = backgroundWidth => this.setState({ scale: 1 / backgroundWidth * this.props.width });
 
   updateImage = name => image => {
     this.setState({sizes: {...this.state.sizes, [name]: {
@@ -24,7 +30,7 @@ class Card extends Component {
     }}});
 
     if (this.props.width && name === 'background') {
-      this.setState({ scale: 1 / image.target.naturalWidth * this.props.width });
+      this.updateScale(image.target.naturalWidth);
     }
   }
 
@@ -42,8 +48,12 @@ class Card extends Component {
   }
 
   renderText = (name, customValue) => {
-    let transform = this.props[`${name}Transform`];
-    transform = transform ? transform : {};
+    const transform = {
+      x: 50,
+      y: 50,
+      scale: 12,
+      ...this.props[`${name}Transform`]
+    };
 
     return (
       <div className={name + ' positionable'} style={{
@@ -62,33 +72,55 @@ class Card extends Component {
 
     return (
       <div className="Card" style={{ ...this.props.style, width: size.width, height: size.height, transform: `scale(${this.state.scale})` }}>
-        <img alt="thumbnail" className="thumbnail positionable" src={ this.props.thumbnail } onLoad={ this.updateImage("thumbnail") } style={ this.getThumbnailStyle() } />
-        <img alt="background" className="background" src={ this.props.background } onLoad={ this.updateImage("background") } />
+        {this.props.thumbnail ? <img
+          alt="thumbnail"
+          className="thumbnail positionable"
+          src={ this.props.thumbnail }
+          onLoad={ this.updateImage("thumbnail") }
+          style={ this.getThumbnailStyle() } />
+        : null}
+        {this.props.background ? <img
+          alt="background"
+          className="background"
+          src={ this.props.background }
+          onLoad={ this.updateImage("background") } />
+        : null}
         {this.renderText('name')}
         {this.renderText('description', [effects, effects ? '.\n' : '', this.props.description])}
-        {this.props.type !== 'minion' ? null : (
+        {this.props.type === 'minion' ? (
           <div>
             {this.renderText('hp')}
             {this.renderText('attack')}
           </div>
-        )}
+        ): null}
       </div>
     );
   }
+}
+
+function mergeTransforms(transforms) {
+  const transform = {};
+
+  ['x', 'y', 'scale'].forEach(field => {
+    const value = transforms
+      .filter(Boolean)
+      .map(({ [field]: value }) => value)
+      .filter(Boolean)
+      .shift();
+
+    if (value)
+      transform[field] = value;
+  });
+
+  return transform;
 }
 
 const mapStateToProps = (state, props) => {
   const cardConfig = getCardsConfig(state);
   const transforms = ['name', 'description', 'attack', 'hp'].reduce((acc, name) => {
     const transformName = name + 'Transform';
-    const cardTransform = props[transformName] ? props[transformName] : {};
-    const configTransform = cardConfig[transformName] ? cardConfig[transformName] : {};
-
-    return { ...acc, [transformName]: {
-      x: cardTransform.x ? cardTransform.x : configTransform.x,
-      y: cardTransform.y ? cardTransform.y : configTransform.y,
-      scale: cardTransform.scale ? cardTransform.scale : configTransform.scale,
-    }}
+    const transform = mergeTransforms([props[transformName], cardConfig[transformName]]);
+    return { ...acc, [transformName]: transform }
   }, {});
 
   return {
