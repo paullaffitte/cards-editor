@@ -6,7 +6,7 @@ function release() {
 	local release_name="$3"
 
 	cd ./dist
-	github-release "$type" \
+	yarn github-release "$type" \
 		--owner "$LOGIN" \
 		--repo cards-editor \
 		--tag "$version" \
@@ -24,7 +24,8 @@ read -p "Github OAuth TOKEN [$env_token]: " -r TOKEN
 LOGIN=${LOGIN:-$default_login}
 TOKEN=${TOKEN:-$env_token}
 
-VERSION=$(/usr/local/bin/semver)
+rm -f ./node_modules/.bin/semver
+VERSION=$(semver)
 default_version_name="v$VERSION"
 
 read -p "Release name [$default_version_name]: " RELEASE_NAME
