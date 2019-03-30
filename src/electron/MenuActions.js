@@ -3,7 +3,12 @@ const fs = require('fs');
 class MenuActions {
 
   static exportAsPDF(event) {
-    event.sender.printToPDF({printBackground: true}, (err, data) => {
+    event.sender.printToPDF({
+      marginsType: 1,
+      pageSize: 'A4',
+      printBackground: true,
+      landscape: true
+    }, (err, data) => {
       if (err) {
         event.sender.send('exportAsPDF-reply', { err });
         return;

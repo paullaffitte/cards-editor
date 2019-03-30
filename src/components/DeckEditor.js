@@ -55,15 +55,15 @@ class DeckEditor extends Component {
   onExport = () => this.setState({ showExport: true });
 
   exportAsPDF = async () => {
-    await DeckStorage.exportAsPDF()
     this.closeExportModal();
+    this.props.toggleExportMode(true);
+    setTimeout(async () => {
+      await DeckStorage.exportAsPDF()
+      this.props.toggleExportMode(false);
+    }, 1000);
   };
 
-  closeExportModal = () => {
-    if (this.exportResponse)
-      this.exportResponse.resolve(false);
-    this.setState({ showExport: false });
-  }
+  closeExportModal = () => this.setState({ showExport: false });
 
   updateFilename = filename => {
     if (!filename)

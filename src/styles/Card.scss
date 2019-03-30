@@ -3,6 +3,11 @@
 	transform-origin: top left;
 	outline: solid black 1px;
 
+	@media print {
+		page-break-inside: avoid;
+		outline: none;
+	}
+
 	.positionable, .background {
 		width: 100%;
 		position: absolute;

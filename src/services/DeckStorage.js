@@ -81,6 +81,14 @@ class DeckStorage {
 
     DeckStorage.onOpen = onOpen;
     DeckStorage.onSave = onSave;
+
+    ipcRenderer.removeAllListeners('new');
+    ipcRenderer.removeAllListeners('open');
+    ipcRenderer.removeAllListeners('save');
+    ipcRenderer.removeAllListeners('saveAs');
+    ipcRenderer.removeAllListeners('exportAsPDF');
+    ipcRenderer.removeAllListeners('exportAsPDF-reply');
+
     register('new', onNew);
     register('open', async () => {
       const deck = await DeckStorage.open();
