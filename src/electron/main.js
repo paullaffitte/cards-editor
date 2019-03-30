@@ -52,17 +52,22 @@ const menuTemplate = [
   {
     label: 'View',
     submenu: [
-      {role: 'reload'},
-      {role: 'forceReload'},
-      {role: 'toggleDevTools'},
-      {type: 'separator'},
       {role: 'resetZoom'},
       {role: 'zoomIn'},
-      {role: 'zoomOut' },
-      {role: 'toggleFullScreen'},
+      {role: 'zoomOut' }
     ]
   }
 ];
+
+if (isDev)
+  menuTemplate.push({
+    label: 'Dev tools',
+    submenu: [
+      {role: 'reload'},
+      {role: 'forceReload'},
+      {role: 'toggleDevTools'},
+    ]
+  });
 
 app.on('ready', createWindow);
 
