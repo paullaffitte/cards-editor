@@ -16,14 +16,14 @@
             "attack": 7,
             "thumbnail": "card-thumbnail.png",
             "background": "card-background.png",
-            "id": 1
+            "id": "1"
         },
         {
             "name": "card name 2",
             "hp": 4,
             "attack": 27,
             "description": "this is a description!!!",
-            "id": 2,
+            "id": "2",
             "background": "card-background.png",
             "thumbnail": "placeholder2.png"
         },
@@ -32,7 +32,7 @@
             "hp": 30,
             "attack": 7,
             "description": "this is not a description",
-            "id": 3,
+            "id": "3",
             "background": "card-background.png",
             "thumbnail": "git_poule.png"
         },
@@ -41,7 +41,7 @@
             "hp": 3,
             "attack": 5,
             "description": "this is another description",
-            "id": 4,
+            "id": "4",
             "background": "card-background.png",
             "thumbnail": "packratjs.png"
         }
