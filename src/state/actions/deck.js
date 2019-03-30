@@ -60,7 +60,13 @@ const actions = {
       type: ActionsTypes.UPDATE_CARDS_CONFIG,
       payload: cardsConfig
     };
-  }
+  },
+  updateExportConfig: exportConfig => {
+    return {
+      type: ActionsTypes.UPDATE_EXPORT_CONFIG,
+      payload: exportConfig
+    };
+  },
 };
 
 const selectFirstItem = (type, items) => selectItem(type, items[0].id);

@@ -6,6 +6,9 @@ const initialState = {
       cards: [],
       effects: [],
       resources: {},
+      exportConfig: {
+        cardsQuantity: {}
+      }
     },
     edited: {
       card: {},

@@ -25,10 +25,10 @@ class List extends Component {
 
   renderItem = item => {
     const backgroundImage = item.thumbnail ? {backgroundImage: `url('${item.thumbnail}')`} : null;
-    item.className        = [ 'list-item', item.updated ? 'updated' : '', item.className].join(' ');
+    const className        = [ 'list-item', item.updated ? 'updated' : '', item.className ].join(' ');
 
     return (
-      <div key={item.id} className={item.className} style={backgroundImage}>
+      <div key={item.id} className={className} style={backgroundImage}>
         <Popconfirm className="list-item-button delete"
           title="Are you sure to delete this item ? (it can't be undone)" placement="left"
           onConfirm={() => this.deleteItem(item)}
@@ -44,8 +44,10 @@ class List extends Component {
   };
 
   render() {
+    const prefix = this.props.prefix ? (this.props.prefix + '-') : '';
+
     return (
-      <div className={'List ' + this.props.type.toLowerCase() + '-list' }>
+      <div className={'List ' + prefix + this.props.type.toLowerCase() + '-list' }>
         <div className="items">
           {this.props.items(this.props.type, this.props.preprocess).map(this.renderItem)}
         </div>

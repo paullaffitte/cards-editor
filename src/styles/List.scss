@@ -103,6 +103,22 @@
 	}
 }
 
+.List.export-card-list {
+
+	$item-height: 2.4em;
+
+	max-height: 400px;
+
+	.list-item {
+		height: $item-height;
+		margin-bottom: 0.5em;
+
+		.ant-input-number {
+			height: $item-height;
+		}
+	}
+}
+
 .List.effect-list {
 	.list-item:hover {
 		font-weight: bold;

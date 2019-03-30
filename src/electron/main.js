@@ -14,12 +14,19 @@ function sendAppEvent(name, callback, ...args) {
   });
 }
 
+function camelize(str) {
+  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+    return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
+  }).replace(/\s+/g, '');
+}
+
 function menuLabelWithEvent(label, accelerator=null) {
   accelerator = accelerator ? {accelerator} : {};
+  const name = camelize(label);
   return {
     label,
     ...accelerator,
-    click: () => sendAppEvent(label, MenuActions[label])
+    click: () => sendAppEvent(name, MenuActions[name])
   };
 }
 
@@ -27,10 +34,12 @@ const menuTemplate = [
   {
     label: 'File',
     submenu: [
-      menuLabelWithEvent('new', 'CmdOrCtrl+N'),
-      menuLabelWithEvent('open', 'CmdOrCtrl+O'),
-      menuLabelWithEvent('save', 'CmdOrCtrl+S'),
-      menuLabelWithEvent('saveAs', 'Shift+CmdOrCtrl+S'),
+      menuLabelWithEvent('New', 'CmdOrCtrl+N'),
+      menuLabelWithEvent('Open', 'CmdOrCtrl+O'),
+      menuLabelWithEvent('Save', 'CmdOrCtrl+S'),
+      menuLabelWithEvent('Save as', 'Shift+CmdOrCtrl+S'),
+      {type: 'separator'},
+      menuLabelWithEvent('Export as PDF', 'CmdOrCtrl+E'),
       {type: 'separator'},
       {role: 'quit', accelerator: 'Alt+F4'},
     ]

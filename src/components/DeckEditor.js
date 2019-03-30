@@ -4,6 +4,7 @@ import { Layout, Modal, Tabs } from 'antd';
 import 'antd/dist/antd.css';
 import CardList from './CardList';
 import CardEditor from './CardEditor';
+import ExportModal from './ExportModal';
 import DeckStorage from '../services/DeckStorage';
 import DeckActions from '../state/actions/deck';
 import ActionsTypes from '../constants/ActionsTypes';
@@ -14,7 +15,8 @@ const TabPane = Tabs.TabPane;
 class DeckEditor extends Component {
 
   state = {
-    cardType: 'minion'
+    cardType: 'minion',
+    showExport: false
   };
 
   componentDidMount() {
@@ -22,7 +24,8 @@ class DeckEditor extends Component {
       onNew:          this.onNew,
       onOpen:         this.onOpen,        // TODO  move this code in App
       onSave:         this.onSave,        //       create a ContextListener class and move register listener inside it
-      updateFilename: this.updateFilename //       use DeckStorage in onOpen or onSave callbacks
+      onExport:       this.onExport,      //       use DeckStorage in onOpen or onSave callbacks
+      updateFilename: this.updateFilename
     });
   }
 
@@ -49,6 +52,10 @@ class DeckEditor extends Component {
     return this.props.deck;
   };
 
+  onExport = () => this.setState({ showExport: true });
+
+  onExportDone = () => this.setState({ showExport: false });
+
   updateFilename = filename => {
     if (!filename)
       return;
@@ -67,6 +74,7 @@ class DeckEditor extends Component {
       <Layout>
         <Content>
           <CardEditor/>
+          <ExportModal visible={this.state.showExport} onClose={this.onExportDone} />
         </Content>
         <Sider width={250}>
           <Tabs defaultActiveKey={ this.state.cardType } onChange={ this.onChangeCardType }>

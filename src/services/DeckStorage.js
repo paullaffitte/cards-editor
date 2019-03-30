@@ -17,6 +17,7 @@ class DeckStorage {
   }
 
   static write(filename, data) {
+    console.log('save', data);
     fs.writeFileSync(filename, JSON.stringify(cleanDeck(data)));
   }
 
@@ -62,7 +63,7 @@ class DeckStorage {
     }));
   }
 
-  static registerListeners({onNew, onOpen, onSave, updateFilename}) {
+  static registerListeners({onNew, onOpen, onSave, onExport, updateFilename}) {
     const register = (name, callback) => {
       let eventName = name + '-event';
       ipcRenderer.on(eventName, async (event, ...args) => {
@@ -81,6 +82,7 @@ class DeckStorage {
     });
     register('save', async (e, ...args) => updateFilename(await DeckStorage.save()));
     register('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs()));
+    register('exportAsPDF', onExport);
   }
 }
 

@@ -15,6 +15,10 @@ class MenuActions {
   static saveAs(callback, ...args) {
     console.log('saveAs callback success!');
   }
+
+  static exportAsPDF(callback, ...args) {
+    console.log('exportAsPdf callback success!');
+  }
 }
 
 module.exports = MenuActions;
