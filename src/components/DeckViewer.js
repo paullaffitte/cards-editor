@@ -5,23 +5,35 @@ import Card from './Card';
 
 class DeckViewer extends Component {
 
+  renderCard = (card, key) => (
+    <div key={ key } style={{ pageBreakInside: 'avoid', paddingTop: '1em', paddingLeft: '1em' }} >
+      <Card { ...card } />
+    </div>
+  );
+
+  renderCards = () => {
+    const cards = [];
+
+    this.props.cards.forEach(card => {
+      for (let i = 0; i < this.props.exportConfig.cardsQuantity[card.id]; i++)
+        cards.push(this.renderCard(card, cards.length));
+    });
+
+    return cards;
+  };
+
   render() {
     return (
       <div>
-        { this.props.deck.cards.map(card => {
-          return (
-            <div style={{ pageBreakInside: 'avoid', paddingTop: '1em', paddingLeft: '1em' }} >
-              <Card key={ card.id } { ...card } />
-            </div>
-          );
-        }) }
+        { this.renderCards() }
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  deck: state.deck.current
+  cards: state.deck.current.cards,
+  exportConfig: state.deck.current.exportConfig,
 });
 
 export default connect(mapStateToProps)(DeckViewer);

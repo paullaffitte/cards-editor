@@ -45,11 +45,15 @@ class List extends Component {
 
   render() {
     const prefix = this.props.prefix ? (this.props.prefix + '-') : '';
+    const items = this.props.items(this.props.type, this.props.preprocess);
+
+    if (this.props.sort)
+      items.sort(this.props.sort);
 
     return (
       <div className={'List ' + prefix + this.props.type.toLowerCase() + '-list' }>
         <div className="items">
-          {this.props.items(this.props.type, this.props.preprocess).map(this.renderItem)}
+          {(items).map(this.renderItem)}
         </div>
       </div>
     );

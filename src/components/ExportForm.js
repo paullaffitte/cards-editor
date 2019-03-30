@@ -17,11 +17,12 @@ class ExportForm extends Component {
           type={ ActionsTypes.Item.CARD }
           prefix="export"
           preprocess={ (item, state) => item }
+          sort={ (left, right) => this.props.exportConfig.cardsQuantity[left.id] < this.props.exportConfig.cardsQuantity[right.id] }
           renderItem={ item => (
             <div>
               <span>{item.name}</span>
               {getFieldDecorator(item.id, {})(
-                <InputNumber style={{
+                <InputNumber min={0} style={{
                   width: '5em',
                   marginRight: '1em',
                   position: 'relative',
@@ -50,7 +51,7 @@ export default connect(mapStateToProps)(Form.create({
     cardsQuantity = Object.keys(changedFields).reduce((acc, name) => ({
       ...acc,
       [name]: changedFields[name].value
-    }), cardsQuantity);
+    }), { ...props.exportConfig.cardsQuantity, ...cardsQuantity });
     props.dispatch(DeckActions.updateExportConfig({cardsQuantity}));
   },
 
