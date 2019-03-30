@@ -1,0 +1,11 @@
+.DeckViewer {
+
+	display: table;
+
+	.card-container {
+		display: inline-block;
+		page-break-inside: 'avoid';
+		padding-top: 1em;
+		padding-left: 1em;
+	}
+}

@@ -13,25 +13,20 @@ class Card extends Component {
     sizes: {
       background: { width: 400, height: 600 },
       thumbnail: { width: 0, height: 0 },
-    },
-    scale: 1
+    }
   }
 
-  componentDidMount() {
-    this.updateScale(this.state.sizes.background.width);
+  getScale() {
+    return this.props.width
+      ? 1 / this.state.sizes.background.width * this.props.width
+      : 1;
   }
-
-  updateScale = backgroundWidth => this.setState({ scale: 1 / backgroundWidth * this.props.width });
 
   updateImage = name => image => {
     this.setState({sizes: {...this.state.sizes, [name]: {
       height: image.target.naturalHeight,
       width: image.target.naturalWidth
     }}});
-
-    if (this.props.width && name === 'background') {
-      this.updateScale(image.target.naturalWidth);
-    }
   }
 
   getThumbnailStyle() {
@@ -69,9 +64,15 @@ class Card extends Component {
   render() {
     const effects = this.props.effects.map(({ description }) => description).filter(Boolean).join('. ');
     let size = this.state.sizes.background;
+    const cardStyle = {
+      ...this.props.style,
+      width: size.width,
+      height: size.height,
+      transform: `scale(${this.getScale()})`
+    };
 
     return (
-      <div className="Card" style={{ ...this.props.style, width: size.width, height: size.height, transform: `scale(${this.state.scale})` }}>
+      <div className="Card" style={cardStyle}>
         {this.props.thumbnail ? <img
           alt="thumbnail"
           className="thumbnail positionable"

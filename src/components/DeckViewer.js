@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
 import Card from './Card';
+import '../styles/DeckViewer.scss';
 
 class DeckViewer extends Component {
 
   renderCard = (card, key) => (
-    <div key={ key } style={{ pageBreakInside: 'avoid', paddingTop: '1em', paddingLeft: '1em' }} >
+    <div key={ key } className="card-container">
       <Card { ...card } />
     </div>
   );
@@ -24,7 +25,7 @@ class DeckViewer extends Component {
 
   render() {
     return (
-      <div>
+      <div className="DeckViewer">
         { this.renderCards() }
       </div>
     );
@@ -33,7 +34,7 @@ class DeckViewer extends Component {
 
 const mapStateToProps = state => ({
   cards: state.deck.current.cards,
-  exportConfig: state.deck.current.exportConfig,
+  exportConfig: state.deck.current.exportConfig
 });
 
 export default connect(mapStateToProps)(DeckViewer);
