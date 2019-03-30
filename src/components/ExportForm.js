@@ -17,7 +17,16 @@ class ExportForm extends Component {
           type={ ActionsTypes.Item.CARD }
           prefix="export"
           preprocess={ (item, state) => item }
-          sort={ (left, right) => this.props.exportConfig.cardsQuantity[left.id] < this.props.exportConfig.cardsQuantity[right.id] }
+          sort={ (left, right) => {
+            left = this.props.exportConfig.cardsQuantity[left.id];
+            right = this.props.exportConfig.cardsQuantity[right.id];
+
+            if (left === undefined)
+              return 1;
+            if (right === undefined)
+              return -1;
+            return left < right
+          } }
           renderItem={ item => (
             <div>
               <span>{item.name}</span>
