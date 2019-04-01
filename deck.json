@@ -1,4 +1,24 @@
 {
+    "cardsConfig": {
+        "nameTransform": {
+            "y": 50,
+            "scale": 22
+        },
+        "descriptionTransform": {
+            "y": 70,
+            "scale": 12
+        },
+        "hpTransform": {
+            "x": 93,
+            "y": 93,
+            "scale": 42
+        },
+        "attackTransform": {
+            "x": 10,
+            "y": 93,
+            "scale": 42
+        }
+    },
     "resources": {
         "git_poule.png": "/home/onehandedpenguin/Pictures/git_poule.png",
         "placeholder2.png": "/home/onehandedpenguin/Pictures/placeholder2.png",
@@ -7,43 +27,108 @@
         "card-background.png": "/home/onehandedpenguin/Pictures/card-background.png",
         "card-thumbnail.png": "/home/onehandedpenguin/Pictures/card-thumbnail.png"
     },
-    "effects": [],
+    "exportConfig": {
+        "cardsQuantity": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1
+        }
+    },
     "cards": [
         {
+            "effects": [
+                "10e91c90-546a-11e9-b0d5-ffc68b73b6a3",
+                "118de810-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
             "name": "card name",
             "description": "this is a description",
             "hp": 3,
             "attack": 7,
             "thumbnail": "card-thumbnail.png",
             "background": "card-background.png",
-            "id": "1"
+            "id": "1",
+            "type": "minion",
+            "thumbnailTransform": {
+                "x": 50,
+                "y": 25,
+                "scale": 1.4
+            }
         },
         {
+            "effects": [
+                "10e91c90-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
             "name": "card name 2",
             "hp": 4,
             "attack": 27,
             "description": "this is a description!!!",
             "id": "2",
             "background": "card-background.png",
-            "thumbnail": "placeholder2.png"
+            "thumbnail": "placeholder2.png",
+            "type": "minion",
+            "thumbnailTransform": {
+                "x": 50,
+                "y": 26,
+                "scale": 2.1
+            }
         },
         {
+            "effects": [
+                "38905380-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
             "name": "card name 3",
             "hp": 30,
             "attack": 7,
-            "description": "this is not a description",
+            "description": "This chicken speaks french, thus it can pull",
             "id": "3",
             "background": "card-background.png",
-            "thumbnail": "git_poule.png"
+            "thumbnail": "git_poule.png",
+            "type": "minion",
+            "thumbnailTransform": {
+                "x": 50,
+                "y": 25,
+                "scale": 0.3
+            }
         },
         {
+            "effects": [
+                "118de810-546a-11e9-b0d5-ffc68b73b6a3",
+                "11fe5d20-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
             "name": "card name 4",
             "hp": 3,
             "attack": 5,
-            "description": "this is another description",
+            "description": "Parse your opponent configuration",
             "id": "4",
             "background": "card-background.png",
-            "thumbnail": "packratjs.png"
+            "thumbnail": "packratjs.png",
+            "type": "spell",
+            "thumbnailTransform": {
+                "x": 100,
+                "y": 25
+            }
+        }
+    ],
+    "effects": [
+        {
+            "id": "10e91c90-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "bonjour"
+        },
+        {
+            "id": "118de810-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "test"
+        },
+        {
+            "id": "11fe5d20-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "aze"
+        },
+        {
+            "id": "38905380-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "Combo: one shot your opponent"
+        },
+        {
+            "id": "736a3e80-546a-11e9-b0d5-ffc68b73b6a3"
         }
     ]
 }
