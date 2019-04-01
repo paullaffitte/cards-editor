@@ -30,15 +30,21 @@ class DeckEditor extends Component {
   }
 
   onNew = () => {
-    Modal.confirm({
-      title: 'Confirmation',
-      content: 'Are you sure to create a new deck. This will discard current changes if there are any.',
-      okText: 'New deck',
-      onOk : close => {
-        this.props.dispatch(DeckActions.newDeck())
-        close();
-      }
-    });
+    const newDeck = () => this.props.dispatch(DeckActions.newDeck());
+
+    if (this.props.deck.updated) {
+      Modal.confirm({
+        title: 'Confirmation',
+        content: 'Your deck has unsaved changes. If you create a new deck now, these changes will be lost',
+        okText: 'New deck',
+        onOk : close => {
+          newDeck();
+          close();
+        }
+      });
+    } else {
+      newDeck();
+    }
   };
 
   onOpen = (deck) => {

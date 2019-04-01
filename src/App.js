@@ -19,9 +19,9 @@ const store = createStore(
 );
 
 DeckStorage.initFonts(store);
-DeckStorage.onQuit(quit => store.getState().deck.updated ? Modal.confirm({
+DeckStorage.onQuit(quit => getCurrentDeck(store.getState()).updated ? Modal.confirm({
   title: 'Confirmation',
-  content: 'Are you sure to quit. This will discard current changes if there are any.',
+  content: 'Your deck has unsaved changes. If you quit now, these changes will be lost',
   okText: 'Quit',
   onOk: quit
 }) : quit());

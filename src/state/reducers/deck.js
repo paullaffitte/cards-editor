@@ -7,9 +7,8 @@ import uuid from 'uuid/v1';
 function deckUpdate(state, data, freshDeck, setUpdated=true) {
   const newState = update(state, { deck: data });
 
-  console.log(setUpdated, freshDeck);
   return (setUpdated === true)
-    ? update(newState, { deck: {updated: {$set: !freshDeck}}})
+    ? update(newState, { deck: {current: {updated: {$set: !freshDeck}}} })
     : newState;
 }
 
