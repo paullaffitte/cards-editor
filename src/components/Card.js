@@ -54,7 +54,8 @@ class Card extends Component {
       <div className={name + ' positionable'} style={{
         left: userToPercent(transform.x),
         top: userToPercent(transform.y),
-        fontSize: userToPt(transform.scale)
+        fontSize: userToPt(transform.scale),
+        color: transform.color,
       }}>
         {customValue ? customValue : this.props[name]}
       </div>
@@ -102,7 +103,7 @@ class Card extends Component {
 function mergeTransforms(transforms) {
   const transform = {};
 
-  ['x', 'y', 'scale'].forEach(field => {
+  ['x', 'y', 'scale', 'color'].forEach(field => {
     const value = transforms
       .filter(Boolean)
       .map(({ [field]: value }) => value)
@@ -117,10 +118,10 @@ function mergeTransforms(transforms) {
 }
 
 const mapStateToProps = (state, props) => {
-  const cardConfig = getCardsConfig(state);
+  const cardsConfig = getCardsConfig(state);
   const transforms = ['name', 'description', 'attack', 'hp'].reduce((acc, name) => {
     const transformName = name + 'Transform';
-    const transform = mergeTransforms([props[transformName], cardConfig[transformName]]);
+    const transform = mergeTransforms([props[transformName], cardsConfig[transformName]]);
     return { ...acc, [transformName]: transform }
   }, {});
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, InputNumber, Row, Col } from 'antd'
+import { Form, InputNumber, Input, Row, Col } from 'antd'
 
 class TransformInput extends Component {
 
@@ -51,29 +51,40 @@ class TransformInput extends Component {
     return (
       <Row key={this.props.name}>
         <h2>{this.props.name}</h2>
-        <Col span={8}>
+        <Col span={6}>
           <Form.Item label="X(%)">
               <InputNumber
                 value={this.state.x}
-                onChange={ value => this.handleChange({x: value}) }
+                onChange={ value => this.handleChange({ x: value }) }
                 step={5} />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col span={6}>
           <Form.Item label="Y(%)">
               <InputNumber
                 value={this.state.y}
-                onChange={ value => this.handleChange({y: value}) }
+                onChange={ value => this.handleChange({ y: value }) }
                 step={5} />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col span={6}>
           <Form.Item label={scaleConfig.label}>
               <InputNumber
                 value={this.state.scale}
-                onChange={ value => this.handleChange({scale: value}) }
+                onChange={ value => this.handleChange({ scale: value }) }
                 step={scaleConfig.step} />
           </Form.Item>
+        </Col>
+        <Col span={6}>
+          { !this.props.withoutColor ? (
+            <Form.Item label="Color">
+              <Input
+                type="color"
+                value={this.state.color}
+                onChange={ e => this.handleChange({ color: e.target.value === '#000000' ? null : e.target.value }) }
+                />
+            </Form.Item>
+          ) : null }
         </Col>
       </Row>
     );
