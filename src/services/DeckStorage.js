@@ -19,6 +19,13 @@ const deckFileFilters = [
   { name: 'All Files', extensions: ['*'] }
 ];
 
+const registerListener = (name, callback) => {
+  ipcRenderer.on(name, async (event, ...args) => {
+    console.log(`${name} event received`);
+    await callback(event, ...args);
+  });
+};
+
 class DeckStorage {
 
   static read(filename) {
@@ -102,13 +109,13 @@ class DeckStorage {
     ipcRenderer.send('getAvailableFonts');
   }
 
+  static onQuit(callback) {
+    registerListener('quit', () => {
+      callback(() => ipcRenderer.send('quit'));
+    });
+  }
+
   static registerListeners({onNew, onOpen, onSave, onExport, updateFilename}) {
-    const register = (name, callback) => {
-      ipcRenderer.on(name, async (event, ...args) => {
-        console.log(`${name} event received`);
-        await callback(event, ...args);
-      });
-    };
 
     DeckStorage.onOpen = onOpen;
     DeckStorage.onSave = onSave;
@@ -120,16 +127,16 @@ class DeckStorage {
     ipcRenderer.removeAllListeners('exportAsPDF');
     ipcRenderer.removeAllListeners('exportAsPDF-reply');
 
-    register('new', onNew);
-    register('open', async () => {
+    registerListener('new', onNew);
+    registerListener('open', async () => {
       const deck = await DeckStorage.open();
       if (deck)
         onOpen(deck)
     });
-    register('save', async (e, ...args) => updateFilename(await DeckStorage.save()));
-    register('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs()));
-    register('exportAsPDF', onExport);
-    register('exportAsPDF-reply', (e, response) => {
+    registerListener('save', async (e, ...args) => updateFilename(await DeckStorage.save()));
+    registerListener('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs()));
+    registerListener('exportAsPDF', onExport);
+    registerListener('exportAsPDF-reply', (e, response) => {
       if ( !pdfPromise )
         return;
 

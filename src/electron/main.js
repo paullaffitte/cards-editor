@@ -1,4 +1,4 @@
-const { app, /*crashReporter,*/ BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, /*crashReporter,*/ BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const isDev = require('electron-is-dev');
 const SystemFonts = require('system-font-families');
 const MenuActions = require('./MenuActions');
@@ -6,12 +6,17 @@ const MenuActions = require('./MenuActions');
 const systemFonts = new SystemFonts.default();
 
 let mainWindow;
+let quitConfirmed = false;
 
 ipcMain.on('exportAsPDF', MenuActions.exportAsPDF);
 ipcMain.on('getAvailableFonts', event => event.sender.send('availableFonts', systemFonts.getFontsSync()));
+ipcMain.on('quit', () => {
+  quitConfirmed = true;
+  mainWindow.close();
+});
 
 function sendAppEvent(name) {
-  mainWindow.webContents.send(name);
+  return mainWindow.webContents.send(name);
 }
 
 function camelize(str) {
@@ -104,6 +109,14 @@ async function createWindow() {
   } else {
     mainWindow.loadFile(__dirname + '/../../build/index.html');
   }
+
+  mainWindow.on('close', async e => {
+    if (quitConfirmed)
+      return;
+
+    e.preventDefault();
+    sendAppEvent('quit');
+  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;

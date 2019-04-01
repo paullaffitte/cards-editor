@@ -1,6 +1,7 @@
 const initialState = {
   deck: {
     current: {
+      updated: false,
       filename: null,
       cardsConfig: {},
       cards: [],

@@ -4,8 +4,13 @@ import { getEditedItem, getItemById } from '../selectors/deck';
 import initialState from '../initialState';
 import uuid from 'uuid/v1';
 
-function deckUpdate(state, data) {
-  return update(state, {deck: data});
+function deckUpdate(state, data, freshDeck, setUpdated=true) {
+  const newState = update(state, { deck: data });
+
+  console.log(setUpdated, freshDeck);
+  return (setUpdated === true)
+    ? update(newState, { deck: {updated: {$set: !freshDeck}}})
+    : newState;
 }
 
 const sanitizeCard = card => ({ effects: [], ...card });
@@ -31,7 +36,7 @@ const deck = {
     if (!('original' in item))
       updates.current = { [getItemKey(type, true)]: {$apply: backupItem} };
 
-    return deckUpdate(state, updates);
+    return deckUpdate(state, updates, false, false);
   },
   [ActionsTypes.UPDATE_ITEM]: (state, { type, item }) => {
     type = ActionsTypes.safeItem(type);
@@ -58,7 +63,7 @@ const deck = {
     });
     return deckUpdate(state, {
       current: { [getItemKey(type, true)]: {$apply: stageCards} }
-    });
+    }, true);
   },
   [ActionsTypes.ADD_ITEM]: (state, { type, item }) => {
     const newItem = { ...item, id: uuid() };
@@ -73,13 +78,13 @@ const deck = {
     });
   },
 
-  [ActionsTypes.NEW_DECK]: (state, deck) => deckUpdate(state, { $set: initialState.deck }),
+  [ActionsTypes.NEW_DECK]: (state, deck) => deckUpdate(state, { $set: initialState.deck }, true),
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
     const sanitizeCards = cards => cards.map(sanitizeCard);
     state = deckUpdate(state, { $set: {...initialState.deck, current: deck} });
     return deckUpdate(state, {
       current: { [getItemKey(ActionsTypes.Item.CARD, true)]: {$apply: sanitizeCards} }
-    });
+    }, true);
   },
   [ActionsTypes.UPDATE_FILENAME]: (state, filename) => {
     return deckUpdate(state, { current: {filename: {$set: filename}} });

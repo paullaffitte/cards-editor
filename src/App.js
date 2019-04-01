@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { Layout } from 'antd';
+import { Layout, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import './App.scss';
 import reducers from './state/reducers/index';
@@ -19,6 +19,12 @@ const store = createStore(
 );
 
 DeckStorage.initFonts(store);
+DeckStorage.onQuit(quit => store.getState().deck.updated ? Modal.confirm({
+  title: 'Confirmation',
+  content: 'Are you sure to quit. This will discard current changes if there are any.',
+  okText: 'Quit',
+  onOk: quit
+}) : quit());
 
 const PageTitle = connect(state => ({
   filename: getCurrentDeck(state).filename
@@ -43,11 +49,11 @@ class App extends Component {
     exportMode: false
   }
 
-
   render() {
     return (
       <Provider store={store}>
         <PageTitle />
+
         { !this.state.exportMode
           ? (
             <Layout className="app">
