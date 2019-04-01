@@ -57,10 +57,8 @@ class DeckEditor extends Component {
   exportAsPDF = async () => {
     this.closeExportModal();
     this.props.toggleExportMode(true);
-    setTimeout(async () => {
-      await DeckStorage.exportAsPDF()
-      this.props.toggleExportMode(false);
-    }, 1000);
+    await DeckStorage.exportAsPDF();
+    this.props.toggleExportMode(false);
   };
 
   closeExportModal = () => this.setState({ showExport: false });

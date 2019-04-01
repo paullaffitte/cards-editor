@@ -12,6 +12,11 @@ const cleanDeck = ({filename, cards, effects, ...data}) => ({
 
 let pdfPromise = null;
 
+const deckFileFilters = [
+  { name: 'Deck', extensions: ['deck', 'json'] },
+  { name: 'All Files', extensions: ['*'] }
+];
+
 class DeckStorage {
 
   static read(filename) {
@@ -27,7 +32,10 @@ class DeckStorage {
 
     if (filename)
       return DeckStorage.onOpen(loadDeck(filename));
-    return new Promise((resolve, reject) => dialog.showOpenDialog((filenames) => {
+    return new Promise((resolve, reject) => dialog.showOpenDialog({
+      title: 'Open',
+      filters: deckFileFilters
+    }, (filenames) => {
       if (!filenames || !filenames.length) {
         resolve(null);
         return;
@@ -53,7 +61,10 @@ class DeckStorage {
       return newFilename;
     }
 
-    return new Promise((resolve, reject) => dialog.showSaveDialog((newFilename) => {
+    return new Promise((resolve, reject) => dialog.showSaveDialog({
+      title: 'Save',
+      filters: deckFileFilters
+    }, (newFilename) => {
       if (!newFilename) {
         resolve(null);
         return;
@@ -65,10 +76,22 @@ class DeckStorage {
   }
 
   static exportAsPDF() {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => dialog.showSaveDialog({
+      title: 'Export',
+      defaultPath: './deck.pdf',
+      filters: [
+        { name: 'PDF', extensions: ['pdf'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    }, (filename) => {
+      if (!filename) {
+        resolve(null);
+        return;
+      }
+
       pdfPromise = { resolve, reject };
-      ipcRenderer.send('exportAsPDF');
-    });
+      ipcRenderer.send('exportAsPDF', filename);
+    }));
   }
 
   static registerListeners({onNew, onOpen, onSave, onExport, updateFilename}) {
