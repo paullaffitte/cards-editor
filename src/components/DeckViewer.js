@@ -4,20 +4,58 @@ import 'antd/dist/antd.css';
 import Card from './Card';
 import '../styles/DeckViewer.scss';
 
+const makeSize = (width, height) => ({ width, height });
+const A4 = makeSize(297, 210);
+
+const mmToIn = mm => mm / 25.4;
+const inToPx = inch => inch * 95.8; // constant when exporting with chrome (empirical constatation)
+const mmToPx = (mm, dpi) => inToPx(mmToIn(mm));
+
 class DeckViewer extends Component {
 
-  renderCard = (card, key) => (
-    <div key={ key } className="card-container">
-      <Card { ...card } />
-    </div>
-  );
+  positionToCss = (position) => ({
+    position: 'absolute',
+    top: `${position.y}px`,
+    left: `${position.x}px`
+  })
+
+  renderCard = (card, { x, y, page }, spacing, cardSize) => {
+    const position = {
+      x: spacing + x * cardSize.width,
+      y: spacing + y * cardSize.height + page * mmToPx(A4.height)
+    };
+
+    return (
+      <div key={ JSON.stringify(position) } className="card-container" style={this.positionToCss(position)}>
+        <Card { ...card } />
+      </div>
+    )
+  };
 
   renderCards = () => {
-    const cards = [];
+    const pageSize = makeSize(mmToPx(A4.width, this), mmToPx(A4.height));
+    const spacing = 10;
+    const cardSize = makeSize(this.props.cardSize.width + spacing, this.props.cardSize.height + spacing);
+    const A4px = makeSize(mmToPx(A4.width), mmToPx(A4.height));
 
+    const maxBy = {
+      row: Math.floor(A4px.width / cardSize.width),
+      col: Math.floor(A4px.height / cardSize.height)
+    };
+
+    const cards = [];
+    const pos = { x: 0, y: 0, page: 0 };
     this.props.cards.forEach(card => {
-      for (let i = 0; i < this.props.exportConfig.cardsQuantity[card.id]; i++)
-        cards.push(this.renderCard(card, cards.length));
+      for (let i = 0; i < this.props.exportConfig.cardsQuantity[card.id]; i++) {
+        cards.push(this.renderCard(card, pos, spacing, cardSize));
+        if (++pos.x >= maxBy.row) {
+          pos.x = 0;
+          if (++pos.y >= maxBy.col) {
+            pos.y = 0;
+            ++pos.page;
+          }
+        }
+      }
     });
 
     return cards;
@@ -34,7 +72,8 @@ class DeckViewer extends Component {
 
 const mapStateToProps = state => ({
   cards: state.deck.current.cards,
-  exportConfig: state.deck.current.exportConfig
+  exportConfig: state.deck.current.exportConfig,
+  cardSize: makeSize(421, 601)
 });
 
 export default connect(mapStateToProps)(DeckViewer);
