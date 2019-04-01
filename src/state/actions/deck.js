@@ -67,6 +67,13 @@ const actions = {
       payload: exportConfig
     };
   },
+
+  updateAvailableFonts: fonts => {
+    return {
+      type: ActionsTypes.UPDATE_AVAILABLE_FONTS,
+      payload: fonts
+    };
+  },
 };
 
 const selectFirstItem = (type, items) => selectItem(type, items[0].id);

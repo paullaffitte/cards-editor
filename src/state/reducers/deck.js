@@ -73,10 +73,10 @@ const deck = {
     });
   },
 
-  [ActionsTypes.NEW_DECK]: (state, deck) => initialState,
+  [ActionsTypes.NEW_DECK]: (state, deck) => deckUpdate(state, { $set: initialState.deck }),
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
     const sanitizeCards = cards => cards.map(sanitizeCard);
-    state = deckUpdate(initialState, { current: { $merge: deck } });
+    state = deckUpdate(state, { $set: {...initialState.deck, current: deck} });
     return deckUpdate(state, {
       current: { [getItemKey(ActionsTypes.Item.CARD, true)]: {$apply: sanitizeCards} }
     });
@@ -106,6 +106,11 @@ const deck = {
   [ActionsTypes.UPDATE_EXPORT_CONFIG]: (state, exportConfig) => {
     return deckUpdate(state, {
       current: { exportConfig: {$merge: exportConfig} }
+    });
+  },
+  [ActionsTypes.UPDATE_AVAILABLE_FONTS]: (state, fonts) => {
+    return update(state, {
+      availableFonts: { $set: fonts }
     });
   },
 };

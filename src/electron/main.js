@@ -1,10 +1,14 @@
 const { app, /*crashReporter,*/ BrowserWindow, Menu, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
+const SystemFonts = require('system-font-families');
 const MenuActions = require('./MenuActions');
+
+const systemFonts = new SystemFonts.default();
 
 let mainWindow;
 
 ipcMain.on('exportAsPDF', MenuActions.exportAsPDF);
+ipcMain.on('getAvailableFonts', event => event.sender.send('availableFonts', systemFonts.getFontsSync()));
 
 function sendAppEvent(name) {
   mainWindow.webContents.send(name);

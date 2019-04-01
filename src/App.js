@@ -8,11 +8,14 @@ import './App.scss';
 import reducers from './state/reducers/index';
 import DeckEditor from './components/DeckEditor';
 import DeckViewer from './components/DeckViewer';
+import DeckStorage from './services/DeckStorage';
 
 const store = createStore(
   reducers,
   applyMiddleware(thunk),
 );
+
+DeckStorage.initFonts(store);
 
 class App extends Component {
 

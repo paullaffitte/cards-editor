@@ -14,7 +14,8 @@ const initialState = {
       card: {},
       effect: {}
     }
-  }
+  },
+  availableFonts: []
 };
 
 export default initialState;

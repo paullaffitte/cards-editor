@@ -16,7 +16,8 @@ const ActionsTypes = {
     REMOVE_RESOURCE: null,
 
     UPDATE_CARDS_CONFIG: null,
-    UPDATE_EXPORT_CONFIG: null
+    UPDATE_EXPORT_CONFIG: null,
+    UPDATE_AVAILABLE_FONTS: null
   }),
   Item: keyMirror({
     CARD: null,

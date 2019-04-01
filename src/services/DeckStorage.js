@@ -1,3 +1,5 @@
+import DeckActions from '../state/actions/deck';
+
 const { remote, ipcRenderer } = window.require('electron');
 const { dialog } = remote;
 const fs = remote.require('fs');
@@ -92,6 +94,12 @@ class DeckStorage {
       pdfPromise = { resolve, reject };
       ipcRenderer.send('exportAsPDF', filename);
     }));
+  }
+
+  static initFonts(store) {
+    ipcRenderer.removeAllListeners('availableFonts');
+    ipcRenderer.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
+    ipcRenderer.send('getAvailableFonts');
   }
 
   static registerListeners({onNew, onOpen, onSave, onExport, updateFilename}) {
