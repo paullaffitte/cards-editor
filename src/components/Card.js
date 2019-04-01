@@ -56,6 +56,7 @@ class Card extends Component {
         top: userToPercent(transform.y),
         fontSize: userToPt(transform.scale),
         color: transform.color,
+        fontFamily: transform.font
       }}>
         {customValue ? customValue : this.props[name]}
       </div>
@@ -103,7 +104,7 @@ class Card extends Component {
 function mergeTransforms(transforms) {
   const transform = {};
 
-  ['x', 'y', 'scale', 'color'].forEach(field => {
+  ['x', 'y', 'scale', 'color', 'font'].forEach(field => {
     const value = transforms
       .filter(Boolean)
       .map(({ [field]: value }) => value)

@@ -2,21 +2,28 @@
     "cardsConfig": {
         "nameTransform": {
             "y": 50,
-            "scale": 22
+            "scale": 22,
+            "color": "#ffffff",
+            "font": "Abyssinica SIL"
         },
         "descriptionTransform": {
             "y": 70,
-            "scale": 12
+            "scale": 12,
+            "color": "#360404",
+            "font": "Times New Roman"
         },
         "hpTransform": {
             "x": 93,
             "y": 93,
-            "scale": 42
+            "scale": 42,
+            "color": "#ffe700",
+            "font": "Arial"
         },
         "attackTransform": {
             "x": 10,
             "y": 93,
-            "scale": 42
+            "scale": 42,
+            "color": "#d20000"
         }
     },
     "resources": {
@@ -29,17 +36,16 @@
     },
     "exportConfig": {
         "cardsQuantity": {
-            "1": 2,
-            "2": 2,
-            "3": 1,
-            "4": 1
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 10
         }
     },
     "cards": [
         {
             "effects": [
-                "10e91c90-546a-11e9-b0d5-ffc68b73b6a3",
-                "118de810-546a-11e9-b0d5-ffc68b73b6a3"
+                "10e91c90-546a-11e9-b0d5-ffc68b73b6a3"
             ],
             "name": "card name",
             "description": "this is a description",
@@ -108,6 +114,15 @@
                 "x": 100,
                 "y": 25
             }
+        },
+        {
+            "effects": [],
+            "type": "minion",
+            "id": "32739550-5485-11e9-b20a-0d181d9cf8e7",
+            "name": "dfsdfjshdfkjhsdfkjh",
+            "description": "ksjdhfksjdfh",
+            "hp": 1,
+            "attack": 1
         }
     ],
     "effects": [

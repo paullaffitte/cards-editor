@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Form, InputNumber, Input, Row, Col } from 'antd'
+import { connect } from 'react-redux';
+import { Form, InputNumber, Input, Select, Row, Col } from 'antd'
+
+const { Option } = Select;
 
 class TransformInput extends Component {
 
@@ -47,11 +50,12 @@ class TransformInput extends Component {
 
   render() {
     const scaleConfig = this.getScaleConfig(this.props.scaleUnit);
+    const span = this.props.disableTextOption ? 8 : 5;
 
     return (
       <Row key={this.props.name}>
         <h2>{this.props.name}</h2>
-        <Col span={6}>
+        <Col span={span}>
           <Form.Item label="X(%)">
               <InputNumber
                 value={this.state.x}
@@ -59,7 +63,7 @@ class TransformInput extends Component {
                 step={5} />
           </Form.Item>
         </Col>
-        <Col span={6}>
+        <Col span={span}>
           <Form.Item label="Y(%)">
               <InputNumber
                 value={this.state.y}
@@ -67,7 +71,7 @@ class TransformInput extends Component {
                 step={5} />
           </Form.Item>
         </Col>
-        <Col span={6}>
+        <Col span={span}>
           <Form.Item label={scaleConfig.label}>
               <InputNumber
                 value={this.state.scale}
@@ -75,8 +79,9 @@ class TransformInput extends Component {
                 step={scaleConfig.step} />
           </Form.Item>
         </Col>
-        <Col span={6}>
-          { !this.props.withoutColor ? (
+
+        { !this.props.disableTextOption ? (
+          <Col span={span - 1} style={{ paddingRight: '1em' }}>
             <Form.Item label="Color">
               <Input
                 type="color"
@@ -84,10 +89,31 @@ class TransformInput extends Component {
                 onChange={ e => this.handleChange({ color: e.target.value === '#000000' ? null : e.target.value }) }
                 />
             </Form.Item>
-          ) : null }
-        </Col>
+          </Col>
+        ) : null }
+
+        { !this.props.disableTextOption ? (
+          <Col span={span}>
+            <Form.Item label="Font">
+              <Select
+                showSearch
+                placeholder="Select a font"
+                optionFilterProp="children"
+                value={this.state.font}
+                onChange={ value => this.handleChange({ font: value }) }
+                filterOption={ (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 } >
+                { this.props.availableFonts.map(fontName => (<Option key={fontName} value={fontName}>{fontName}</Option>)) }
+              </Select>
+            </Form.Item>
+          </Col>
+        ) : null }
       </Row>
     );
   }
 }
-export default TransformInput
+
+const mapStateToProps = state => ({
+  availableFonts: state.availableFonts
+});
+
+export default connect(mapStateToProps)(TransformInput);
