@@ -8,8 +8,10 @@ import { getResourceByName } from '../state/selectors/deck';
 const makeSize = (width, height) => ({ width, height });
 const A4 = makeSize(297, 210);
 
+const dpiBase = 95.8; // constant when exporting with chrome (empirical constatation)
+
 const mmToIn = mm => mm / 25.4;
-const inToPx = inch => inch * 95.8; // constant when exporting with chrome (empirical constatation)
+const inToPx = inch => inch * dpiBase;
 const mmToPx = (mm, dpi) => inToPx(mmToIn(mm));
 
 class DeckViewer extends Component {
@@ -17,12 +19,6 @@ class DeckViewer extends Component {
   state = {
     cardSize: makeSize(100, 100)
   }
-
-  positionToCss = (position) => ({
-    position: 'absolute',
-    top: `${position.y}px`,
-    left: `${position.x}px`
-  })
 
   async componentDidMount() {
     if (!this.props.cards.length)
@@ -38,14 +34,22 @@ class DeckViewer extends Component {
     this.background.src = this.props.background;
   }
 
-  renderCard = (card, { x, y, page }, spacing, cardSize) => {
+  renderCard = (card, { x, y, page }, spacing, cardSize, scale) => {
     const position = {
       x: spacing + x * cardSize.width,
       y: spacing + y * cardSize.height + page * mmToPx(A4.height)
     };
 
+    const style = {
+      position: 'absolute',
+      top: `${position.y}px`,
+      left: `${position.x}px`,
+      transform: `scale(${scale})`,
+      transformOrigin: 'top left'
+    };
+
     return (
-      <div key={ JSON.stringify(position) } className="card-container" style={this.positionToCss(position)}>
+      <div key={ JSON.stringify(position) } className="card-container" style={ style }>
         <Card { ...card } />
       </div>
     )
@@ -53,8 +57,9 @@ class DeckViewer extends Component {
 
   renderCards = () => {
     const pageSize = makeSize(mmToPx(A4.width, this), mmToPx(A4.height));
-    const spacing = 10;
-    const cardSize = makeSize(this.state.cardSize.width + spacing, this.state.cardSize.height + spacing);
+    const spacing = mmToPx(this.props.spacing);
+    const scale = dpiBase / this.props.dpi;
+    const cardSize = makeSize(this.state.cardSize.width * scale + spacing, this.state.cardSize.height * scale + spacing);
     const A4px = makeSize(mmToPx(A4.width), mmToPx(A4.height));
 
     const maxBy = {
@@ -66,7 +71,7 @@ class DeckViewer extends Component {
     const pos = { x: 0, y: 0, page: 0 };
     this.props.cards.forEach(card => {
       for (let i = 0; i < this.props.exportConfig.cardsQuantity[card.id]; i++) {
-        cards.push(this.renderCard(card, pos, spacing, cardSize));
+        cards.push(this.renderCard(card, pos, spacing, cardSize, scale));
         if (++pos.x >= maxBy.row) {
           pos.x = 0;
           if (++pos.y >= maxBy.col) {
@@ -95,6 +100,8 @@ const mapStateToProps = state => ({
   background: state.deck.current.cards.length
     ? getResourceByName(state, state.deck.current.cards[0].background)
     : null,
+  dpi: 300,
+  spacing: 8 // pixels
 });
 
 export default connect(mapStateToProps)(DeckViewer);
