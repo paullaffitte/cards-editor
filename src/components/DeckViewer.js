@@ -56,7 +56,6 @@ class DeckViewer extends Component {
   };
 
   renderCards = () => {
-    const pageSize = makeSize(mmToPx(A4.width, this), mmToPx(A4.height));
     const spacing = mmToPx(this.props.spacing);
     const scale = dpiBase / this.props.dpi;
     const cardSize = makeSize(this.state.cardSize.width * scale + spacing, this.state.cardSize.height * scale + spacing);
