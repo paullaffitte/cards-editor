@@ -1,7 +1,6 @@
 const initialState = {
   deck: {
     current: {
-      updated: false,
       filename: null,
       cardsConfig: {},
       cards: [],
@@ -9,7 +8,9 @@ const initialState = {
       resources: {},
       exportConfig: {
         cardsQuantity: {}
-      }
+      },
+      updated: false,
+      version: '0.2.1-follow-up-2'
     },
     edited: {
       card: {},

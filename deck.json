@@ -40,8 +40,11 @@
             "2": 10,
             "3": 10,
             "4": 10
-        }
+        },
+        "dpi": 300,
+        "spacing": 5
     },
+    "version": "0.2.1-follow-up-2",
     "cards": [
         {
             "effects": [

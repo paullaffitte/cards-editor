@@ -80,7 +80,7 @@ const deck = {
   [ActionsTypes.NEW_DECK]: (state, deck) => deckUpdate(state, { $set: initialState.deck }, true),
   [ActionsTypes.OPEN_DECK]: (state, deck) => {
     const sanitizeCards = cards => cards.map(sanitizeCard);
-    state = deckUpdate(state, { $set: {...initialState.deck, current: deck} });
+    state = deckUpdate(state, { $set: {...initialState.deck, current: {...initialState.deck.current, ...deck}} });
     return deckUpdate(state, {
       current: { [getItemKey(ActionsTypes.Item.CARD, true)]: {$apply: sanitizeCards} }
     }, true);

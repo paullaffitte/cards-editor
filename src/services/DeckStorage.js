@@ -6,7 +6,7 @@ const fs = remote.require('fs');
 
 const cleanList = ({original, updated, ...item}) => item;
 
-const cleanDeck = ({filename, cards, effects, ...data}) => ({
+const cleanDeck = ({filename, updated, cards, effects, ...data}) => ({
   ...data,
   cards: cards.map(cleanList),
   effects: effects.map(cleanList)

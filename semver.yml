@@ -4,3 +4,4 @@ version: 0.2.1-follow-up-2
 files:
   README.md: 'latest \([^\(]*\)'
   package.json: '"version": "[^"]*",'
+  src/state/initialState.js: "version: '[^\"]*'"

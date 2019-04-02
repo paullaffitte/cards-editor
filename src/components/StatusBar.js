@@ -19,16 +19,21 @@ class StatusBar extends Component {
 
   render() {
     return (
-      <Footer style={{ height: this.props.height, padding: 0, paddingLeft: '0.5em', backgroundColor: 'white'}}>
+      <Footer style={{ height: this.props.height, padding: 0, paddingLeft: '0.2em', backgroundColor: 'white'}}>
         { [this.props.filename, this.props.updated ? 'unsaved changes' : ''].filter(Boolean).join(' - ') }
+        <span style={{ float: 'right', paddingRight: '0.2em' }}>deck version: { this.props.version }</span>
       </Footer>
     );
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  filename: getCurrentDeck(state).filename,
-  updated: getCurrentDeck(state).updated,
-});
+const mapStateToProps = (state, props) => {
+  const deck = getCurrentDeck(state);
+  return {
+    filename: deck.filename,
+    updated: deck.updated,
+    version: deck.version
+  }
+};
 
 export default connect(mapStateToProps)(StatusBar);
