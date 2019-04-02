@@ -29,8 +29,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "pack": "electron-builder -c.extraMetadata.main=src/electron/main.js --dir",
-    "dist": "electron-builder -c.extraMetadata.main=src/electron/main.js",
+    "build-icons": "electron-icon-builder --input=./public/icon.png --output=./build --flatten",
+    "pack": "yarn build-icons && electron-builder -c.extraMetadata.main=src/electron/main.js --dir",
+    "dist": "yarn build-icons && electron-builder -c.extraMetadata.main=src/electron/main.js",
     "release": "yarn build && yarn dist",
     "release-on-github": "./publish.sh"
   },
@@ -49,21 +50,27 @@
     "antd": "^3.12.3",
     "electron": "^4.0.1",
     "electron-builder": "^20.38.5",
-    "electron-devtools-installer": "^2.2.4"
+    "electron-devtools-installer": "^2.2.4",
+    "electron-icon-builder": "^1.0.0"
   },
   "build": {
+    "productName": "Cards Editor",
     "files": [
       "build/**/*",
       "node_modules/**/*",
       "src/electron/**/*"
     ],
-    "directories": {},
+    "directories": {
+      "buildResources": "./build"
+    },
     "linux": {
+      "category": "Graphics",
       "target": [
         "deb",
         "AppImage",
         "snap"
       ]
-    }
+    },
+    "icon": "icons"
   }
 }
