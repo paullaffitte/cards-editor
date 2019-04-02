@@ -26,7 +26,6 @@ class ExportModal extends Component {
           okText="Export"
         >
           <ExportForm />
-          <span>Exports are currently limited to 96dpi</span>
         </Modal>
       </div>
     );

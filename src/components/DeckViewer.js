@@ -12,7 +12,7 @@ const dpiBase = 95.8; // constant when exporting with chrome (empirical constata
 
 const mmToIn = mm => mm / 25.4;
 const inToPx = inch => inch * dpiBase;
-const mmToPx = (mm, dpi) => inToPx(mmToIn(mm));
+const mmToPx = mm => inToPx(mmToIn(mm));
 
 class DeckViewer extends Component {
 
@@ -28,7 +28,6 @@ class DeckViewer extends Component {
       this.setState({ cardSize: makeSize(this.background.naturalWidth, this.background.naturalHeight) });
     };
 
-    console.log(this.props.background);
     this.background = new Image();
     this.background.onload = onLoad;
     this.background.src = this.props.background;
@@ -56,8 +55,8 @@ class DeckViewer extends Component {
   };
 
   renderCards = () => {
-    const spacing = mmToPx(this.props.spacing);
-    const scale = dpiBase / this.props.dpi;
+    const spacing = mmToPx(this.props.exportConfig.spacing);
+    const scale = dpiBase / this.props.exportConfig.dpi;
     const cardSize = makeSize(this.state.cardSize.width * scale + spacing, this.state.cardSize.height * scale + spacing);
     const A4px = makeSize(mmToPx(A4.width), mmToPx(A4.height));
 
@@ -98,9 +97,7 @@ const mapStateToProps = state => ({
   exportConfig: state.deck.current.exportConfig,
   background: state.deck.current.cards.length
     ? getResourceByName(state, state.deck.current.cards[0].background)
-    : null,
-  dpi: 300,
-  spacing: 8 // pixels
+    : null
 });
 
 export default connect(mapStateToProps)(DeckViewer);
