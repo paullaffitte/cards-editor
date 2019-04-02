@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 class Container extends Component {
 
@@ -23,7 +22,7 @@ class FakeBackground extends Component {
     return this.props.src ? (
       <Container className={ this.props.className } style={ this.props.style } onClick={ this.props.onClick }>
         <div style={{ overflow: 'hidden', position: 'absolute' }}>
-          { this.props.src ? (<img src={ this.props.src }  />) : null }
+          { this.props.src ? (<img src={ this.props.src } alt="" />) : null }
         </div>
         <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
           { this.props.children }

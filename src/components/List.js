@@ -25,7 +25,6 @@ class List extends Component {
   deleteItem = item => this.props.dispatch(DeckActions.deleteItem(this.props.type, item.id));
 
   renderItem = item => {
-    const backgroundImage = item.thumbnail ? {backgroundImage: `url('${item.thumbnail}')`} : null;
     const className       = [ 'list-item', item.updated ? 'updated' : '', item.className ].join(' ');
 
     return (
