@@ -12,7 +12,6 @@ import DeckEditor from './components/DeckEditor';
 import DeckViewer from './components/DeckViewer';
 import DeckStorage from './services/DeckStorage';
 
-
 const store = createStore(
   reducers,
   applyMiddleware(thunk),
@@ -26,23 +25,6 @@ DeckStorage.onQuit(quit => getCurrentDeck(store.getState()).updated ? Modal.conf
   onOk: quit
 }) : quit());
 
-const PageTitle = connect(state => ({
-  filename: getCurrentDeck(state).filename
-}))(class extends Component {
-
-  componentDidMount() {
-    document.originalTitle = document.title;
-  }
-
-  componentWillUpdate(nextProps) {
-    document.title = nextProps.filename
-      ? document.originalTitle + ' - ' + nextProps.filename
-      : document.originalTitle;
-  }
-
-  render = () => null;
-});
-
 class App extends Component {
 
   state = {
@@ -52,8 +34,6 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <PageTitle />
-
         { !this.state.exportMode
           ? (
             <Layout className="app">
