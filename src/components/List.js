@@ -4,6 +4,7 @@ import { Icon } from 'antd';
 import { Popconfirm } from 'antd';
 import { getItems } from '../state/selectors/deck';
 import DeckActions from '../state/actions/deck';
+import FakeBackground from './FakeBackground';
 import '../styles/List.scss';
 
 class List extends Component {
@@ -25,10 +26,10 @@ class List extends Component {
 
   renderItem = item => {
     const backgroundImage = item.thumbnail ? {backgroundImage: `url('${item.thumbnail}')`} : null;
-    const className        = [ 'list-item', item.updated ? 'updated' : '', item.className ].join(' ');
+    const className       = [ 'list-item', item.updated ? 'updated' : '', item.className ].join(' ');
 
     return (
-      <div key={item.id} className={className} style={backgroundImage}>
+      <div key={item.id} className={className} style={{position: 'relative'}}>
         <Popconfirm className="list-item-button delete"
           title="Are you sure to delete this item ? (it can't be undone)" placement="left"
           onConfirm={() => this.deleteItem(item)}
@@ -36,9 +37,11 @@ class List extends Component {
           <Icon type="close" />
         </Popconfirm>
         { !this.props.onEdit ? null : <Icon type="edit" className="list-item-button edit" onClick={() => this.selectItem(item, true)} /> }
-        <div className="content" onClick={() => this.selectItem(item)}>
-          {this.props.renderItem(item)}
-        </div>
+        <FakeBackground src={ item.thumbnail } onClick={() => this.selectItem(item)}>
+          <div className="content">
+            {this.props.renderItem(item)}
+          </div>
+        </FakeBackground>
       </div>
     );
   };

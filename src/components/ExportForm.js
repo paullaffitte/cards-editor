@@ -34,7 +34,7 @@ class ExportForm extends Component {
         <List
           type={ ActionsTypes.Item.CARD }
           prefix="export"
-          preprocess={ (item, state) => item }
+          preprocess={ ({thumbnail, ...item}, state) => item }
           sort={ (left, right) => {
             left = this.props.exportConfig.cardsQuantity[left.id];
             right = this.props.exportConfig.cardsQuantity[right.id];

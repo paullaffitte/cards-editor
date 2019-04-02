@@ -5,7 +5,6 @@ function release() {
 	local version="$2"
 	local release_name="$3"
 
-	cd ./dist
 	yarn github-release "$type" \
 		--owner "$LOGIN" \
 		--repo cards-editor \
@@ -14,7 +13,7 @@ function release() {
 		--body "$DESCRIPTION" \
 		$prerelease \
 		-T "$TOKEN" \
-		*"$VERSION"*
+		dist/*"$VERSION"*
 }
 
 default_login='paullaffitte'
