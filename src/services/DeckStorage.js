@@ -1,7 +1,9 @@
 import DeckActions from '../state/actions/deck';
+import { runMigrations } from './DeckMigration';
+import semver from 'semver'
 
 const { remote, ipcRenderer } = window.require('electron');
-const { dialog } = remote;
+const { app, dialog } = remote;
 const fs = remote.require('fs');
 
 const cleanList = ({original, updated, ...item}) => item;
@@ -26,10 +28,28 @@ const registerListener = (name, callback) => {
   });
 };
 
+const handleVersions = deck => {
+  const appVersion = app.getVersion();
+
+  if (!semver.valid(deck.version)) {
+    alert(`Invalid deck version "${deck.version}"`);
+    return null;
+  }
+
+  if (semver.lt(deck.version, appVersion)) {
+    return runMigrations(deck, appVersion);
+  } else if (semver.gt(deck.version, appVersion)) {
+    alert(`Your software is outdated (${appVersion}) and thus can't open this deck (${deck.version}).`);
+    return null;
+  }
+
+  return deck;
+}
+
 class DeckStorage {
 
   static read(filename) {
-    return JSON.parse(fs.readFileSync(filename));
+    return handleVersions(JSON.parse(fs.readFileSync(filename)));
   }
 
   static write(filename, data) {
@@ -50,8 +70,9 @@ class DeckStorage {
         return;
       }
 
-      let content = loadDeck(filenames[0]);
-      resolve(content);
+      const filename = filenames[0];
+      const deck = DeckStorage.read(filename);
+      resolve(deck ? { ...deck, filename } : null);
     }));
   }
 
