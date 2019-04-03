@@ -12,8 +12,8 @@ const ActionsTypes = {
     OPEN_DECK: null,
     UPDATE_FILENAME: null,
 
-    ADD_RESOURCE: null,
-    REMOVE_RESOURCE: null,
+    SET_RESOURCE: null,
+    DELETE_RESOURCE: null,
 
     UPDATE_CARDS_CONFIG: null,
     UPDATE_EXPORT_CONFIG: null,

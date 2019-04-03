@@ -42,15 +42,15 @@ const actions = {
     };
   },
 
-  addResource: resource => {
+  setResource: resource => {
     return {
-      type: ActionsTypes.ADD_RESOURCE,
+      type: ActionsTypes.SET_RESOURCE,
       payload: resource
     }
   },
-  removeResource: name => {
+  deleteResource: name => {
     return {
-      type: ActionsTypes.REMOVE_RESOURCE,
+      type: ActionsTypes.DELETE_RESOURCE,
       payload: name
     }
   },

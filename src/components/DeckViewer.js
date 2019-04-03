@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
 import Card from './Card';
 import '../styles/DeckViewer.scss';
-import { getResourceByName } from '../state/selectors/deck';
+import { getResourceById } from '../state/selectors/deck';
 
 const makeSize = (width, height) => ({ width, height });
 const A4 = makeSize(297, 210);
@@ -96,7 +96,7 @@ const mapStateToProps = state => ({
   cards: state.deck.current.cards,
   exportConfig: state.deck.current.exportConfig,
   background: state.deck.current.cards.length
-    ? getResourceByName(state, state.deck.current.cards[0].background)
+    ? getResourceById(state, state.deck.current.cards[0].background)
     : null
 });
 

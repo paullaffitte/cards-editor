@@ -90,15 +90,16 @@ const deck = {
   },
 
 
-  [ActionsTypes.ADD_RESOURCE]: (state, {filename, path}) => {
+  [ActionsTypes.SET_RESOURCE]: (state, resource) => {
+    const id = resource.id ? resource.id : uuid();
     return deckUpdate(state, {
-      current: { resources: {[filename]: {$set: path}} }
+      current: { resources: {[id]: {$set: {...resource, id}}} }
     });
   },
-  [ActionsTypes.REMOVE_RESOURCE]: (state, name) => {
-    const removeResource = ({[name]: path, ...resources}) => resources;
+  [ActionsTypes.DELETE_RESOURCE]: (state, id) => {
+    const deleteResource = ({[id]: resource, ...resources}) => resources;
     return deckUpdate(state, {
-      current: { resources: {$apply: removeResource} }
+      current: { resources: {$apply: deleteResource} }
     });
   },
 

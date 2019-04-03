@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getResourceByName, getEffectsByIds, getCardsConfig } from '../state/selectors/deck';
+import { getResourceById, getEffectsByIds, getCardsConfig } from '../state/selectors/deck';
 import '../styles/Card.scss';
 
 const userToUnit = unit => num => parseInt(num ? num : '0') + unit;
@@ -127,8 +127,8 @@ const mapStateToProps = (state, props) => {
   }, {});
 
   return {
-    thumbnail: getResourceByName(state, props.thumbnail),
-    background: getResourceByName(state, props.background),
+    thumbnail: getResourceById(state, props.thumbnail),
+    background: getResourceById(state, props.background),
     effects: getEffectsByIds(state, props.effects),
     ...transforms
   }
