@@ -33,6 +33,7 @@
 		.list-item-button {
 			float: right;
 			position: relative;
+			z-index: 10;
 			right: 0.5em;
 			height: 1em;
 			top: calc(50% - 0.5em);
