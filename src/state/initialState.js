@@ -10,7 +10,7 @@ const initialState = {
         cardsQuantity: {}
       },
       updated: false,
-      version: '1.0.1'
+      version: '1.0.2'
     },
     edited: {
       card: {},
