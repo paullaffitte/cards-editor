@@ -8,7 +8,8 @@ const { Footer } = Layout;
 class StatusBar extends Component {
 
   componentDidMount() {
-    document.originalTitle = document.title;
+    if (!document.originalTitle)
+      document.originalTitle = document.title;
   }
 
   componentWillUpdate(nextProps) {
