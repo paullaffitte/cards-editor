@@ -41,10 +41,8 @@ class TransformInput extends Component {
     switch (scaleUnit) {
       case '%':
         return { label: 'Scale', step: 0.1 };
-      case 'pt':
-        return { label: 'Size', step: 1 };
       default:
-        return { label: 'Scale', step: 1 };
+        return { label: 'Size', step: 1 };
     }
   }
 
