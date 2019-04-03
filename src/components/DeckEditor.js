@@ -5,7 +5,6 @@ import 'antd/dist/antd.css';
 import CardList from './CardList';
 import CardEditor from './CardEditor';
 import ExportModal from './ExportModal';
-import StatusBar from './StatusBar';
 import DeckStorage from '../services/DeckStorage';
 import DeckActions from '../state/actions/deck';
 import ActionsTypes from '../constants/ActionsTypes';
@@ -84,15 +83,11 @@ class DeckEditor extends Component {
   onChangeCardType = (type) => this.setState({ cardType: type })
 
   render() {
-    const statusBarHeight = '1.5em';
     return (
       <Layout>
         <Content>
-          <div style={{ height: `calc(100% - ${statusBarHeight})`}}>
-            <CardEditor/>
-          </div>
+          <CardEditor/>
           <ExportModal visible={ this.state.showExport } onExport={ this.exportAsPDF } onCancel={ this.closeExportModal } />
-          <StatusBar height={statusBarHeight} />
         </Content>
         <Sider width={250}>
           <Tabs defaultActiveKey={ this.state.cardType } onChange={ this.onChangeCardType }>

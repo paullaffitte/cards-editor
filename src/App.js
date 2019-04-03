@@ -9,6 +9,7 @@ import reducers from './state/reducers/index';
 import { getCurrentDeck } from './state/selectors/deck';
 import DeckEditor from './components/DeckEditor';
 import DeckViewer from './components/DeckViewer';
+import StatusBar from './components/StatusBar';
 import DeckStorage from './services/DeckStorage';
 
 const store = createStore(
@@ -37,6 +38,7 @@ class App extends Component {
           ? (
             <Layout className="app">
               <DeckEditor toggleExportMode={ exportMode => this.setState({ exportMode }) } />
+              <StatusBar height='1.5em' />
             </Layout>
           )
           : (<DeckViewer style={{ backgroundColor: 'white' }} />)
