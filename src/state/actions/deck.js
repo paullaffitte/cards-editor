@@ -73,12 +73,6 @@ const actions = {
       payload: fonts
     };
   },
-  updateCardSize: () => {
-    return {
-      type: ActionsTypes.UPDATE_CARD_SIZE,
-      payload: null
-    }
-  },
 };
 
 const selectFirstItem = (type, items) => selectItem(type, items[0].id);
@@ -103,6 +97,11 @@ const deleteItem = (type, id) => {
   };
 };
 
+const nowSec = () => Date.now() / 1000
+const updateCardSizeLimitRate = 2;
+let lastCardSizeUpdate = nowSec() - updateCardSizeLimitRate;
+let cardSizeWillUpdate = false;
+
 const thunkActions = {
   addItem,
   deleteItem,
@@ -113,6 +112,27 @@ const thunkActions = {
       const cards = getItems(ActionsTypes.Item.CARD, getState());
       if (cards.length)
         dispatch(selectFirstItem(ActionsTypes.Item.CARD, cards));
+    };
+  },
+
+  updateCardSize: () => {
+    return (dispatch, getState) => {
+      const updateCardSize = () => {
+        lastCardSizeUpdate = nowSec();
+        cardSizeWillUpdate = false;
+        dispatch({ type: ActionsTypes.UPDATE_CARD_SIZE, payload: null });
+      }
+      const deltaTime = nowSec() - lastCardSizeUpdate;
+
+      if ( deltaTime < updateCardSizeLimitRate) {
+        if (!cardSizeWillUpdate) {
+          const delay = updateCardSizeLimitRate - deltaTime;
+          cardSizeWillUpdate = true;
+          setTimeout(updateCardSize, delay * 1000);
+        }
+        return;
+      }
+      updateCardSize();
     };
   },
 };

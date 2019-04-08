@@ -58,7 +58,10 @@ class DeckEditor extends Component {
     return this.props.deck;
   };
 
-  onExport = () => this.setState({ showExport: true });
+  onExport = () => {
+    this.props.dispatch(DeckActions.updateCardSize());
+    this.setState({ showExport: true });
+  };
 
   exportAsPDF = async () => {
     this.closeExportModal();

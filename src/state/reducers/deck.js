@@ -119,13 +119,16 @@ const deck = {
     });
   },
   [ActionsTypes.UPDATE_CARD_SIZE]: (state, fonts) => {
-    const { width, height } = getCards(state)
+    const background = getCards(state)
       .map(card => getResourceById(state, card.background))
       .filter(Boolean)
       .shift();
 
+    if (!background || !background.width || !background.height)
+      return state;
+
     return deckUpdate(state, {
-      cardSize: { $set: {width, height} }
+      cardSize: { $set: {width: background.width, height: background.height} }
     });
   },
 };
