@@ -8,7 +8,6 @@ class ResourceLoader extends Component {
   onLoad = (image, resource) => {
     this.props.dispatch(DeckActions.setResource({
       ...resource,
-      src: image.src,
       width: image.naturalWidth,
       height: image.naturalHeight
     }));
@@ -19,7 +18,7 @@ class ResourceLoader extends Component {
       <div style={{ display: 'none' }} >
       { Object.values(this.props.resources).map(resource => (
         <img ref={ resource.id } key={ `${resource.id}-${this.props.openAt}` }
-          src={ 'file://' + resource.path }
+          src={ resource.src }
           onLoad={ () => this.onLoad(this.refs[resource.id], resource) }
           alt="loader" />
       )) }

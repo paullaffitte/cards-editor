@@ -9,28 +9,14 @@ const userToPt = userToUnit('pt');
 
 class Card extends Component {
 
-  state = {
-    sizes: {
-      background: { width: 400, height: 600 },
-      thumbnail: { width: 0, height: 0 },
-    }
-  }
-
   getScale() {
-    return this.props.width
-      ? 1 / this.state.sizes.background.width * this.props.width
+    return this.props.background.width && this.props.width
+      ? 1 / this.props.background.width * this.props.width
       : 1;
   }
 
-  updateImage = name => image => {
-    this.setState({sizes: {...this.state.sizes, [name]: {
-      height: image.target.naturalHeight,
-      width: image.target.naturalWidth
-    }}});
-  }
-
   getThumbnailStyle() {
-    const thumbnail = this.state.sizes.thumbnail;
+    const thumbnail = this.props.thumbnail;
     const transform = this.props.thumbnailTransform ? this.props.thumbnailTransform : {};
     const thumbnailScale = transform.scale ? transform.scale : 1;
 
@@ -65,11 +51,10 @@ class Card extends Component {
 
   render() {
     const effects = this.props.effects.map(({ description }) => description).filter(Boolean).join('. ');
-    let size = this.state.sizes.background;
+    const { width, height } = this.props.background;
     const cardStyle = {
       ...this.props.style,
-      width: size.width,
-      height: size.height,
+      width, height,
       transform: `scale(${this.getScale()})`
     };
 
@@ -78,15 +63,13 @@ class Card extends Component {
         {this.props.thumbnail ? <img
           alt="thumbnail"
           className="thumbnail positionable"
-          src={ this.props.thumbnail }
-          onLoad={ this.updateImage("thumbnail") }
+          src={ this.props.thumbnail.src }
           style={ this.getThumbnailStyle() } />
         : null}
         {this.props.background ? <img
           alt="background"
           className="background"
-          src={ this.props.background }
-          onLoad={ this.updateImage("background") } />
+          src={ this.props.background.src } />
         : null}
         {this.renderText('name')}
         {this.renderText('description', [effects, effects ? '.\n' : '', this.props.description])}

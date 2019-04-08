@@ -8,7 +8,8 @@ const initialState = {
       effects: [],
       resources: {},
       exportConfig: {
-        cardsQuantity: {}
+        cardsQuantity: {},
+        cardSize: { width: 400, height: 600 }
       },
       updated: false,
       version: '1.0.2'

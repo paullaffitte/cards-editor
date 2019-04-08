@@ -64,7 +64,7 @@ const unpackDeck = deck => {
   for (let filename in deck.resources) {
     resources[filename] = {
       id: filename,
-      path: deck.resources[filename]
+      src: 'file://' + deck.resources[filename]
     };
   }
 

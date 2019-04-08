@@ -16,23 +16,6 @@ const mmToPx = mm => inToPx(mmToIn(mm));
 
 class DeckViewer extends Component {
 
-  state = {
-    cardSize: makeSize(100, 100)
-  }
-
-  async componentDidMount() {
-    if (!this.props.cards.length)
-      return;
-
-    const onLoad = () => {
-      this.setState({ cardSize: makeSize(this.background.naturalWidth, this.background.naturalHeight) });
-    };
-
-    this.background = new Image();
-    this.background.onload = onLoad;
-    this.background.src = this.props.background;
-  }
-
   renderCard = (card, { x, y, page }, spacing, cardSize, scale) => {
     const position = {
       x: spacing + x * cardSize.width,
@@ -57,7 +40,8 @@ class DeckViewer extends Component {
   renderCards = () => {
     const spacing = mmToPx(this.props.exportConfig.spacing);
     const scale = dpiBase / this.props.exportConfig.dpi;
-    const cardSize = makeSize(this.state.cardSize.width * scale + spacing, this.state.cardSize.height * scale + spacing);
+    let cardSize = this.props.exportConfig.cardSize;
+    cardSize = makeSize(cardSize.width * scale + spacing, cardSize.height * scale + spacing);
     const A4px = makeSize(mmToPx(A4.width), mmToPx(A4.height));
 
     const maxBy = {
@@ -94,10 +78,7 @@ class DeckViewer extends Component {
 
 const mapStateToProps = state => ({
   cards: state.deck.current.cards,
-  exportConfig: state.deck.current.exportConfig,
-  background: state.deck.current.cards.length
-    ? getResourceById(state, state.deck.current.cards[0].background)
-    : null
+  exportConfig: { ...state.deck.current.exportConfig, cardSize: {width: 400, height: 600} }
 });
 
 export default connect(mapStateToProps)(DeckViewer);

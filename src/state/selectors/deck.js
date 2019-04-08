@@ -15,9 +15,18 @@ export const getResources = createSelector(
   deck => deck ? deck.resources : getResources(initialState)
 );
 
+
+export const getExportConfig = createSelector(
+  [ getCurrentDeck ],
+  deck => deck.exportConfig
+);
+
+const resourceBase = getExportConfig(initialState).cardSize;
 export const getResourceById = createSelector(
   [ getResources, getProps ],
-  (resources, id) => id in resources ? 'file://' + resources[id].path : null
+  (resources, id) => id in resources
+    ? { ...resourceBase , ...resources[id] }
+    : resourceBase
 );
 
 const _getItems = createSelector(

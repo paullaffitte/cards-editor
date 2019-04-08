@@ -10,7 +10,7 @@ class CardList extends Component {
         type={ ActionsTypes.Item.CARD }
         preprocess={ (item, state) => (item.type && item.type !== this.props.cardsType ? null : {
           ...item,
-          thumbnail: getResourceById(state, item.thumbnail),
+          thumbnail: getResourceById(state, item.thumbnail).src,
           className: item.id === getEditedItem(ActionsTypes.Item.CARD, state).id ? 'selected' : ''
         }) }
         renderItem={ item => (
