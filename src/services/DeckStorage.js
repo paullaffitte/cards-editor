@@ -8,10 +8,20 @@ const fs = remote.require('fs');
 
 const cleanList = ({original, updated, ...item}) => item;
 
-const cleanDeck = ({filename, updated, cards, effects, ...data}) => ({
+const cleanResources = resources => {
+  const cleanResources = {};
+  for (let id in resources) {
+    const { path } = resources[id];
+    cleanResources[id] = path;
+  }
+  return cleanResources;
+};
+
+const cleanDeck = ({filename, updated, cards, effects, resources, ...data}) => ({
   ...data,
   cards: cards.map(cleanList),
-  effects: effects.map(cleanList)
+  effects: effects.map(cleanList),
+  resources: cleanResources(resources)
 });
 
 let pdfPromise = null;
@@ -46,10 +56,23 @@ const handleVersions = deck => {
   return deck;
 }
 
+const unpackDeck = deck => {
+  const resources = {};
+
+  for (let filename in deck.resources) {
+    resources[filename] = {
+      id: filename,
+      path: deck.resources[filename]
+    };
+  }
+
+  return { ...deck, resources };
+}
+
 class DeckStorage {
 
   static read(filename) {
-    return handleVersions(JSON.parse(fs.readFileSync(filename)));
+    return unpackDeck(handleVersions(JSON.parse(fs.readFileSync(filename))));
   }
 
   static write(filename, data) {

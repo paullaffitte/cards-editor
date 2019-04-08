@@ -55,7 +55,6 @@
     "electron-icon-builder": "^1.0.0"
   },
   "build": {
-    "productName": "Cards Editor",
     "files": [
       "build/**/*",
       "node_modules/**/*",

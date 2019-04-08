@@ -8,21 +8,7 @@ const makeMigration = (version, migration) => ({
   }
 });
 
-const migrations = [
-  makeMigration('1.1.0', deck => {
-    const resources = {};
-
-    for (let filename in deck.resources) {
-      resources[filename] = {
-        id: filename,
-        path: deck.resources[filename]
-      };
-    }
-
-    return { ...deck, resources };
-  }),
-];
-
+const migrations = [];
 
 export function runMigrations(deck, target) {
   return migrations

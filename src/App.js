@@ -10,6 +10,7 @@ import { getCurrentDeck } from './state/selectors/deck';
 import DeckEditor from './components/DeckEditor';
 import DeckViewer from './components/DeckViewer';
 import StatusBar from './components/StatusBar';
+import ResourceLoader from './components/ResourceLoader';
 import DeckStorage from './services/DeckStorage';
 
 const store = createStore(
@@ -43,6 +44,8 @@ class App extends Component {
           )
           : (<DeckViewer style={{ backgroundColor: 'white' }} />)
         }
+
+        <ResourceLoader />
       </Provider>
     );
   }
