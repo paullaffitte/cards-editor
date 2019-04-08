@@ -1,14 +1,16 @@
 import semver from 'semver'
 
-const makeMigration = (version, migration) => ({
-  version,
-  migrate: deck => {
-    console.log(`migrating deck from ${deck.version} to ${version}`);
-    return { ...migration(deck), version };
-  }
-});
+// const makeMigration = (version, migration) => ({
+//   version,
+//   migrate: deck => {
+//     console.log(`migrating deck from ${deck.version} to ${version}`);
+//     return { ...migration(deck), version };
+//   }
+// });
 
-const migrations = [];
+const migrations = [
+  // makeMigration('0.0.0', deck => deck),
+];
 
 export function runMigrations(deck, target) {
   return migrations

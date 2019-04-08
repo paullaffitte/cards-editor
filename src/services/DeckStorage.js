@@ -6,6 +6,8 @@ const { remote, ipcRenderer } = window.require('electron');
 const { app, dialog } = remote;
 const fs = remote.require('fs');
 
+window.appVersion = app.getVersion();
+
 const cleanList = ({original, updated, ...item}) => item;
 
 const cleanResources = resources => {
@@ -17,7 +19,7 @@ const cleanResources = resources => {
   return cleanResources;
 };
 
-const cleanDeck = ({filename, updated, cards, effects, resources, ...data}) => ({
+const cleanDeck = ({filename, openAt, updated, cards, effects, resources, ...data}) => ({
   ...data,
   cards: cards.map(cleanList),
   effects: effects.map(cleanList),
@@ -39,7 +41,7 @@ const registerListener = (name, callback) => {
 };
 
 const handleVersions = deck => {
-  const appVersion = app.getVersion();
+  const appVersion = window.appVersion;
 
   if (!semver.valid(deck.version)) {
     alert(`Invalid deck version "${deck.version}"`);
@@ -80,10 +82,15 @@ class DeckStorage {
   }
 
   static open(filename) {
-    const loadDeck = (filename) => ({ ...DeckStorage.read(filename), filename });
+    const loadDeck = (filename) => {
+      const deck = DeckStorage.read(filename);
+      return deck ? { ...deck, filename, openAt: Date.now() } : null;
+    }
 
-    if (filename)
-      return DeckStorage.onOpen(loadDeck(filename));
+    if (filename) {
+      DeckStorage.onOpen(loadDeck(filename));
+      return
+    }
     return new Promise((resolve, reject) => dialog.showOpenDialog({
       title: 'Open',
       filters: deckFileFilters
@@ -94,8 +101,7 @@ class DeckStorage {
       }
 
       const filename = filenames[0];
-      const deck = DeckStorage.read(filename);
-      resolve(deck ? { ...deck, filename } : null);
+      resolve(loadDeck(filename));
     }));
   }
 

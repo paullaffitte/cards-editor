@@ -22,7 +22,7 @@ class StatusBar extends Component {
     return (
       <Footer style={{ height: this.props.height, padding: 0, paddingLeft: '0.2em', backgroundColor: 'white'}}>
         { [this.props.filename, this.props.updated ? 'unsaved changes' : ''].filter(Boolean).join(' - ') }
-        <span style={{ float: 'right', paddingRight: '0.2em' }}>deck version: { this.props.version }</span>
+        <span style={{ float: 'right', paddingRight: '0.2em' }}>{ window.appVersion }</span>
       </Footer>
     );
   }

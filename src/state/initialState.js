@@ -2,6 +2,7 @@ const initialState = {
   deck: {
     current: {
       filename: null,
+      openAt: 0,
       cardsConfig: {},
       cards: [],
       effects: [],
