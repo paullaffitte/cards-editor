@@ -34,7 +34,7 @@ class ResourcePicker extends Component {
       else {
         const preview = {
           name: this.props.value,
-          url: 'file://' + this.props.resources[this.props.value]
+          url: this.props.resources[this.props.value].src
         };
         this.setState({ preview });
       }

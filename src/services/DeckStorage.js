@@ -61,10 +61,12 @@ const handleVersions = deck => {
 const unpackDeck = deck => {
   const resources = {};
 
-  for (let filename in deck.resources) {
-    resources[filename] = {
-      id: filename,
-      src: 'file://' + deck.resources[filename]
+  for (let id in deck.resources) {
+    const path = deck.resources[id];
+    resources[id] = {
+      id: id,
+      path: path,
+      src: 'file://' + path
     };
   }
 

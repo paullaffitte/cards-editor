@@ -17,7 +17,8 @@ const ActionsTypes = {
 
     UPDATE_CARDS_CONFIG: null,
     UPDATE_EXPORT_CONFIG: null,
-    UPDATE_AVAILABLE_FONTS: null
+    UPDATE_AVAILABLE_FONTS: null,
+    UPDATE_CARD_SIZE: null
   }),
   Item: keyMirror({
     CARD: null,

@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getEditedItem, getItemById } from '../selectors/deck';
+import { getEditedItem, getItemById, getCards, getResourceById } from '../selectors/deck';
 import initialState from '../initialState';
 import uuid from 'uuid/v1';
 
@@ -116,6 +116,16 @@ const deck = {
   [ActionsTypes.UPDATE_AVAILABLE_FONTS]: (state, fonts) => {
     return update(state, {
       availableFonts: { $set: fonts }
+    });
+  },
+  [ActionsTypes.UPDATE_CARD_SIZE]: (state, fonts) => {
+    const { width, height } = getCards(state)
+      .map(card => getResourceById(state, card.background))
+      .filter(Boolean)
+      .shift();
+
+    return deckUpdate(state, {
+      cardSize: { $set: {width, height} }
     });
   },
 };

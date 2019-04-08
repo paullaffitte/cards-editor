@@ -9,7 +9,6 @@ const initialState = {
       resources: {},
       exportConfig: {
         cardsQuantity: {},
-        cardSize: { width: 400, height: 600 }
       },
       updated: false,
       version: '1.0.2'
@@ -17,7 +16,8 @@ const initialState = {
     edited: {
       card: {},
       effect: {}
-    }
+    },
+    cardSize: { width: 400, height: 600 }
   },
   availableFonts: []
 };

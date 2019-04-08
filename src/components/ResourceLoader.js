@@ -11,6 +11,7 @@ class ResourceLoader extends Component {
       width: image.naturalWidth,
       height: image.naturalHeight
     }));
+    this.props.dispatch(DeckActions.updateCardSize());
   }
 
   render() {

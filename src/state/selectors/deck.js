@@ -15,13 +15,7 @@ export const getResources = createSelector(
   deck => deck ? deck.resources : getResources(initialState)
 );
 
-
-export const getExportConfig = createSelector(
-  [ getCurrentDeck ],
-  deck => deck.exportConfig
-);
-
-const resourceBase = getExportConfig(initialState).cardSize;
+const resourceBase = initialState.deck.cardSize;
 export const getResourceById = createSelector(
   [ getResources, getProps ],
   (resources, id) => id in resources
@@ -37,6 +31,7 @@ const _getItems = createSelector(
 );
 
 export const getItems = (type, state) => _getItems(state, { type });
+export const getCards = state => getItems(ActionsTypes.Item.CARD, state);
 
 export const getEditedItem = (type, state) => {
   return state.deck ? state.deck.edited[ActionsTypes.getItemKey(type)] : getEditedItem(type, initialState);
@@ -66,4 +61,9 @@ export const getCardsConfig = createSelector(
   deck => {
     return deck.cardsConfig;
   }
+);
+
+export const getExportConfig = createSelector(
+  [ getCurrentDeck ],
+  deck => deck.exportConfig
 );

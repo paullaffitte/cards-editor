@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
 import Card from './Card';
 import '../styles/DeckViewer.scss';
-import { getResourceById } from '../state/selectors/deck';
 
 const makeSize = (width, height) => ({ width, height });
 const A4 = makeSize(297, 210);
@@ -40,8 +39,7 @@ class DeckViewer extends Component {
   renderCards = () => {
     const spacing = mmToPx(this.props.exportConfig.spacing);
     const scale = dpiBase / this.props.exportConfig.dpi;
-    let cardSize = this.props.exportConfig.cardSize;
-    cardSize = makeSize(cardSize.width * scale + spacing, cardSize.height * scale + spacing);
+    const cardSize = makeSize(this.props.cardSize.width * scale + spacing, this.props.cardSize.height * scale + spacing);
     const A4px = makeSize(mmToPx(A4.width), mmToPx(A4.height));
 
     const maxBy = {
@@ -78,7 +76,8 @@ class DeckViewer extends Component {
 
 const mapStateToProps = state => ({
   cards: state.deck.current.cards,
-  exportConfig: { ...state.deck.current.exportConfig, cardSize: {width: 400, height: 600} }
+  exportConfig: state.deck.current.exportConfig,
+  cardSize: state.deck.cardSize
 });
 
 export default connect(mapStateToProps)(DeckViewer);

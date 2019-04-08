@@ -67,12 +67,17 @@ const actions = {
       payload: exportConfig
     };
   },
-
   updateAvailableFonts: fonts => {
     return {
       type: ActionsTypes.UPDATE_AVAILABLE_FONTS,
       payload: fonts
     };
+  },
+  updateCardSize: () => {
+    return {
+      type: ActionsTypes.UPDATE_CARD_SIZE,
+      payload: null
+    }
   },
 };
 
