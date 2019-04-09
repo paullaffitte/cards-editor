@@ -1,16 +1,12 @@
 .StatusBar {
 	padding: 0;
-	padding-left: 0.2em;
+	padding-left: 0.5em;
 	background-color: white;
 	overflow: hidden;
 
 	.version {
 		float: right;
 		height: 100%;
-
-		.current-version {
-			padding-right: 0.2em;
-		}
 	}
 
 	.update-button {

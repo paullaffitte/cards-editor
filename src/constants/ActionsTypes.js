@@ -13,6 +13,7 @@ const ActionsTypes = {
     UPDATE_FILENAME: null,
 
     SET_RESOURCE: null,
+    SET_RESOURCE_META: null,
     DELETE_RESOURCE: null,
 
     UPDATE_CARDS_CONFIG: null,

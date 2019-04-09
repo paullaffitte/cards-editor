@@ -6,7 +6,7 @@ import DeckActions from '../state/actions/deck';
 class ResourceLoader extends Component {
 
   onLoad = (image, resource) => {
-    this.props.dispatch(DeckActions.setResource({
+    this.props.dispatch(DeckActions.setResourceMeta({
       ...resource,
       width: image.naturalWidth,
       height: image.naturalHeight

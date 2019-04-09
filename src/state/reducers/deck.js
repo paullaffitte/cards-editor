@@ -89,12 +89,18 @@ const deck = {
     return deckUpdate(state, { current: {filename: {$set: filename}} });
   },
 
-
   [ActionsTypes.SET_RESOURCE]: (state, resource) => {
     const id = resource.id ? resource.id : uuid();
     return deckUpdate(state, {
       current: { resources: {[id]: {$set: {...resource, id}}} }
     });
+  },
+  [ActionsTypes.SET_RESOURCE_META]: (state, resource) => {
+    const id = resource.id ? resource.id : uuid();
+    let { src, path, ...resourceMeta } = resource;
+    return deckUpdate(state, {
+      current: { resources: {[id]: {$merge: {...resourceMeta, id}}} }
+    }, false, false);
   },
   [ActionsTypes.DELETE_RESOURCE]: (state, id) => {
     const deleteResource = ({[id]: resource, ...resources}) => resources;
@@ -144,7 +150,7 @@ const deck = {
 
     return deckUpdate(state, {
       cardSize: { $set: {width: width, height: height, multipleSizes} }
-    });
+    }, false, false);
   },
 };
 

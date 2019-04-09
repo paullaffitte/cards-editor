@@ -48,6 +48,12 @@ const actions = {
       payload: resource
     }
   },
+  setResourceMeta: resourceMeta => {
+    return {
+      type: ActionsTypes.SET_RESOURCE_META,
+      payload: resourceMeta
+    }
+  },
   deleteResource: name => {
     return {
       type: ActionsTypes.DELETE_RESOURCE,

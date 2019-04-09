@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout, Button } from 'antd';
+import { Layout, Button, Tag } from 'antd';
 import { getCurrentDeck } from '../state/selectors/deck';
 import semver from 'semver'
 import '../styles/StatusBar.scss';
@@ -46,7 +46,7 @@ class StatusBar extends Component {
             <Button type='primary' className="update-button" onClick={ this.doUpdate }>
               <span>update available ({ window.appVersion } -> { this.state.latest })</span>
             </Button>
-          ) : <span className="current-version">{ window.appVersion }</span> }
+          ) : <Tag>{ window.appVersion }</Tag> }
         </div>
       </Footer>
     );
