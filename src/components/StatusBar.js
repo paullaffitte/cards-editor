@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Layout, Button } from 'antd';
 import { getCurrentDeck } from '../state/selectors/deck';
-import DeckActions from '../state/actions/deck';
 import semver from 'semver'
 import '../styles/StatusBar.scss';
 const { shell } = window.require('electron');

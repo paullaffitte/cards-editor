@@ -3,10 +3,8 @@ import { runMigrations } from './DeckMigration';
 import semver from 'semver'
 
 const { remote, ipcRenderer } = window.require('electron');
-const { app, dialog } = remote;
+const { dialog } = remote;
 const fs = remote.require('fs');
-
-window.appVersion = app.getVersion();
 
 const cleanList = ({original, updated, ...item}) => item;
 
