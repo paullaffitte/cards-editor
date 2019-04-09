@@ -16,13 +16,13 @@ class Card extends Component {
   }
 
   getThumbnailStyle() {
-    const thumbnail = this.props.thumbnail;
+    const { width, height } = this.props.thumbnail;
     const transform = this.props.thumbnailTransform ? this.props.thumbnailTransform : {};
     const thumbnailScale = transform.scale ? transform.scale : 1;
 
     return {
-      width: thumbnail.width * thumbnailScale,
-      height: thumbnail.height * thumbnailScale,
+      width: (width ? width : 0) * thumbnailScale,
+      height: (height ? height : 0) * thumbnailScale,
       top: userToPercent(transform.y),
       left: userToPercent(transform.x),
     };
@@ -54,19 +54,20 @@ class Card extends Component {
     const { width, height } = this.props.background;
     const cardStyle = {
       ...this.props.style,
-      width, height,
+      width: width ? width : this.props.cardSize.width,
+      height: height ? height : this.props.cardSize.height,
       transform: `scale(${this.getScale()})`
     };
 
     return (
       <div className="Card" style={cardStyle}>
-        {this.props.thumbnail ? <img
+        {this.props.thumbnail.src ? <img
           alt="thumbnail"
           className="thumbnail positionable"
           src={ this.props.thumbnail.src }
           style={ this.getThumbnailStyle() } />
         : null}
-        {this.props.background ? <img
+        {this.props.background.src ? <img
           alt="background"
           className="background"
           src={ this.props.background.src } />
@@ -113,6 +114,7 @@ const mapStateToProps = (state, props) => {
     thumbnail: getResourceById(state, props.thumbnail),
     background: getResourceById(state, props.background),
     effects: getEffectsByIds(state, props.effects),
+    cardSize: state.deck.cardSize,
     ...transforms
   }
 };

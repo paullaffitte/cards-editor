@@ -118,17 +118,31 @@ const deck = {
       availableFonts: { $set: fonts }
     });
   },
-  [ActionsTypes.UPDATE_CARD_SIZE]: (state, fonts) => {
-    const background = getCards(state)
-      .map(card => getResourceById(state, card.background))
-      .filter(Boolean)
-      .shift();
+  [ActionsTypes.UPDATE_CARD_SIZE]: (state) => {
+    const groupAndCount = backgrounds => Object.values(backgrounds.reduce((acc, id) => {
+      if (!acc.hasOwnProperty(id)) {
+        acc[id] = { id, count: 0 };
+      }
+      acc[id].count++;
+      return acc;
+    }, {}));
 
-    if (!background || !background.width || !background.height)
+    const backgroundIds = getCards(state).map(card => card.background);
+    const backgrounds = groupAndCount(backgroundIds)
+      .map(({ id, count }) => ({ resource: getResourceById(state, id), count: count }))
+      .filter(({ resource: {width, height} }) => width && height)
+      .sort((bl, br) => br.count - bl.count);
+
+    const background = backgrounds.shift();
+    if (!background)
+      return state;
+
+    const { width, height } = background.resource;
+    if (!width || !height)
       return state;
 
     return deckUpdate(state, {
-      cardSize: { $set: {width: background.width, height: background.height} }
+      cardSize: { $set: {width: width, height: height} }
     });
   },
 };

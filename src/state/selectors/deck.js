@@ -15,12 +15,9 @@ export const getResources = createSelector(
   deck => deck ? deck.resources : getResources(initialState)
 );
 
-const resourceBase = initialState.deck.cardSize;
 export const getResourceById = createSelector(
   [ getResources, getProps ],
-  (resources, id) => id in resources
-    ? { ...resourceBase , ...resources[id] }
-    : resourceBase
+  (resources, id) => id in resources ? resources[id] : {}
 );
 
 const _getItems = createSelector(
