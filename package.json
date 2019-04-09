@@ -66,10 +66,18 @@
     "linux": {
       "category": "Graphics",
       "target": [
-        "deb",
-        "AppImage",
-        "snap"
+        "deb"
       ]
+    },
+    "win": {
+      "target":
+        {
+          "target": "nsis",
+          "arch": [ "x64" ]
+        }
+    },
+    "nsis": {
+      "differentialPackage": false
     },
     "icon": "icons"
   }
