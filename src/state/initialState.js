@@ -19,7 +19,8 @@ const initialState = {
     },
     cardSize: { width: 400, height: 600 }
   },
-  availableFonts: []
+  availableFonts: [],
+  latestVersion: null
 };
 
 export default initialState;

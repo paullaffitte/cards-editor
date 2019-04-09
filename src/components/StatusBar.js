@@ -1,15 +1,31 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout } from 'antd';
+import { Layout, Button } from 'antd';
 import { getCurrentDeck } from '../state/selectors/deck';
+import DeckActions from '../state/actions/deck';
+import semver from 'semver'
+import '../styles/StatusBar.scss';
+const { shell } = window.require('electron');
 
 const { Footer } = Layout;
 
 class StatusBar extends Component {
 
-  componentDidMount() {
+  state = {
+    latest: null,
+    latestUrl: null
+  }
+
+  async componentDidMount() {
     if (!document.originalTitle)
       document.originalTitle = document.title;
+
+    const latestUrl = (await fetch('https://github.com/paullaffitte/cards-editor/releases/latest')).url;
+    const latest = latestUrl.split('/').pop();
+    const upgradeAvailable = semver.lt(window.appVersion, latest);
+
+    if (upgradeAvailable)
+      this.setState({ latest, latestUrl });
   }
 
   componentWillUpdate(nextProps) {
@@ -18,11 +34,21 @@ class StatusBar extends Component {
       : document.originalTitle;
   }
 
+  doUpdate = () => shell.openExternal(this.state.latestUrl);
+
   render() {
     return (
-      <Footer style={{ height: this.props.height, padding: 0, paddingLeft: '0.2em', backgroundColor: 'white'}}>
+      <Footer className="StatusBar" style={{ height: this.props.height, lineHeight: this.props.height}}>
         { [this.props.filename, this.props.updated ? 'unsaved changes' : ''].filter(Boolean).join(' - ') }
-        <span style={{ float: 'right', paddingRight: '0.2em' }}>{ window.appVersion }</span>
+
+        <div className="version">
+          { this.state.latest
+            ? (
+            <Button type='primary' className="update-button" onClick={ this.doUpdate }>
+              <span>update available ({ window.appVersion } -> { this.state.latest })</span>
+            </Button>
+          ) : <span className="current-version">{ window.appVersion }</span> }
+        </div>
       </Footer>
     );
   }
@@ -33,7 +59,8 @@ const mapStateToProps = (state, props) => {
   return {
     filename: deck.filename,
     updated: deck.updated,
-    version: deck.version
+    version: deck.version,
+    latestVersion: state.latestVersion
   }
 };
 

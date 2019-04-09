@@ -39,7 +39,7 @@ class App extends Component {
           ? (
             <Layout className="app">
               <DeckEditor toggleExportMode={ exportMode => this.setState({ exportMode }) } />
-              <StatusBar height='1.5em' />
+              <StatusBar height='2em' />
             </Layout>
           )
           : (<DeckViewer style={{ backgroundColor: 'white' }} />)
