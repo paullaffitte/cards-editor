@@ -1,12 +1,49 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, InputNumber, Row, Col } from 'antd';
+import { Form, InputNumber, Row, Col, Tooltip, Icon } from 'antd';
 import List from './List';
 import ActionsTypes from '../constants/ActionsTypes';
 import DeckActions from '../state/actions/deck';
+import { getResourceById, getExportConfig } from '../state/selectors/deck';
 import 'antd/dist/antd.css';
 
 class ExportForm extends Component {
+
+  renderCardListItem = item => {
+    const { width, height } = this.props.getResourceById(item.background);
+    const { width: expectedWidth, height: expectedHeight } = this.props.cardSize;
+    const invalidSize = !width || !height;
+    const sizeMismatch = width !== expectedWidth || height !== expectedHeight;
+
+    const { getFieldDecorator } = this.props.form;
+    const warning = message => (
+      <Tooltip title={message}>
+        <Icon type='warning' theme="twoTone" twoToneColor="orange" />{' '}
+      </Tooltip>
+    );
+
+    return (
+      <div>
+        { invalidSize
+          ? (warning(`This card doesn't has any background. However, this card will take the same size than other cards. (${expectedWidth}x${expectedHeight})`))
+          : null }
+        { !invalidSize && sizeMismatch
+          ? (warning(`The background's size of this card doesn't match others cards' backgrounds sizes (expected to be ${expectedWidth}x${expectedHeight} but is ${width}x${height})`))
+          : null }
+        <span>
+          { item.name }
+        </span>
+        {getFieldDecorator(item.id, {})(
+          <InputNumber min={0} style={{
+            width: '5em',
+            marginRight: '1em',
+            position: 'relative',
+            float: 'right',
+          }} />
+        )}
+      </div>
+    )
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -45,19 +82,7 @@ class ExportForm extends Component {
               return -1;
             return left < right
           } }
-          renderItem={ item => (
-            <div>
-              <span>{item.name}</span>
-              {getFieldDecorator(item.id, {})(
-                <InputNumber min={0} style={{
-                  width: '5em',
-                  marginRight: '1em',
-                  position: 'relative',
-                  float: 'right',
-                }} />
-              )}
-            </div>
-          ) }
+          renderItem={ this.renderCardListItem }
         />
       </Form>
     );
@@ -66,7 +91,10 @@ class ExportForm extends Component {
 
 const mapStateToProps = state => ({
   deck: state.deck.current,
-  exportConfig: state.deck.current.exportConfig
+  exportConfig: getExportConfig(state),
+  cardSize: state.deck.cardSize,
+
+  getResourceById: id => getResourceById(state, id)
 });
 
 export default connect(mapStateToProps)(Form.create({

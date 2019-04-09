@@ -133,6 +133,7 @@ const deck = {
       .filter(({ resource: {width, height} }) => width && height)
       .sort((bl, br) => br.count - bl.count);
 
+    const multipleSizes = backgrounds.length > 1;
     const background = backgrounds.shift();
     if (!background)
       return state;
@@ -142,7 +143,7 @@ const deck = {
       return state;
 
     return deckUpdate(state, {
-      cardSize: { $set: {width: width, height: height} }
+      cardSize: { $set: {width: width, height: height, multipleSizes} }
     });
   },
 };
