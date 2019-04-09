@@ -41,6 +41,9 @@ const registerListener = (name, callback) => {
 const handleVersions = deck => {
   const appVersion = window.appVersion;
 
+  if (!deck.version)
+    deck.version = '0.0.0';
+
   if (!semver.valid(deck.version)) {
     alert(`Invalid deck version "${deck.version}"`);
     return null;
@@ -74,7 +77,8 @@ const unpackDeck = deck => {
 class DeckStorage {
 
   static read(filename) {
-    return unpackDeck(handleVersions(JSON.parse(fs.readFileSync(filename))));
+    const packedDeck = handleVersions(JSON.parse(fs.readFileSync(filename)));
+    return packedDeck ? unpackDeck(packedDeck) : null;
   }
 
   static write(filename, data) {
