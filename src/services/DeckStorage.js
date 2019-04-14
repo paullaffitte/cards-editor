@@ -5,6 +5,7 @@ import semver from 'semver'
 const { remote, ipcRenderer } = window.require('electron');
 const { dialog } = remote;
 const fs = remote.require('fs');
+const path = remote.require('path');
 
 const cleanList = ({original, updated, ...item}) => item;
 
@@ -25,11 +26,6 @@ const cleanDeck = ({filename, openAt, updated, cards, effects, resources, ...dat
 });
 
 let pdfPromise = null;
-
-const deckFileFilters = [
-  { name: 'Deck', extensions: ['deck', 'json'] },
-  { name: 'All Files', extensions: ['*'] }
-];
 
 const registerListener = (name, callback) => {
   ipcRenderer.on(name, async (event, ...args) => {
@@ -77,27 +73,42 @@ const unpackDeck = deck => {
 class DeckStorage {
 
   static read(filename) {
-    const packedDeck = handleVersions(JSON.parse(fs.readFileSync(filename)));
+    const content = JSON.parse(fs.readFileSync(filename));
+    const packedDeck = handleVersions({ ...content, filename, openAt: Date.now() });
+
     return packedDeck ? unpackDeck(packedDeck) : null;
   }
 
   static write(filename, data) {
+    const projectFolder = path.dirname(filename);
+    const resourcesFolder = projectFolder + '/resources';
+
+    if (!fs.existsSync(projectFolder))
+      fs.promises.mkdir(projectFolder, { recursive: true });
+
+    if (!fs.existsSync(resourcesFolder))
+      fs.promises.mkdir(resourcesFolder);
+
     fs.writeFileSync(filename, JSON.stringify(cleanDeck(data)));
   }
 
   static open(filename) {
     const loadDeck = (filename) => {
       const deck = DeckStorage.read(filename);
-      return deck ? { ...deck, filename, openAt: Date.now() } : null;
+      return deck ? deck : null;
     }
 
     if (filename) {
       DeckStorage.onOpen(loadDeck(filename));
-      return
+      return;
     }
     return new Promise((resolve, reject) => dialog.showOpenDialog({
       title: 'Open',
-      filters: deckFileFilters
+      properties: [ 'openFile' ],
+      filters: [
+        { name: 'Deck', extensions: ['deck', 'json'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
     }, (filenames) => {
       if (!filenames || !filenames.length) {
         resolve(null);
@@ -110,7 +121,7 @@ class DeckStorage {
   }
 
   static save() {
-    const {filename, ...data} = DeckStorage.onSave();
+    const { filename, ...data } = DeckStorage.onSave();
     if (!filename)
       return DeckStorage.saveAs();
 
@@ -118,23 +129,26 @@ class DeckStorage {
     return filename;
   }
 
-  static saveAs(newFilename) {
-    if (newFilename) {
-      DeckStorage.write(newFilename, DeckStorage.onSave());
-      return newFilename;
+  static saveAs(newFolder) {
+    const folderToFilename = folder => folder + '/deck.json';
+
+    if (newFolder) {
+      DeckStorage.write(newFolder, DeckStorage.onSave());
+      return folderToFilename(newFolder);
     }
 
-    return new Promise((resolve, reject) => dialog.showSaveDialog({
-      title: 'Save',
-      filters: deckFileFilters
-    }, (newFilename) => {
-      if (!newFilename) {
+    return new Promise((resolve, reject) => dialog.showOpenDialog({
+      title: 'Save in a folder',
+      properties: [ 'openDirectory' ]
+    }, (newFolder) => {
+      if (!newFolder) {
         resolve(null);
         return;
       }
 
-      DeckStorage.write(newFilename, DeckStorage.onSave());
-      resolve(newFilename);
+      const filename = folderToFilename(newFolder[0]);
+      DeckStorage.write(filename, DeckStorage.onSave());
+      resolve(filename);
     }));
   }
 
