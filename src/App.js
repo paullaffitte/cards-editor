@@ -12,12 +12,14 @@ import DeckViewer from './components/DeckViewer';
 import StatusBar from './components/StatusBar';
 import ResourceLoader from './components/ResourceLoader';
 import DeckStorage from './services/DeckStorage';
+import Wrapper from './services/Wrapper';
 
 const store = createStore(
   reducers,
   applyMiddleware(thunk),
 );
 
+Wrapper.init();
 DeckStorage.initFonts(store);
 DeckStorage.onQuit(quit => getCurrentDeck(store.getState()).updated ? Modal.confirm({
   title: 'Confirmation',
@@ -44,7 +46,6 @@ class App extends Component {
           )
           : (<DeckViewer style={{ backgroundColor: 'white' }} />)
         }
-
         <ResourceLoader />
       </Provider>
     );

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Layout, Button, Tag } from 'antd';
-import { getCurrentDeck } from '../state/selectors/deck';
 import semver from 'semver'
+import Wrapper from '../services/Wrapper';
+import { getCurrentDeck } from '../state/selectors/deck';
 import '../styles/StatusBar.scss';
-const { shell } = window.require('electron');
 
 const { Footer } = Layout;
 
@@ -19,9 +19,9 @@ class StatusBar extends Component {
     if (!document.originalTitle)
       document.originalTitle = document.title;
 
-    const latestUrl = (await fetch('https://github.com/paullaffitte/cards-editor/releases/latest')).url;
-    const latest = latestUrl.split('/').pop();
-    const upgradeAvailable = semver.lt(window.appVersion, latest);
+    const response = await fetch('https://api.github.com/repos/paullaffitte/cards-editor/releases/latest');
+    const { html_url: latestUrl, tag_name: latest } = await response.json();
+    const upgradeAvailable = semver.valid(window.appVersion) ? semver.lt(window.appVersion, latest) : false;
 
     if (upgradeAvailable)
       this.setState({ latest, latestUrl });
@@ -33,7 +33,7 @@ class StatusBar extends Component {
       : document.originalTitle;
   }
 
-  doUpdate = () => shell.openExternal(this.state.latestUrl);
+  doUpdate = () => Wrapper.openUrl(this.state.latestUrl);
 
   render() {
     return (

@@ -1,11 +1,7 @@
+import Wrapper from '../services/Wrapper';
 import DeckActions from '../state/actions/deck';
 import { runMigrations } from './DeckMigration';
 import semver from 'semver'
-
-const { remote, ipcRenderer } = window.require('electron');
-const { dialog } = remote;
-const fs = remote.require('fs');
-const path = remote.require('path');
 
 const cleanList = ({original, updated, ...item}) => item;
 
@@ -28,7 +24,7 @@ const cleanDeck = ({filename, openAt, updated, cards, effects, resources, ...dat
 let pdfPromise = null;
 
 const registerListener = (name, callback) => {
-  ipcRenderer.on(name, async (event, ...args) => {
+  Wrapper.on(name, async (event, ...args) => {
     console.log(`${name} event received`);
     await callback(event, ...args);
   });
@@ -73,23 +69,14 @@ const unpackDeck = deck => {
 class DeckStorage {
 
   static read(filename) {
-    const content = JSON.parse(fs.readFileSync(filename));
+    const content = Wrapper.readDeck(filename);
     const packedDeck = handleVersions({ ...content, filename, openAt: Date.now() });
 
     return packedDeck ? unpackDeck(packedDeck) : null;
   }
 
   static write(filename, data) {
-    const projectFolder = path.dirname(filename);
-    const resourcesFolder = projectFolder + '/resources';
-
-    if (!fs.existsSync(projectFolder))
-      fs.promises.mkdir(projectFolder, { recursive: true });
-
-    if (!fs.existsSync(resourcesFolder))
-      fs.promises.mkdir(resourcesFolder);
-
-    fs.writeFileSync(filename, JSON.stringify(cleanDeck(data)));
+    return Wrapper.writeDeck(filename, cleanDeck(data));
   }
 
   static open(filename) {
@@ -102,22 +89,15 @@ class DeckStorage {
       DeckStorage.onOpen(loadDeck(filename));
       return;
     }
-    return new Promise((resolve, reject) => dialog.showOpenDialog({
+
+    return Wrapper.openFile({
       title: 'Open',
       properties: [ 'openFile' ],
       filters: [
         { name: 'Deck', extensions: ['deck', 'json'] },
         { name: 'All Files', extensions: ['*'] }
       ]
-    }, (filenames) => {
-      if (!filenames || !filenames.length) {
-        resolve(null);
-        return;
-      }
-
-      const filename = filenames[0];
-      resolve(loadDeck(filename));
-    }));
+    }).then(loadDeck);
   }
 
   static save() {
@@ -137,49 +117,39 @@ class DeckStorage {
       return folderToFilename(newFolder);
     }
 
-    return new Promise((resolve, reject) => dialog.showOpenDialog({
+    return Wrapper.openFile({
       title: 'Save in a folder',
       properties: [ 'openDirectory' ]
-    }, (newFolder) => {
-      if (!newFolder) {
-        resolve(null);
-        return;
-      }
-
-      const filename = folderToFilename(newFolder[0]);
+    }).then(folder => {
+      const filename = folderToFilename(folder);
       DeckStorage.write(filename, DeckStorage.onSave());
-      resolve(filename);
-    }));
+      return filename;
+    });
   }
 
   static exportAsPDF() {
-    return new Promise(async (resolve, reject) => dialog.showSaveDialog({
+    return new Promise((resolve, reject) => Wrapper.saveFile({
       title: 'Export',
       defaultPath: './deck.pdf',
       filters: [
         { name: 'PDF', extensions: ['pdf'] },
         { name: 'All Files', extensions: ['*'] }
       ]
-    }, (filename) => {
-      if (!filename) {
-        resolve(null);
-        return;
-      }
-
+    }).then(filename => {
       pdfPromise = { resolve, reject };
-      ipcRenderer.send('exportAsPDF', filename);
+      Wrapper.send('exportAsPDF', filename);
     }));
   }
 
   static initFonts(store) {
-    ipcRenderer.removeAllListeners('availableFonts');
-    ipcRenderer.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
-    ipcRenderer.send('getAvailableFonts');
+    Wrapper.removeAllListeners('availableFonts');
+    Wrapper.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
+    Wrapper.send('getAvailableFonts');
   }
 
   static onQuit(callback) {
     registerListener('quit', () => {
-      callback(() => ipcRenderer.send('quit'));
+      callback(() => Wrapper.send('quit'));
     });
   }
 
@@ -188,12 +158,12 @@ class DeckStorage {
     DeckStorage.onOpen = onOpen;
     DeckStorage.onSave = onSave;
 
-    ipcRenderer.removeAllListeners('new');
-    ipcRenderer.removeAllListeners('open');
-    ipcRenderer.removeAllListeners('save');
-    ipcRenderer.removeAllListeners('saveAs');
-    ipcRenderer.removeAllListeners('exportAsPDF');
-    ipcRenderer.removeAllListeners('exportAsPDF-reply');
+    Wrapper.removeAllListeners('new');
+    Wrapper.removeAllListeners('open');
+    Wrapper.removeAllListeners('save');
+    Wrapper.removeAllListeners('saveAs');
+    Wrapper.removeAllListeners('exportAsPDF');
+    Wrapper.removeAllListeners('exportAsPDF-reply');
 
     registerListener('new', onNew);
     registerListener('open', async () => {
