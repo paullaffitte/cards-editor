@@ -10,6 +10,11 @@ export const getCurrentDeck = state => {
   return state.deck ? state.deck.current : getCurrentDeck(initialState);
 };
 
+export const getProjectDirectory = createSelector(
+  [ getCurrentDeck ],
+  deck => deck.filename ? deck.filename.split('/').slice(0, -1).join('/') : ''
+);
+
 export const getResources = createSelector(
   [ getCurrentDeck ],
   deck => deck ? deck.resources : getResources(initialState)

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Icon, Modal, Button } from 'antd';
 import ResourcesEditor from './ResourcesEditor'
-import { getResources } from '../state/selectors/deck';
+import { getResources, getProjectDirectory } from '../state/selectors/deck';
 
 class ResourcePicker extends Component {
 
@@ -10,6 +10,7 @@ class ResourcePicker extends Component {
     preview: {
       name: null,
       url: null,
+      path: null
     },
     modalOpened: false
   };
@@ -23,8 +24,8 @@ class ResourcePicker extends Component {
     return null;
   }
 
-  onPreview = file => {
-    this.setState({preview: {name: file.name, url: file.url}});
+  onPreview = ({ name, url, path }) => {
+    this.setState({ preview: {name, url, path} });
   };
 
   toggleModal = visible => {
@@ -32,10 +33,8 @@ class ResourcePicker extends Component {
       if (!(this.props.value in this.props.resources))
         alert(`Error: Resource ${this.props.value} not found`);
       else {
-        const preview = {
-          name: this.props.value,
-          url: this.props.resources[this.props.value].src
-        };
+        const { name, url, path } = this.props.resources[this.props.value];
+        const preview = { name, url, path };
         this.setState({ preview });
       }
     }
@@ -54,7 +53,11 @@ class ResourcePicker extends Component {
   onCancel = () => this.toggleModal(false);
 
   render() {
-    const {preview, modalOpened} = this.state;
+    const { preview, modalOpened } = this.state;
+    const previewPath = preview.path && preview.path.indexOf(this.props.projectDirectory) === 0
+      ? preview.path.slice(this.props.projectDirectory.length)
+      : preview.path;
+
     return (
       <div>
         <div>{ this.state.value }</div>
@@ -73,8 +76,10 @@ class ResourcePicker extends Component {
             <ResourcesEditor selected={this.state.value} onPreview={this.onPreview} style={{ marginBottom: '1em' }} />
           </Col>
           <Col span={9} offset={1}>
-            {!preview.url ? '' : (<img alt="example" style={{ width: '100%' }} src={preview.url} />)}
-            <span>{preview.name}</span>
+            { preview.url ? (
+              <img alt="example" style={{ width: '100%' }} src={ preview.url } />
+            ) : null }
+            <span>{ previewPath }</span>
           </Col>
           </Row>
         </Modal>
@@ -84,6 +89,7 @@ class ResourcePicker extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
+  projectDirectory: getProjectDirectory(state),
   resources: getResources(state)
 });
 

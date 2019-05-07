@@ -26,7 +26,8 @@ class ResourcesEditor extends Component {
         uid: resource.id,
         name: resource.path ? resource.path.split('/').pop() : '',
         status: 'done',
-        url: 'file://' + resource.path
+        url: 'file://' + resource.path,
+        path: resource.path
       };
     });
 
