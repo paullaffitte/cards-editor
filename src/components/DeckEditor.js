@@ -6,6 +6,7 @@ import CardList from './CardList';
 import CardEditor from './CardEditor';
 import ExportModal from './ExportModal';
 import DeckStorage from '../services/DeckStorage';
+import Wrapper from '../services/Wrapper';
 import DeckActions from '../state/actions/deck';
 import ActionsTypes from '../constants/ActionsTypes';
 
@@ -20,13 +21,19 @@ class DeckEditor extends Component {
   };
 
   componentDidMount() {
-    DeckStorage.registerListeners({
-      onNew:          this.onNew,
-      onOpen:         this.onOpen,        // TODO  move this code in App
-      onSave:         this.onSave,        //       create a ContextListener class and move register listener inside it
-      onExport:       this.onExport,      //       use DeckStorage in onOpen or onSave callbacks
-      updateFilename: this.updateFilename
-    });
+    Wrapper.on('new', this.onNew);
+    Wrapper.on('open', this.onOpen);
+    Wrapper.on('save', this.onSave);
+    Wrapper.on('saveAs', this.onSaveAs);
+    Wrapper.on('exportAsPDF', this.onExport);
+  }
+
+  componentWillUnmount() {
+    Wrapper.off('new', this.onNew);
+    Wrapper.off('open', this.onOpen);
+    Wrapper.off('save', this.onSave);
+    Wrapper.off('saveAs', this.onSaveAs);
+    Wrapper.off('exportAsPDF', this.onExport);
   }
 
   onNew = () => {
@@ -47,29 +54,38 @@ class DeckEditor extends Component {
     }
   };
 
-  onOpen = (deck) => {
-    if (!deck)
-      return;
+  onOpen = async () => {
+    const deck = await DeckStorage.open();
 
-    this.props.dispatch(DeckActions.openDeck(deck));
+    if (deck)
+      this.props.dispatch(DeckActions.openDeck(deck));
   };
 
-  onSave = () => {
-    return this.props.deck;
-  };
+  onSave = async () => this.afterSave(await DeckStorage.save(this.props.deck));
+
+  onSaveAs = async () => this.afterSave(await DeckStorage.saveAs(this.props.deck));
+
+  afterSave = filename => {
+    if (filename)
+      this.updateFilename(filename);
+  }
 
   onExport = () => {
     this.props.dispatch(DeckActions.updateCardSize());
-    this.setState({ showExport: true });
+    this.openExportModal();
   };
 
   exportAsPDF = async () => {
     this.closeExportModal();
     this.props.toggleExportMode(true);
-    await DeckStorage.exportAsPDF();
+    const filename = await DeckStorage.exportAsPDF();
     this.props.toggleExportMode(false);
+
+    if (!filename)
+      this.openExportModal()
   };
 
+  openExportModal = () => this.setState({ showExport: true });
   closeExportModal = () => this.setState({ showExport: false });
 
   updateFilename = filename => {

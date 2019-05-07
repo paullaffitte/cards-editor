@@ -21,11 +21,15 @@ class Wrapper {
     throw new Error('Not implemented');
   }
 
-  static send(event, payload) {
+  static once(event, callback) {
     throw new Error('Not implemented');
   }
 
-  static removeAllListeners(event) {
+  static off(event, callback) {
+    throw new Error('Not implemented');
+  }
+
+  static send(event, payload) {
     throw new Error('Not implemented');
   }
 

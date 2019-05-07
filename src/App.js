@@ -11,7 +11,7 @@ import DeckEditor from './components/DeckEditor';
 import DeckViewer from './components/DeckViewer';
 import StatusBar from './components/StatusBar';
 import ResourceLoader from './components/ResourceLoader';
-import DeckStorage from './services/DeckStorage';
+import DeckActions from './state/actions/deck';
 import Wrapper from './services/Wrapper';
 
 const store = createStore(
@@ -19,9 +19,11 @@ const store = createStore(
   applyMiddleware(thunk),
 );
 
+const quit = () => Wrapper.send('quit');
+
 Wrapper.init();
-DeckStorage.initFonts(store);
-DeckStorage.onQuit(quit => getCurrentDeck(store.getState()).updated ? Modal.confirm({
+Wrapper.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
+Wrapper.on('quit', () => getCurrentDeck(store.getState()).updated ? Modal.confirm({
   title: 'Confirmation',
   content: 'Your deck has unsaved changes. If you quit now, these changes will be lost',
   okText: 'Quit',
@@ -37,14 +39,13 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        { !this.state.exportMode
-          ? (
-            <Layout className="app">
-              <DeckEditor toggleExportMode={ exportMode => this.setState({ exportMode }) } />
-              <StatusBar height='2em' />
-            </Layout>
-          )
-          : (<DeckViewer style={{ backgroundColor: 'white' }} />)
+        <Layout className="app" style={{ display: this.state.exportMode ? 'none' : undefined }}>
+          <DeckEditor toggleExportMode={ exportMode => this.setState({ exportMode }) } />
+          <StatusBar height='2em' />
+        </Layout>
+        { this.state.exportMode
+          ? (<DeckViewer style={{ backgroundColor: 'white' }} />)
+          : null
         }
         <ResourceLoader />
       </Provider>

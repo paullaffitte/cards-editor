@@ -5,6 +5,8 @@ export default {
   },
   on: (event, callback) => {
   },
+  off: (event, callback) => {
+  },
   send: (event, payload) => {
   },
   removeAllListeners: (event) => {

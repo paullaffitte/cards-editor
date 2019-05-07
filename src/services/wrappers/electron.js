@@ -8,10 +8,13 @@ export default {
   init: () => {
     window.appVersion = remote.app.getVersion();
     window.isDev = remote.require('electron-is-dev');
+
+    ipcRenderer.send('getAvailableFonts');
   },
   on: (event, callback) => ipcRenderer.on(event, callback),
+  once: (event, callback) => ipcRenderer.once(event, callback),
+  off: (event, callback) => ipcRenderer.removeListener(event, callback),
   send: (event, payload) => ipcRenderer.send(event, payload),
-  removeAllListeners: (event) => ipcRenderer.removeAllListeners(event),
   readDeck: (filename) => {
     return JSON.parse(fs.readFileSync(filename));
   },

@@ -1,5 +1,4 @@
 import Wrapper from '../services/Wrapper';
-import DeckActions from '../state/actions/deck';
 import { runMigrations } from './DeckMigration';
 import semver from 'semver'
 
@@ -14,14 +13,12 @@ const cleanResources = resources => {
   return cleanResources;
 };
 
-const cleanDeck = ({filename, openAt, updated, cards, effects, resources, ...data}) => ({
+const cleanDeck = ({openAt, updated, cards, effects, resources, ...data}) => ({
   ...data,
   cards: cards.map(cleanList),
   effects: effects.map(cleanList),
   resources: cleanResources(resources)
 });
-
-let pdfPromise = null;
 
 const registerListener = (name, callback) => {
   Wrapper.on(name, async (event, ...args) => {
@@ -100,29 +97,25 @@ class DeckStorage {
     }).then(loadDeck);
   }
 
-  static save() {
-    const { filename, ...data } = DeckStorage.onSave();
+  static save({ filename, ...data }) {
     if (!filename)
-      return DeckStorage.saveAs();
+      return DeckStorage.saveAs(data);
 
     DeckStorage.write(filename, data);
     return filename;
   }
 
-  static saveAs(newFolder) {
-    const folderToFilename = folder => folder + '/deck.json';
-
-    if (newFolder) {
-      DeckStorage.write(newFolder, DeckStorage.onSave());
-      return folderToFilename(newFolder);
-    }
-
+  static saveAs({ filename, ...data }) {
     return Wrapper.openFile({
       title: 'Save in a folder',
       properties: [ 'openDirectory' ]
     }).then(folder => {
-      const filename = folderToFilename(folder);
-      DeckStorage.write(filename, DeckStorage.onSave());
+      if (!folder)
+        return null;
+
+      const filename = folder + '/deck.json';
+
+      DeckStorage.write(filename, data);
       return filename;
     });
   }
@@ -136,51 +129,17 @@ class DeckStorage {
         { name: 'All Files', extensions: ['*'] }
       ]
     }).then(filename => {
-      pdfPromise = { resolve, reject };
+      if (!filename) {
+        resolve(null);
+        return;
+      }
+
+      Wrapper.once('exportAsPDF-reply', (e, response) => response.err
+        ? reject(response.err)
+        : resolve(filename));
+
       Wrapper.send('exportAsPDF', filename);
     }));
-  }
-
-  static initFonts(store) {
-    Wrapper.removeAllListeners('availableFonts');
-    Wrapper.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
-    Wrapper.send('getAvailableFonts');
-  }
-
-  static onQuit(callback) {
-    registerListener('quit', () => {
-      callback(() => Wrapper.send('quit'));
-    });
-  }
-
-  static registerListeners({onNew, onOpen, onSave, onExport, updateFilename}) {
-
-    DeckStorage.onOpen = onOpen;
-    DeckStorage.onSave = onSave;
-
-    Wrapper.removeAllListeners('new');
-    Wrapper.removeAllListeners('open');
-    Wrapper.removeAllListeners('save');
-    Wrapper.removeAllListeners('saveAs');
-    Wrapper.removeAllListeners('exportAsPDF');
-    Wrapper.removeAllListeners('exportAsPDF-reply');
-
-    registerListener('new', onNew);
-    registerListener('open', async () => {
-      const deck = await DeckStorage.open();
-      if (deck)
-        onOpen(deck)
-    });
-    registerListener('save', async (e, ...args) => updateFilename(await DeckStorage.save()));
-    registerListener('saveAs', async (e, ...args) => updateFilename(await DeckStorage.saveAs()));
-    registerListener('exportAsPDF', onExport);
-    registerListener('exportAsPDF-reply', (e, response) => {
-      if ( !pdfPromise )
-        return;
-
-      response.err ? pdfPromise.reject(response.err) : pdfPromise.resolve(response.data);
-      pdfPromise = null;
-    });
   }
 }
 
