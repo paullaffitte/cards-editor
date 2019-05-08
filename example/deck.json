@@ -1,0 +1,153 @@
+{
+    "filename": "/home/onehandedpenguin/dev/personal_projects/tek3/cards-editor/example/deck.json",
+    "cardsConfig": {
+        "nameTransform": {
+            "y": 50,
+            "scale": 22,
+            "color": "#ffffff",
+            "font": "Abyssinica SIL"
+        },
+        "descriptionTransform": {
+            "y": 70,
+            "scale": 12,
+            "color": "#360404",
+            "font": "Times New Roman"
+        },
+        "hpTransform": {
+            "x": 93,
+            "y": 93,
+            "scale": 42,
+            "color": "#ffe700",
+            "font": "Arial"
+        },
+        "attackTransform": {
+            "x": 10,
+            "y": 93,
+            "scale": 42,
+            "color": "#d20000"
+        }
+    },
+    "exportConfig": {
+        "cardsQuantity": {
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 10
+        },
+        "dpi": 300,
+        "spacing": 5
+    },
+    "version": "1.1.0",
+    "cards": [
+        {
+            "effects": [
+                "10e91c90-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
+            "name": "card name",
+            "description": "this is a description",
+            "hp": 3,
+            "attack": 7,
+            "thumbnail": "card-thumbnail",
+            "background": "card-background",
+            "id": "1",
+            "type": "minion",
+            "thumbnailTransform": {
+                "x": 50,
+                "y": 25,
+                "scale": 1.4
+            }
+        },
+        {
+            "effects": [
+                "10e91c90-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
+            "name": "card name 2",
+            "hp": 4,
+            "attack": 27,
+            "description": "this is a description!!!",
+            "id": "2",
+            "background": "card-background",
+            "thumbnail": "placeholder2",
+            "type": "minion",
+            "thumbnailTransform": {
+                "x": 50,
+                "y": 26,
+                "scale": 2.1
+            }
+        },
+        {
+            "effects": [
+                "38905380-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
+            "name": "card name 3",
+            "hp": 30,
+            "attack": 7,
+            "description": "This chicken speaks french, thus it can pull",
+            "id": "3",
+            "background": "card-background",
+            "thumbnail": "git_poule",
+            "type": "minion",
+            "thumbnailTransform": {
+                "x": 50,
+                "y": 25,
+                "scale": 0.3
+            }
+        },
+        {
+            "effects": [
+                "118de810-546a-11e9-b0d5-ffc68b73b6a3",
+                "11fe5d20-546a-11e9-b0d5-ffc68b73b6a3"
+            ],
+            "name": "card name 4",
+            "hp": 3,
+            "attack": 5,
+            "description": "Parse your opponent configuration",
+            "id": "4",
+            "background": "card-background",
+            "thumbnail": "packratjs",
+            "type": "spell",
+            "thumbnailTransform": {
+                "x": 100,
+                "y": 25
+            }
+        },
+        {
+            "effects": [],
+            "type": "minion",
+            "id": "32739550-5485-11e9-b20a-0d181d9cf8e7",
+            "name": "dfsdfjshdfkjhsdfkjh",
+            "description": "ksjdhfksjdfh",
+            "hp": 1,
+            "attack": 1
+        }
+    ],
+    "effects": [
+        {
+            "id": "10e91c90-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "bonjour"
+        },
+        {
+            "id": "118de810-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "test"
+        },
+        {
+            "id": "11fe5d20-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "aze"
+        },
+        {
+            "id": "38905380-546a-11e9-b0d5-ffc68b73b6a3",
+            "description": "Combo: one shot your opponent"
+        },
+        {
+            "id": "736a3e80-546a-11e9-b0d5-ffc68b73b6a3"
+        }
+    ],
+    "resources": {
+        "git_poule": "git_poule.png",
+        "placeholder2": "placeholder2.png",
+        "Screenshot from 2018-04-06 23-15-19": "Screenshot from 2018-04-06 23-15-19.png",
+        "packratjs": "packratjs.png",
+        "card-background": "card-background.png",
+        "card-thumbnail": "card-thumbnail.png"
+    }
+}
