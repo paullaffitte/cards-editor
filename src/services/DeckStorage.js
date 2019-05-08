@@ -2,24 +2,6 @@ import Wrapper from '../services/Wrapper';
 import { runMigrations } from './DeckMigration';
 import semver from 'semver'
 
-const cleanList = ({original, updated, ...item}) => item;
-
-const cleanResources = resources => {
-  const cleanResources = {};
-  for (let id in resources) {
-    const { path } = resources[id];
-    cleanResources[id] = path;
-  }
-  return cleanResources;
-};
-
-const cleanDeck = ({openAt, updated, cards, effects, resources, ...data}) => ({
-  ...data,
-  cards: cards.map(cleanList),
-  effects: effects.map(cleanList),
-  resources: cleanResources(resources)
-});
-
 const registerListener = (name, callback) => {
   Wrapper.on(name, async (event, ...args) => {
     console.log(`${name} event received`);
@@ -63,7 +45,13 @@ const unpackDeck = deck => {
   return { ...deck, resources };
 }
 
+let actions = null;
+
 class DeckStorage {
+
+  static init(reduxActions) {
+    actions = reduxActions;
+  }
 
   static read(filename) {
     const content = Wrapper.readDeck(filename);
@@ -72,8 +60,8 @@ class DeckStorage {
     return packedDeck ? unpackDeck(packedDeck) : null;
   }
 
-  static write(filename, data) {
-    return Wrapper.writeDeck(filename, cleanDeck(data));
+  static write(filename) {
+    actions.writeDeck(filename);
   }
 
   static open(filename) {
@@ -97,15 +85,15 @@ class DeckStorage {
     }).then(loadDeck);
   }
 
-  static save({ filename, ...data }) {
+  static save({ filename }) {
     if (!filename)
-      return DeckStorage.saveAs(data);
+      return DeckStorage.saveAs({ filename });
 
-    DeckStorage.write(filename, data);
+    DeckStorage.write(filename);
     return filename;
   }
 
-  static saveAs({ filename, ...data }) {
+  static saveAs({ filename }) {
     return Wrapper.openFile({
       title: 'Save in a folder',
       properties: [ 'openDirectory' ]
@@ -115,7 +103,7 @@ class DeckStorage {
 
       const filename = folder + '/deck.json';
 
-      DeckStorage.write(filename, data);
+      DeckStorage.write(filename);
       return filename;
     });
   }

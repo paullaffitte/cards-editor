@@ -1,5 +1,6 @@
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getItems, getEditedItem } from '../selectors/deck';
+import Wrapper from '../../services/Wrapper';
+import { getItems, getEditedItem, getCurrentDeck } from '../selectors/deck';
 
 const selectItem = (type, id) => {
   return {
@@ -139,6 +140,35 @@ const thunkActions = {
         return;
       }
       updateCardSize();
+    };
+  },
+
+  writeDeck: filename => {
+    const cleanList = ({original, updated, ...item}) => item;
+
+    const cleanResources = resources => {
+      const cleanResources = {};
+      for (let id in resources) {
+        const { path } = resources[id];
+        cleanResources[id] = path;
+      }
+      return cleanResources;
+    };
+
+    const cleanDeck = ({openAt, updated, cards, effects, resources, ...data}) => ({
+      ...data,
+      cards: cards.map(cleanList),
+      effects: effects.map(cleanList),
+      resources: cleanResources(resources)
+    });
+
+    return async (dispatch, getState) => {
+      const getDeck = () => getCurrentDeck(getState());
+      const dispatchSetRessource = resource => dispatch(actions.setResource(resource));
+      const updates = await Wrapper.writeResources(filename, getDeck().resources);
+
+      await Promise.all(updates.map(dispatchSetRessource));
+      Wrapper.writeDeck(filename, cleanDeck(getDeck()));
     };
   },
 };

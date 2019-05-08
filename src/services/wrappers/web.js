@@ -5,6 +5,8 @@ export default {
   },
   on: (event, callback) => {
   },
+  once: (event, callback) => {
+  },
   off: (event, callback) => {
   },
   send: (event, payload) => {
@@ -14,6 +16,8 @@ export default {
   // readDeck: (filename) => {
   // },
   // writeDeck: (filename, data) => {
+  // },
+  // writeResources: (resources) => {
   // },
   // openFile: (opts) => {
   // },

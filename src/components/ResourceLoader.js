@@ -17,12 +17,12 @@ class ResourceLoader extends Component {
   render() {
     return (
       <div style={{ display: 'none' }} >
-      { Object.values(this.props.resources).map(resource => (
+      { Object.values(this.props.resources).map(resource => resource.id ? (
         <img ref={ resource.id } key={ `${resource.id}-${this.props.openAt}` }
           src={ resource.src }
           onLoad={ () => this.onLoad(this.refs[resource.id], resource) }
           alt="loader" />
-      )) }
+      ) : null ) }
       </div>
     );
   }

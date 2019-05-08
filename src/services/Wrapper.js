@@ -41,6 +41,10 @@ class Wrapper {
     throw new Error('Not implemented');
   }
 
+  static writeResources(resources) {
+    throw new Error('Not implemented');
+  }
+
   static openFile(opts) {
     throw new Error('Not implemented');
   }

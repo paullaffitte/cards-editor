@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, bindActionCreators } from 'redux'
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { Layout, Modal } from 'antd';
@@ -12,6 +12,7 @@ import DeckViewer from './components/DeckViewer';
 import StatusBar from './components/StatusBar';
 import ResourceLoader from './components/ResourceLoader';
 import DeckActions from './state/actions/deck';
+import DeckStorage from './services/DeckStorage';
 import Wrapper from './services/Wrapper';
 
 const store = createStore(
@@ -21,6 +22,7 @@ const store = createStore(
 
 const quit = () => Wrapper.send('quit');
 
+DeckStorage.init(bindActionCreators(DeckActions, store.dispatch));
 Wrapper.init();
 Wrapper.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
 Wrapper.on('quit', () => getCurrentDeck(store.getState()).updated ? Modal.confirm({
