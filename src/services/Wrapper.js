@@ -37,11 +37,15 @@ class Wrapper {
     throw new Error('Not implemented');
   }
 
+  static getResourcesPath(filename, path) {
+    throw new Error('Not implemented');
+  }
+
   static writeDeck(filename, data) {
     throw new Error('Not implemented');
   }
 
-  static writeResources(resources) {
+  static writeResources(filename, resources) {
     throw new Error('Not implemented');
   }
 

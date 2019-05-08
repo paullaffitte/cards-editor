@@ -1,5 +1,6 @@
 import semver from 'semver';
 import { notification } from 'antd';
+import Wrapper from './Wrapper';
 
 const makeMigration = (version, migration) => ({
   version,
@@ -18,6 +19,11 @@ const migrations = [
       placement: 'bottomLeft',
       duration: 10
     });
+
+    Object.keys(newDeck.resources).forEach(id => newDeck.resources[id] = { id, path: newDeck.resources[id] });
+    const updates = Wrapper.writeResources(filename, newDeck.resources);
+    updates.forEach(({ id, path }) => newDeck.resources[id] = path.split('/').pop());
+
     return newDeck;
   }),
 ];

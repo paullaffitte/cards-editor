@@ -15,6 +15,8 @@ export default {
   },
   // readDeck: (filename) => {
   // },
+  // getResourcesPath: (filename, path) => {
+  // }
   // writeDeck: (filename, data) => {
   // },
   // writeResources: (resources) => {

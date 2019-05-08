@@ -2,13 +2,6 @@ import Wrapper from '../services/Wrapper';
 import { runMigrations } from './DeckMigration';
 import semver from 'semver'
 
-const registerListener = (name, callback) => {
-  Wrapper.on(name, async (event, ...args) => {
-    console.log(`${name} event received`);
-    await callback(event, ...args);
-  });
-};
-
 const handleVersions = deck => {
   const appVersion = window.appVersion;
 
@@ -30,11 +23,11 @@ const handleVersions = deck => {
   return deck;
 }
 
-const unpackDeck = deck => {
+const unpackDeck = (filename, deck) => {
   const resources = {};
 
   for (let id in deck.resources) {
-    const path = deck.resources[id];
+    const path = Wrapper.getResourcesPath(filename, deck.resources[id]);
     resources[id] = {
       id: id,
       path: path,
@@ -57,7 +50,7 @@ class DeckStorage {
     const content = Wrapper.readDeck(filename);
     const packedDeck = handleVersions({ ...content, filename, openAt: Date.now() });
 
-    return packedDeck ? unpackDeck(packedDeck) : null;
+    return packedDeck ? unpackDeck(filename, packedDeck) : null;
   }
 
   static write(filename) {
@@ -65,8 +58,11 @@ class DeckStorage {
   }
 
   static open(filename) {
-    const loadDeck = (filename) => {
-      const deck = DeckStorage.read(filename);
+    const loadDeck = (fname) => {
+      if (!fname)
+        return null;
+
+      const deck = DeckStorage.read(fname);
       return deck ? deck : null;
     }
 

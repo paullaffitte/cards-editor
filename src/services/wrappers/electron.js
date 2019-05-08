@@ -26,16 +26,25 @@ export default {
   readDeck: (filename) => {
     return JSON.parse(fs.readFileSync(filename));
   },
-  writeDeck: (filename, data) => {
+  getResourcesPath: (filename, path) => {
+    const { resourcesFolder } = getFolders(filename);
+    return resourcesFolder + '/' + path;
+  },
+  writeDeck: (filename, deck) => {
     const { projectFolder, resourcesFolder } = getFolders(filename);
 
     if (!fs.existsSync(projectFolder))
       fs.promises.mkdir(projectFolder, { recursive: true });
 
-    fs.writeFileSync(filename, JSON.stringify(data));
+    Object.keys(deck.resources).forEach(id => {
+      const path = deck.resources[id];
+      deck.resources[id] = path.slice(resourcesFolder.length + 1);
+    });
+
+    fs.writeFileSync(filename, JSON.stringify(deck));
   },
   writeResources: (filename, resources) => {
-    const { projectFolder, resourcesFolder } = getFolders(filename);
+    const { resourcesFolder } = getFolders(filename);
 
     if (!fs.existsSync(resourcesFolder))
       fs.promises.mkdir(resourcesFolder, { recursive: true });
