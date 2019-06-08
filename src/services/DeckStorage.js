@@ -1,6 +1,7 @@
 import Wrapper from '../services/Wrapper';
 import { runMigrations } from './DeckMigration';
-import semver from 'semver'
+import semver from 'semver';
+import { message } from 'antd';
 
 const handleVersions = deck => {
   const appVersion = window.appVersion;
@@ -83,25 +84,33 @@ class DeckStorage {
 
   static save({ filename }) {
     if (!filename)
-      return DeckStorage.saveAs({ filename });
+      return DeckStorage.saveAs();
 
     DeckStorage.write(filename);
     return filename;
   }
 
-  static saveAs({ filename }) {
-    return Wrapper.openFile({
+  static async saveAs() {
+    const filename = await Wrapper.openFile({
       title: 'Save in a folder',
-      properties: [ 'openDirectory' ]
+      properties: [ 'openDirectory' ],
+      shouldBeEmpty: true
     }).then(folder => {
-      if (!folder)
-        return null;
+      if (!folder || folder.error)
+        return folder;
 
       const filename = folder + '/deck.json';
 
       DeckStorage.write(filename);
       return filename;
     });
+
+    if (filename.error) {
+      message.error(filename.error);
+      return null;
+    }
+
+    return filename;
   }
 
   static exportAsPDF() {

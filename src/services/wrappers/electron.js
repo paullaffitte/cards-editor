@@ -83,6 +83,12 @@ export default {
         return;
       }
 
+      if (opts.properties.includes('openDirectory') && opts.shouldBeEmpty) {
+        const folderFiles = fs.readdirSync(filenames[0]);
+        if (folderFiles.length)
+          resolve({ error: 'This directory is not empty. You can only save your deck in an empty folder.' });
+      }
+
       resolve(filenames[0]);
     }));
   },
