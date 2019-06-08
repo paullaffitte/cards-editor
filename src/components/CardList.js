@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { getEditedItem, getResourceById } from '../state/selectors/deck';
 import ActionsTypes from '../constants/ActionsTypes';
-import List from './List';
+import ItemList from './ItemList';
 
 class CardList extends Component {
   render() {
     return (
-      <List
+      <ItemList
         type={ ActionsTypes.Item.CARD }
         preprocess={ (item, state) => (item.type && item.type !== this.props.cardsType ? null : {
           ...item,

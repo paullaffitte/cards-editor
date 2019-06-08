@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, InputNumber, Row, Col, Tooltip, Icon } from 'antd';
-import List from './List';
+import ItemList from './ItemList';
 import ActionsTypes from '../constants/ActionsTypes';
 import DeckActions from '../state/actions/deck';
 import { getResourceById, getExportConfig } from '../state/selectors/deck';
@@ -68,7 +68,7 @@ class ExportForm extends Component {
         </Row>
 
         <h2>Cards quantity</h2>
-        <List
+        <ItemList
           type={ ActionsTypes.Item.CARD }
           prefix="export"
           preprocess={ ({thumbnail, ...item}, state) => item }

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import ActionsTypes from '../constants/ActionsTypes';
-import List from './List';
+import ItemList from './ItemList';
 
 class EffectList extends Component {
 
   render() {
     return (
-      <List
+      <ItemList
         type={ ActionsTypes.Item.EFFECT }
         preprocess={ this.props.preprocess }
         renderItem={ item => (

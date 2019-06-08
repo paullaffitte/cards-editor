@@ -7,7 +7,7 @@ import DeckActions from '../state/actions/deck';
 import FakeBackground from './FakeBackground';
 import '../styles/List.scss';
 
-class List extends Component {
+class ItemList extends Component {
 
   selectItem = (item, edit) => {
     if (!edit) {
@@ -66,4 +66,4 @@ const mapStateToProps = state => ({
   items: (type, preprocess) => getItems(type, state).map(item => preprocess(item, state)).filter(Boolean)
 });
 
-export default connect(mapStateToProps)(List);
+export default connect(mapStateToProps)(ItemList);
