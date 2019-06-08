@@ -5,59 +5,54 @@ import { Popconfirm } from 'antd';
 import { getItems } from '../state/selectors/deck';
 import DeckActions from '../state/actions/deck';
 import FakeBackground from './FakeBackground';
-import '../styles/List.scss';
+import List from './List';
 
 class ItemList extends Component {
 
-  selectItem = (item, edit) => {
-    if (!edit) {
-      if (!this.props.onEdit)
-        this.props.dispatch(DeckActions.selectItem(this.props.type, item.id))
-      if (this.props.onSelect)
-        this.props.onSelect(item);
-    } else {
-      this.props.dispatch(DeckActions.selectItem(this.props.type, item.id))
-      if (this.props.onEdit)
-        this.props.onEdit(item);
-    }
+  selectItem = item => {
+    this.props.dispatch(DeckActions.selectItem(this.props.type, item.id));
+    if (this.props.onSelect)
+      this.props.onSelect(item);
   };
+
+  editItem = item => {
+    this.props.dispatch(DeckActions.selectItem(this.props.type, item.id));
+    if (this.props.onEdit)
+      this.props.onEdit(item);
+  }
 
   deleteItem = item => this.props.dispatch(DeckActions.deleteItem(this.props.type, item.id));
 
   renderItem = item => {
-    const className       = [ 'list-item', item.updated ? 'updated' : '', item.className ].join(' ');
-
     return (
-      <div key={item.id} className={className} style={{position: 'relative'}}>
-        <Popconfirm className="list-item-button delete"
-          title="Are you sure to delete this item ? (it can't be undone)" placement="left"
-          onConfirm={() => this.deleteItem(item)}
-          okText="Yes" cancelText="No">
-          <Icon type="close" />
-        </Popconfirm>
-        { !this.props.onEdit ? null : <Icon type="edit" className="list-item-button edit" onClick={() => this.selectItem(item, true)} /> }
-        <FakeBackground src={ item.thumbnail } onClick={() => this.selectItem(item)}>
-          <div className="content">
-            {this.props.renderItem(item)}
-          </div>
-        </FakeBackground>
-      </div>
+      <FakeBackground src={ item.thumbnail }>
+        <div className="content">
+          {this.props.renderItem(item)}
+        </div>
+      </FakeBackground>
     );
   };
 
   render() {
-    const prefix = this.props.prefix ? (this.props.prefix + '-') : '';
+    const prefix = [ this.props.prefix, this.props.type.toLowerCase() ].filter(Boolean).join('-');
     const items = this.props.items(this.props.type, this.props.preprocess);
 
     if (this.props.sort)
       items.sort(this.props.sort);
 
     return (
-      <div className={'List ' + prefix + this.props.type.toLowerCase() + '-list' }>
-        <div className="items">
-          {(items).map(this.renderItem)}
-        </div>
-      </div>
+      <List
+        prefix={ prefix }
+        items={ items.map(item => {
+          item.className = [ item.updated ? 'updated' : '', item.className ].join(' ')
+          return item;
+        }) }
+        renderItem={ this.renderItem }
+        itemStyle={{ position: 'relative' }}
+        onSelect={ this.selectItem }
+        onDelete={ this.deleteItem }
+        onEdit={ this.props.onEdit ? this.editItem : null }
+      />
     );
   }
 }

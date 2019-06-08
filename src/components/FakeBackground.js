@@ -24,7 +24,7 @@ class FakeBackground extends Component {
         <div style={{ overflow: 'hidden', position: 'absolute' }}>
           { this.props.src ? (<img src={ this.props.src } alt="" />) : null }
         </div>
-        <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
+        <div className="full-size" style={{ position: 'absolute' }}>
           { this.props.children }
         </div>
       </Container>
