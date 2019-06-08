@@ -13,15 +13,18 @@ const makeMigration = (version, migration) => ({
 const migrations = [
   makeMigration('1.2.0', deck => {
     const { filename, ...newDeck } = deck;
+    const projectFolder = filename.split('.').shift();
+
+    newDeck.filename = projectFolder + '/deck.json';
     notification.warning({
       message: 'Deck from an old version',
-      description: 'This deck is from an older version than your software. This version now save projects in folders instead of plain files, thus a new project location will be asked at next save.',
+      description: `This deck is from an older version than your software. This version now save projects in folders instead of plain files. Thus we moved your project in a new folder. (${projectFolder})`,
       placement: 'bottomLeft',
       duration: 10
     });
 
     Object.keys(newDeck.resources).forEach(id => newDeck.resources[id] = { id, path: newDeck.resources[id] });
-    const updates = Wrapper.writeResources(filename, newDeck.resources);
+    let updates = Wrapper.writeResources(newDeck.filename, newDeck.resources);
     updates.forEach(({ id, path }) => newDeck.resources[id] = path.split('/').pop());
 
     return newDeck;

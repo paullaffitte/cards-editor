@@ -23,7 +23,7 @@ const handleVersions = deck => {
   return deck;
 }
 
-const unpackDeck = (filename, deck) => {
+const unpackDeck = ({ filename, ...deck }) => {
   const resources = {};
 
   for (let id in deck.resources) {
@@ -35,7 +35,7 @@ const unpackDeck = (filename, deck) => {
     };
   }
 
-  return { ...deck, resources };
+  return { ...deck, resources, filename };
 }
 
 let actions = null;
@@ -50,7 +50,7 @@ class DeckStorage {
     const content = Wrapper.readDeck(filename);
     const packedDeck = handleVersions({ ...content, filename, openAt: Date.now() });
 
-    return packedDeck ? unpackDeck(filename, packedDeck) : null;
+    return packedDeck ? unpackDeck(packedDeck) : null;
   }
 
   static write(filename) {

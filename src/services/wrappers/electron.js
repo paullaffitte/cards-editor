@@ -12,6 +12,14 @@ const getFolders = (filename) => {
   }
 };
 
+function mkdirSyncRecursivePatched(path) {
+  const parent = path.split('/').slice(0, -1).join('/');
+
+  if (!fs.existsSync(parent))
+    mkdirSyncRecursivePatched(parent);
+  fs.mkdirSync(path);
+}
+
 export default {
   init: () => {
     window.appVersion = remote.app.getVersion();
@@ -34,7 +42,7 @@ export default {
     const { projectFolder, resourcesFolder } = getFolders(filename);
 
     if (!fs.existsSync(projectFolder))
-      fs.promises.mkdir(projectFolder, { recursive: true });
+      mkdirSyncRecursivePatched(projectFolder);
 
     Object.keys(deck.resources).forEach(id => {
       const path = deck.resources[id];
@@ -47,7 +55,7 @@ export default {
     const { resourcesFolder } = getFolders(filename);
 
     if (!fs.existsSync(resourcesFolder))
-      fs.promises.mkdir(resourcesFolder, { recursive: true });
+      mkdirSyncRecursivePatched(resourcesFolder);
 
     return Object.keys(resources).map(id => {
       const { path, ...resource } = resources[id];
