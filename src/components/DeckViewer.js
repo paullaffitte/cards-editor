@@ -31,7 +31,7 @@ class DeckViewer extends Component {
 
     return (
       <div key={ JSON.stringify(position) } className="card-container" style={ style }>
-        <Card { ...card } />
+        <Card data={ card } />
       </div>
     )
   };

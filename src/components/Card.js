@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getResourceById, getEffectsByIds, getCardsConfig } from '../state/selectors/deck';
+import { getItemById, getResourceById, getEffectsByIds } from '../state/selectors/deck';
 import '../styles/Card.scss';
 
 const userToUnit = unit => num => parseInt(num ? num : '0') + unit;
@@ -10,14 +10,14 @@ const userToPt = userToUnit('pt');
 class Card extends Component {
 
   getScale() {
-    return this.props.background.width && this.props.width
-      ? 1 / this.props.background.width * this.props.width
+    return this.props.data.background.width && this.props.width
+      ? 1 / this.props.data.background.width * this.props.width
       : 1;
   }
 
   getThumbnailStyle() {
-    const { width, height } = this.props.thumbnail;
-    const transform = this.props.thumbnailTransform ? this.props.thumbnailTransform : {};
+    const { width, height } = this.props.data.thumbnail;
+    const transform = this.props.data.thumbnailTransform ? this.props.data.thumbnailTransform : {};
     const thumbnailScale = transform.scale ? transform.scale : 1;
 
     return {
@@ -33,7 +33,7 @@ class Card extends Component {
       x: 50,
       y: 50,
       scale: 12,
-      ...this.props[`${name}Transform`]
+      ...this.props.data[`${name}Transform`]
     };
 
     return (
@@ -44,16 +44,17 @@ class Card extends Component {
         color: transform.color,
         fontFamily: transform.font
       }}>
-        {customValue ? customValue : this.props[name]}
+        {customValue ? customValue : this.props.data[name]}
       </div>
     );
   };
 
   render() {
-    const effects = this.props.effects.map(({ description }) => description).filter(Boolean).join('. ');
-    const { width, height } = this.props.background;
+    const card = this.props.data;
+    const effects = card.effects.map(({ description }) => description).filter(Boolean).join('. ');
+    const { width, height } = card.background;
     const cardStyle = {
-      ...this.props.style,
+      ...card.style,
       width: width ? width : this.props.cardSize.width,
       height: height ? height : this.props.cardSize.height,
       transform: `scale(${this.getScale()})`
@@ -61,20 +62,20 @@ class Card extends Component {
 
     return (
       <div className="Card" style={cardStyle}>
-        {this.props.thumbnail.src ? <img
+        {card.thumbnail.src ? <img
           alt="thumbnail"
           className="thumbnail positionable"
-          src={ this.props.thumbnail.src }
+          src={ card.thumbnail.src }
           style={ this.getThumbnailStyle() } />
         : null}
-        {this.props.background.src ? <img
+        {card.background.src ? <img
           alt="background"
           className="background"
-          src={ this.props.background.src } />
+          src={ card.background.src } />
         : null}
         {this.renderText('name')}
-        {this.renderText('description', [effects, effects ? '.\n' : '', this.props.description])}
-        {this.props.type === 'minion' ? (
+        {this.renderText('description', [effects, effects ? '.\n' : '', card.description])}
+        {card.type === 'minion' ? (
           <div>
             {this.renderText('hp')}
             {this.renderText('attack')}
@@ -85,37 +86,47 @@ class Card extends Component {
   }
 }
 
-function mergeTransforms(transforms) {
+function mergeTransforms(t1, t2) {
   const transform = {};
 
   ['x', 'y', 'scale', 'color', 'font'].forEach(field => {
-    const value = transforms
-      .filter(Boolean)
-      .map(({ [field]: value }) => value)
-      .filter(Boolean)
-      .shift();
-
-    if (value)
-      transform[field] = value;
+    if (t1) {
+      transform[field] = t1[field];
+    } else if (t2) {
+      transform[field] = t2[field];
+    }
   });
 
   return transform;
 }
 
+function mergeCards(...cards) {
+  return cards.reduce((acc, card) => {
+    Object.keys(card).forEach(key => {
+      if (typeof card[key] == 'string' && card[key].length == 0)
+        delete card[key];
+    });
+    return { ...card, ...acc }
+  }, {});
+};
+
 const mapStateToProps = (state, props) => {
-  const cardsConfig = getCardsConfig(state);
+  const models = props.data.models.map(id => getItemById(state, { type: 'CARD', id }));
   const transforms = ['name', 'description', 'attack', 'hp'].reduce((acc, name) => {
     const transformName = name + 'Transform';
-    const transform = mergeTransforms([props[transformName], cardsConfig[transformName]]);
-    return { ...acc, [transformName]: transform }
+    return { ...acc, [transformName]: props.data[transformName] }
   }, {});
 
+  const card = mergeCards(props.data, ...models);
+
   return {
-    thumbnail: getResourceById(state, props.thumbnail),
-    background: getResourceById(state, props.background),
-    effects: getEffectsByIds(state, props.effects),
+    data: {
+      ...card,
+      thumbnail: getResourceById(state, card.thumbnail),
+      background: getResourceById(state, card.background),
+      effects: getEffectsByIds(state, card.effects),
+    },
     cardSize: state.deck.cardSize,
-    ...transforms
   }
 };
 

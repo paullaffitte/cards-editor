@@ -18,7 +18,7 @@ class CardEditor extends Component {
     ) : (
       <div className="CardEditor">
         <div className="panel card-preview" style={{ width: `calc(${cardCssWidth})` }}>
-          <Card { ...this.props.data } width={ cardWidth } />
+          <Card data={ this.props.data } width={ cardWidth } />
         </div>
         <div className="panel" style={{ width: `calc(100% - (${cardCssWidth}))` }}>
           <CardForm data={ this.props.data } />
