@@ -5,7 +5,9 @@ import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 import EffectPicker from './EffectPicker';
 import TransformInput from './TransformInput';
+import ItemChooser from './ItemChooser';
 import { getEditedCard, getCardsConfig } from '../state/selectors/deck';
+import ActionsTypes from '../constants/ActionsTypes';
 
 const { Option } = Select;
 const TabPane = Tabs.TabPane;
@@ -65,21 +67,34 @@ class CardForm extends Component {
           </Row>
         )
       }
-        <Row>
-          <Col span={12}>
-            <Form.Item label="Thumbnail">
-              {getFieldDecorator('thumbnail')(<ResourcePicker />)}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Background">
-              {getFieldDecorator('background')(<ResourcePicker />)}
-            </Form.Item>
-          </Col>
-        </Row>
-      <Form.Item label="Effects">
-        {getFieldDecorator('effects')(<EffectPicker />)}
-      </Form.Item>
+
+      <Row>
+        <Col span={12}>
+          <Form.Item label="Thumbnail">
+            {getFieldDecorator('thumbnail')(<ResourcePicker />)}
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Background">
+            {getFieldDecorator('background')(<ResourcePicker />)}
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col span={12}>
+          <Form.Item label="Effects">
+            {getFieldDecorator('effects')(<EffectPicker />)}
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Models">
+            {getFieldDecorator('models')(
+              <ItemChooser type={ ActionsTypes.Item.CARD } edition={ true }/>
+            )}
+          </Form.Item>
+        </Col>
+      </Row>
     </TabPane>
   );
 

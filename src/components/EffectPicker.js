@@ -68,14 +68,14 @@ class EffectPicker extends Component {
   render() {
     return (
       <div className="EffectPicker">
+        <Button onClick={() => this.addEffect()} style={{ marginBottom: '0.5em' }}>
+          <Icon type="plus" /> New effect
+        </Button>
         <EffectList
           onSelect={this.onSelect}
           preprocess={this.preprocess}
           onEdit={this.onEdit}
         />
-        <Button onClick={() => this.addEffect()}>
-          <Icon type="plus" /> New effect
-        </Button>
 
         <Modal
           ref="modal"
