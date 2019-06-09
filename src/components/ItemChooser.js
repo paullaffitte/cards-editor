@@ -47,15 +47,17 @@ class ItemChooser extends Component {
     this.change(value);
   }
 
-  onDelete = async id => {
+  onDelete = async ({ id }) => {
     const itemIndex = this.state.value.findIndex(itemId => itemId === id);
     const value = [ ...this.state.value ];
 
-    value.pop(itemIndex);
+    value.splice(itemIndex, 1);
     this.change(value);
   }
 
   onEdit = item => this.props.edit(this.props.type, item.id);
+
+  preprocessOption = (item, id) => (item.id === id || !this.state.value.includes(item.id) ? item : null);
 
   renderItem = id => {
     return (
@@ -70,6 +72,7 @@ class ItemChooser extends Component {
         <ItemSelect
           type={ this.props.type }
           value={ id }
+          preprocess={ item => this.preprocessOption(item, id) }
           onChange={ update => this.onChange(id, update) }
           id={ id }
         />
@@ -83,6 +86,7 @@ class ItemChooser extends Component {
         <ItemSelect
           type={ this.props.type }
           value={ 'Add a model' }
+          preprocess={ this.preprocessOption }
           onChange={ this.onAdd }
           key={ 'new' }
         />

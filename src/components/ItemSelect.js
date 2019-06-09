@@ -29,7 +29,7 @@ class ItemSelect extends Component {
   };
 
   render() {
-    const items = this.props.items(this.props.type);
+    const items = this.props.items(this.props.type, this.props.preprocess ? this.props.preprocess : (i => i));
 
     if (this.props.sort)
       items.sort(this.props.sort);
@@ -55,12 +55,8 @@ class ItemSelect extends Component {
 }
 
 const mapStateToProps = state => ({
-  items: type => getItems(type, state),
+  items: (type, preprocess) => getItems(type, state).map(item => preprocess(item, state)).filter(Boolean),
   getItem: (type, id) => getItemById({ type, id })
 });
 
-const actions = {
-  // ...DeckActions
-};
-
-export default connect(mapStateToProps, actions)(ItemSelect);
+export default connect(mapStateToProps)(ItemSelect);
