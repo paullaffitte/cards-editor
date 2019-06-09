@@ -1,4 +1,5 @@
-import React, {Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import { Select, message } from 'antd';
 import DeckActions from '../state/actions/deck';
 import ItemSelect from './ItemSelect';
@@ -54,12 +55,15 @@ class ItemChooser extends Component {
     this.change(value);
   }
 
+  onEdit = item => this.props.edit(this.props.type, item.id);
+
   renderItem = id => {
     return (
       <Item
         key={ id }
+        item={{ id }}
         style={{ height: '2.8em' }}
-        onEdit={ this.props.onEdit }
+        onEdit={ this.props.edition === true ? this.onEdit : null }
         onDelete={ this.onDelete }
         confirmDelete="Are you sure to remove this model from this card?"
       >
@@ -88,4 +92,8 @@ class ItemChooser extends Component {
   }
 }
 
-export default ItemChooser;
+const actions = {
+  edit: DeckActions.selectItem
+};
+
+export default connect(null, actions)(ItemChooser);
