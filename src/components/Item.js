@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Icon } from 'antd';
 import { Popconfirm } from 'antd';
-import '../styles/List.scss';
+import '../styles/Item.scss';
 
 class Item extends Component {
 
@@ -20,17 +20,23 @@ class Item extends Component {
   };
 
   render() {
-    const item = this.props.item;
+    const { item, className, style } = this.props;
 
     return (
-      <div className={ this.props.className } style={ this.props.itemStyle }>
-        <Popconfirm className="list-item-button delete"
-          title={ this.props.title ? this.props.title : "Are you sure to delete this item ? (it can't be undone)"} placement="left"
-          onConfirm={() => this.deleteItem(item)}
-          okText="Yes" cancelText="No">
-          <Icon type="close" />
-        </Popconfirm>
-        { !this.props.onEdit ? null : <Icon type="edit" className="list-item-button edit" onClick={() => this.selectItem(item, true)} /> }
+      <div className={ 'Item ' + (className ? className : '') } style={ style }>
+        { this.props.confirmDelete ? (
+          <Popconfirm className="item-button delete"
+            title={ this.props.confirmDelete === true ? "Are you sure to delete this item ? (it can't be undone)" : this.props.confirmDelete } placement="left"
+            onConfirm={ () => this.deleteItem(item) }
+            okText="Yes" cancelText="No">
+            <Icon type="close" />
+          </Popconfirm>
+        ) : (
+          <div className="item-button delete">
+            <Icon type="close" onClick={() => this.deleteItem(item)} />
+          </div>
+        ) }
+        { !this.props.onEdit ? null : <Icon type="edit" className="item-button edit" onClick={() => this.selectItem(item, true)} /> }
         <div onClick={() => this.selectItem(item)} className="full-size">
           { this.props.children }
         </div>

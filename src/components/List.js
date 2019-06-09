@@ -7,15 +7,16 @@ import '../styles/List.scss';
 class List extends Component {
 
   renderItem = item => {
-    const className = [ 'list-item', item.className ].join(' ');
     return (
       <Item
-        className={ className }
+        className={ item.className + ' hoverable' }
+        style={ this.props.itemStyle }
         item={ item }
         key={ item.id }
         onEdit={ this.props.onEdit }
         onSelect={ this.props.onSelect }
         onDelete={ this.props.onDelete }
+        confirmDelete={ this.props.confirmDelete === undefined ? true : this.props.confirmDelete }
       >
         { this.props.renderItem(item) }
       </Item>

@@ -1,8 +1,8 @@
-import React, { bindActionCreators, Component, Fragment } from 'react';
-import { connect } from 'react-redux';
+import React, {Component, Fragment } from 'react';
 import { Select, message } from 'antd';
 import DeckActions from '../state/actions/deck';
 import ItemSelect from './ItemSelect';
+import Item from './Item';
 
 const { Option } = Select;
 
@@ -13,17 +13,22 @@ class ItemChooser extends Component {
   }
 
   static getDerivedStateFromProps(nextProps) {
-    if ('value' in nextProps) {
-      return {
-        value: nextProps.value,
-      };
+    return 'value' in nextProps ? {
+      value: nextProps.value ? nextProps.value : [],
+    } : [];
+  }
+
+  change = async value => {
+    if (this.props.onChange) {
+      this.props.onChange(value);
+    } else {
+      await this.setState({ value });
     }
-    return null;
   }
 
   onAdd = id => {
     if (this.state.value.findIndex(itemId => itemId === id) == -1) {
-      this.setState({ value: [ ...this.state.value, id ] });
+      this.change([ ...this.state.value, id ]);
     } else {
       message.warning('Model already added');
     }
@@ -36,19 +41,35 @@ class ItemChooser extends Component {
     if (itemIndex == -1) {
       throw new Error('Item not found');
     }
+
     value[itemIndex] = update;
-    this.setState({ value });
+    this.change(value);
   }
 
-  renderItem = (id) => {
+  onDelete = async id => {
+    const itemIndex = this.state.value.findIndex(itemId => itemId === id);
+    const value = [ ...this.state.value ];
+
+    value.pop(itemIndex);
+    this.change(value);
+  }
+
+  renderItem = id => {
     return (
-      <ItemSelect
-        type={ this.props.type }
-        value={ id }
-        onChange={ update => this.onChange(id, update) }
+      <Item
         key={ id }
-        id={ id }
-      />
+        style={{ height: '2.8em' }}
+        onEdit={ this.props.onEdit }
+        onDelete={ this.onDelete }
+        confirmDelete="Are you sure to remove this model from this card?"
+      >
+        <ItemSelect
+          type={ this.props.type }
+          value={ id }
+          onChange={ update => this.onChange(id, update) }
+          id={ id }
+        />
+      </Item>
     );
   };
 
@@ -67,12 +88,4 @@ class ItemChooser extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  // items: type => getItems(type, state)
-});
-
-const actions = {
-  // ...DeckActions
-};
-
-export default connect(mapStateToProps, actions)(ItemChooser);
+export default ItemChooser;

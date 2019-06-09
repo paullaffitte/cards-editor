@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Select } from 'antd';
 import { getItems, getItemById } from '../state/selectors/deck';
 import DeckActions from '../state/actions/deck';
-import Item from './Item';
 
 const { Option } = Select;
 
@@ -12,14 +11,12 @@ class ItemSelect extends Component {
   renderItem = item => {
     const parentId = (this.props.id ? this.props.id : '');
 
-    console.log(item.id + '-' + parentId, this.props.id, this.props.type)
-
     return (
       <Option
         value={ item.id }
         key={ item.id + '-' + parentId }
       >
-        { item.name }
+        { item.name ? item.name : <span className="comment">no name</span> }
       </Option>
     );
   };
@@ -28,7 +25,6 @@ class ItemSelect extends Component {
     if (!this.props.onChange)
       return;
 
-    console.log('this.props.onChange(id)', id)
     this.props.onChange(id);
   };
 
