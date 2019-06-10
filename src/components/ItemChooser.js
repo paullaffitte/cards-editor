@@ -57,7 +57,7 @@ class ItemChooser extends Component {
 
   onEdit = item => this.props.edit(this.props.type, item.id);
 
-  preprocessOption = (item, id) => (item.id === id || !this.state.value.includes(item.id) ? item : null);
+  preprocessOption = (item, id) => ((item.id === id || !this.state.value.includes(item.id)) && this.props.excludeId !== item.id ? item : null);
 
   renderItem = id => {
     return (

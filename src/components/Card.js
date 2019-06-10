@@ -111,7 +111,7 @@ function mergeCards(...cards) {
 };
 
 const mapStateToProps = (state, props) => {
-  const models = props.data.models.map(id => getItemById(state, { type: 'CARD', id }));
+  const models = props.data.models ? props.data.models.map(id => getItemById(state, { type: 'CARD', id })) : [];
   const transforms = ['name', 'description', 'attack', 'hp'].reduce((acc, name) => {
     const transformName = name + 'Transform';
     return { ...acc, [transformName]: props.data[transformName] }

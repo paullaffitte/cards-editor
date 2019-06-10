@@ -11,9 +11,22 @@ const makeMigration = (version, migration) => ({
 });
 
 const migrations = [
-  makeMigration('1.2.0', deck => {
+  makeMigration('1.1.0', deck => {
     const { filename, ...newDeck } = deck;
     const projectFolder = filename.split('.').shift();
+
+    newDeck.cards.forEach(card => {
+      card.models = [ 'global' ];
+    });
+
+    newDeck.cards.push({
+      ...newDeck.cardsConfig,
+      id: 'global',
+      name: 'global',
+      type: 'minion'
+    });
+
+    delete newDeck.cardsConfig;
 
     newDeck.filename = projectFolder + '/deck.json';
     notification.warning({
