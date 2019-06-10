@@ -1,6 +1,7 @@
+import { message } from 'antd';
 import ActionsTypes from '../../constants/ActionsTypes';
 import Wrapper from '../../services/Wrapper';
-import { getItems, getEditedItem, getCurrentDeck } from '../selectors/deck';
+import { getItems, getEditedItem, getCurrentDeck, getCards, getCardsByIds } from '../selectors/deck';
 
 const selectItem = (type, id) => {
   return {
@@ -94,9 +95,39 @@ const addItem = (type, item) => {
   };
 };
 
+function itemInUse(state, type, id) {
+  switch (type) {
+    case ActionsTypes.Item.CARD:
+      const cards = getCards(state);
+
+      const childsNames = cards.map(card => {
+        const models = getCardsByIds(state, card.models ? card.models : []);
+        const modelsIds = models.map(({ id }) => id);
+
+        if (modelsIds.includes(id)) {
+          return card.name;
+        }
+      }).filter(Boolean);
+
+      if (childsNames.length)
+        return `A card used as a model can\'t be deleted (${childsNames.join(', ')})`
+
+      break;
+    case ActionsTypes.Item.EFFECT:
+      break;
+  }
+}
+
 const deleteItem = (type, id) => {
   return (dispatch, getState) => {
     const state = getState();
+    const error = itemInUse(state, type, id);
+
+    if (error) {
+      message.error(error === true ? 'Item in use, it cannot be deleted' : error);
+      return;
+    }
+
     if (getEditedItem(type, state).id === id)
       dispatch(selectFirstItem(type, getItems(type, state)));
 
