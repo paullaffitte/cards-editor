@@ -8,7 +8,7 @@ Cards Editor is an open source software based on Electron and React with Redux. 
 ### Download release
 You can find installers for Windows and Linux in project's releases.
 
-[`latest (1.1.0)`](https://github.com/paullaffitte/cards-editor/releases/latest)
+[`latest (1.2.0)`](https://github.com/paullaffitte/cards-editor/releases/latest)
 
 ### Build
 Install the dependencies and build.
