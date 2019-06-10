@@ -90,11 +90,12 @@ function mergeTransforms(t1, t2) {
   const transform = {};
 
   ['x', 'y', 'scale', 'color', 'font'].forEach(field => {
-    if (t1) {
-      transform[field] = t1[field];
-    } else if (t2) {
-      transform[field] = t2[field];
-    }
+    const f1 = t1 ? t1[field] : null;
+    const f2 = t2 ? t2[field] : null;
+    const transformField = f2 || f1;
+
+    if (transformField)
+      transform[field] = transformField;
   });
 
   return transform;
@@ -106,7 +107,14 @@ function mergeCards(...cards) {
       if (typeof card[key] == 'string' && card[key].length === 0)
         delete card[key];
     });
-    return { ...card, ...acc }
+
+    const mergedCard = { ...card, ...acc };
+    for (let key in mergedCard) {
+      if (key.includes('Transform'))
+        mergedCard[key] = mergeTransforms(card[key], acc[key]);
+    }
+
+    return mergedCard;
   }, {});
 };
 

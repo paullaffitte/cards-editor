@@ -104,16 +104,16 @@ function itemInUse(state, type, id) {
         const models = getCardsByIds(state, card.models ? card.models : []);
         const modelsIds = models.map(({ id }) => id);
 
-        if (modelsIds.includes(id)) {
-          return card.name;
-        }
+        return modelsIds.includes(id) ? card.name : null;
       }).filter(Boolean);
 
       if (childsNames.length)
-        return `A card used as a model can\'t be deleted (${childsNames.join(', ')})`
+        return `A card used as a model can't be deleted (${childsNames.join(', ')})`;
 
       break;
     case ActionsTypes.Item.EFFECT:
+      break;
+    default:
       break;
   }
 }
