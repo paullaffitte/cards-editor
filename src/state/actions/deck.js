@@ -63,12 +63,6 @@ const actions = {
     }
   },
 
-  updateCardsConfig: cardsConfig => {
-    return {
-      type: ActionsTypes.UPDATE_CARDS_CONFIG,
-      payload: cardsConfig
-    };
-  },
   updateExportConfig: exportConfig => {
     return {
       type: ActionsTypes.UPDATE_EXPORT_CONFIG,

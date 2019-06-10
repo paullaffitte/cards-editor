@@ -11,7 +11,7 @@ const makeMigration = (version, migration) => ({
 });
 
 const migrations = [
-  makeMigration('1.1.0', deck => {
+  makeMigration('1.2.0', deck => {
     const { filename, ...newDeck } = deck;
     const projectFolder = filename.split('.').shift();
 

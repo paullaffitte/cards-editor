@@ -3,7 +3,6 @@ const initialState = {
     current: {
       filename: null,
       openAt: 0,
-      cardsConfig: {},
       cards: [],
       effects: [],
       resources: {},

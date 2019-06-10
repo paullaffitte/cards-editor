@@ -62,7 +62,7 @@ export const getCardsByIds = (state, ids) => getItemsByIds(state, {type: Actions
 export const getCardsConfig = createSelector(
   [ getCurrentDeck ],
   deck => {
-    return deck.cardsConfig;
+    return deck.cardsConfig ? deck.cardsConfig : {};
   }
 );
 

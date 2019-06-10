@@ -109,11 +109,6 @@ const deck = {
     });
   },
 
-  [ActionsTypes.UPDATE_CARDS_CONFIG]: (state, cardsConfig) => {
-    return deckUpdate(state, {
-      current: { cardsConfig: {$merge: cardsConfig} }
-    });
-  },
   [ActionsTypes.UPDATE_EXPORT_CONFIG]: (state, exportConfig) => {
     return deckUpdate(state, {
       current: { exportConfig: {$merge: exportConfig} }

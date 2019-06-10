@@ -6,7 +6,7 @@ import ResourcePicker from './ResourcePicker';
 import EffectPicker from './EffectPicker';
 import TransformInput from './TransformInput';
 import ItemChooser from './ItemChooser';
-import { getEditedCard, getCardsConfig } from '../state/selectors/deck';
+import { getEditedCard } from '../state/selectors/deck';
 import ActionsTypes from '../constants/ActionsTypes';
 
 const { Option } = Select;
@@ -112,8 +112,6 @@ class CardForm extends Component {
       <TransformInput key={ valueName } name={ name } />
     );
   };
-
-  updateCardsConfig = name => configField => this.props.dispatch(DeckActions.updateCardsConfig({[name]: configField}));
 
   render() {
     const { getFieldDecorator } = this.props.form;

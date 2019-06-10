@@ -1,32 +1,5 @@
 {
-    "filename": "/home/onehandedpenguin/dev/personal_projects/tek3/cards-editor/example/deck.json",
-    "cardsConfig": {
-        "nameTransform": {
-            "y": 50,
-            "scale": 22,
-            "color": "#ffffff",
-            "font": "Abyssinica SIL"
-        },
-        "descriptionTransform": {
-            "y": 70,
-            "scale": 12,
-            "color": "#360404",
-            "font": "Times New Roman"
-        },
-        "hpTransform": {
-            "x": 93,
-            "y": 93,
-            "scale": 42,
-            "color": "#ffe700",
-            "font": "Arial"
-        },
-        "attackTransform": {
-            "x": 10,
-            "y": 93,
-            "scale": 42,
-            "color": "#d20000"
-        }
-    },
+    "filename": "/home/onehandedpenguin/dev/personal_projects/tek3/cards-editor/deck/deck.json",
     "exportConfig": {
         "cardsQuantity": {
             "1": 10,
@@ -47,15 +20,18 @@
             "description": "this is a description",
             "hp": 3,
             "attack": 7,
-            "thumbnail": "card-thumbnail",
-            "background": "card-background",
+            "thumbnail": "card-thumbnail.png",
+            "background": "card-background.png",
             "id": "1",
             "type": "minion",
             "thumbnailTransform": {
                 "x": 50,
                 "y": 25,
                 "scale": 1.4
-            }
+            },
+            "models": [
+                "global"
+            ]
         },
         {
             "effects": [
@@ -66,14 +42,17 @@
             "attack": 27,
             "description": "this is a description!!!",
             "id": "2",
-            "background": "card-background",
-            "thumbnail": "placeholder2",
+            "background": "card-background.png",
+            "thumbnail": "placeholder2.png",
             "type": "minion",
             "thumbnailTransform": {
                 "x": 50,
                 "y": 26,
                 "scale": 2.1
-            }
+            },
+            "models": [
+                "global"
+            ]
         },
         {
             "effects": [
@@ -84,14 +63,17 @@
             "attack": 7,
             "description": "This chicken speaks french, thus it can pull",
             "id": "3",
-            "background": "card-background",
-            "thumbnail": "git_poule",
+            "background": "card-background.png",
+            "thumbnail": "git_poule.png",
             "type": "minion",
             "thumbnailTransform": {
                 "x": 50,
                 "y": 25,
                 "scale": 0.3
-            }
+            },
+            "models": [
+                "global"
+            ]
         },
         {
             "effects": [
@@ -103,13 +85,16 @@
             "attack": 5,
             "description": "Parse your opponent configuration",
             "id": "4",
-            "background": "card-background",
-            "thumbnail": "packratjs",
+            "background": "card-background.png",
+            "thumbnail": "packratjs.png",
             "type": "spell",
             "thumbnailTransform": {
                 "x": 100,
                 "y": 25
-            }
+            },
+            "models": [
+                "global"
+            ]
         },
         {
             "effects": [],
@@ -118,7 +103,41 @@
             "name": "dfsdfjshdfkjhsdfkjh",
             "description": "ksjdhfksjdfh",
             "hp": 1,
-            "attack": 1
+            "attack": 1,
+            "models": [
+                "global"
+            ]
+        },
+        {
+            "effects": [],
+            "nameTransform": {
+                "y": 50,
+                "scale": 22,
+                "color": "#ffffff",
+                "font": "Abyssinica SIL"
+            },
+            "descriptionTransform": {
+                "y": 70,
+                "scale": 12,
+                "color": "#360404",
+                "font": "Times New Roman"
+            },
+            "hpTransform": {
+                "x": 93,
+                "y": 93,
+                "scale": 42,
+                "color": "#ffe700",
+                "font": "Arial"
+            },
+            "attackTransform": {
+                "x": 10,
+                "y": 93,
+                "scale": 42,
+                "color": "#d20000"
+            },
+            "id": "global",
+            "name": "global",
+            "type": "minion"
         }
     ],
     "effects": [
@@ -143,11 +162,11 @@
         }
     ],
     "resources": {
-        "git_poule": "git_poule.png",
-        "placeholder2": "placeholder2.png",
-        "Screenshot from 2018-04-06 23-15-19": "Screenshot from 2018-04-06 23-15-19.png",
-        "packratjs": "packratjs.png",
-        "card-background": "card-background.png",
-        "card-thumbnail": "card-thumbnail.png"
+        "git_poule.png": "git_poule.png",
+        "placeholder2.png": "placeholder2.png",
+        "Screenshot from 2018-04-06 23-15-19.png": "Screenshot from 2018-04-06 23-15-19.png",
+        "packratjs.png": "packratjs.png",
+        "card-background.png": "card-background.png",
+        "card-thumbnail.png": "card-thumbnail.png"
     }
 }
