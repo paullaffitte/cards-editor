@@ -1,11 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Select, message } from 'antd';
+import { message } from 'antd';
 import DeckActions from '../state/actions/deck';
 import ItemSelect from './ItemSelect';
 import Item from './Item';
-
-const { Option } = Select;
 
 class ItemChooser extends Component {
 
@@ -28,7 +26,7 @@ class ItemChooser extends Component {
   }
 
   onAdd = id => {
-    if (this.state.value.findIndex(itemId => itemId === id) == -1) {
+    if (this.state.value.findIndex(itemId => itemId === id) === -1) {
       this.change([ ...this.state.value, id ]);
     } else {
       message.warning('Model already added');
@@ -39,7 +37,7 @@ class ItemChooser extends Component {
     const itemIndex = this.state.value.findIndex(itemId => itemId === id);
     const value = [ ...this.state.value ];
 
-    if (itemIndex == -1) {
+    if (itemIndex === -1) {
       throw new Error('Item not found');
     }
 

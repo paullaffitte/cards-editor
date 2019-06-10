@@ -103,7 +103,7 @@ function mergeTransforms(t1, t2) {
 function mergeCards(...cards) {
   return cards.reduce((acc, card) => {
     Object.keys(card).forEach(key => {
-      if (typeof card[key] == 'string' && card[key].length == 0)
+      if (typeof card[key] == 'string' && card[key].length === 0)
         delete card[key];
     });
     return { ...card, ...acc }
@@ -112,11 +112,6 @@ function mergeCards(...cards) {
 
 const mapStateToProps = (state, props) => {
   const models = props.data.models ? props.data.models.map(id => getItemById(state, { type: 'CARD', id })) : [];
-  const transforms = ['name', 'description', 'attack', 'hp'].reduce((acc, name) => {
-    const transformName = name + 'Transform';
-    return { ...acc, [transformName]: props.data[transformName] }
-  }, {});
-
   const card = mergeCards(props.data, ...models);
 
   return {

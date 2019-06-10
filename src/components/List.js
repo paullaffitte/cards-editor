@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Icon } from 'antd';
-import { Popconfirm } from 'antd';
 import Item from './Item';
 import '../styles/List.scss';
 

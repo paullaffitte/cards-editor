@@ -1,8 +1,7 @@
-import React, { bindActionCreators, Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Select } from 'antd';
 import { getItems, getItemById } from '../state/selectors/deck';
-import DeckActions from '../state/actions/deck';
 
 const { Option } = Select;
 

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon } from 'antd';
-import { Popconfirm } from 'antd';
 import { getItems } from '../state/selectors/deck';
 import DeckActions from '../state/actions/deck';
 import FakeBackground from './FakeBackground';
