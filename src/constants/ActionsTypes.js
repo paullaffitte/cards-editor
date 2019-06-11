@@ -4,6 +4,7 @@ const ActionsTypes = {
   ...keyMirror({
     SELECT_ITEM: null,
     UPDATE_ITEM: null,
+    REORDER_ITEM: null,
     STAGE_ITEMS: null,
     ADD_ITEM: null,
     DELETE_ITEM: null,

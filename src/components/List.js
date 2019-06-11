@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Item from './Item';
 import '../styles/List.scss';
 
 class List extends Component {
 
-  renderItem = item => {
+  renderItem = (item, index) => {
     return (
       <Item
         className={ item.className + ' hoverable' }
         style={ this.props.itemStyle }
         item={ item }
         key={ item.id }
+        index={ index }
         onEdit={ this.props.onEdit }
         onSelect={ this.props.onSelect }
         onDelete={ this.props.onDelete }
@@ -21,6 +23,14 @@ class List extends Component {
     );
   };
 
+  onDragEnd = ({ source, destination }) => {
+    if (!this.props.onReorder || !destination) {
+      return;
+    }
+
+    this.props.onReorder(source.index, destination.index);
+  };
+
   render() {
     const items = [ ...this.props.items ];
 
@@ -28,11 +38,23 @@ class List extends Component {
       items.sort(this.props.sort);
 
     return (
-      <div className={'List ' + this.props.prefix + '-list' } style={ this.props.style }>
-        <div className="items">
-          { (items).map(this.renderItem) }
-        </div>
-      </div>
+      <DragDropContext onDragEnd={ this.onDragEnd }>
+        <Droppable droppableId="droppable">
+          { provided => (
+            <div
+              className={'List ' + this.props.prefix + '-list' }
+              style={ this.props.style }
+              ref={ provided.innerRef }
+              { ...provided.droppableProps }
+            >
+              <div className="items">
+                { (items).map(this.renderItem) }
+                { provided.placeholder }
+              </div>
+            </div>
+          ) }
+        </Droppable>
+      </DragDropContext>
     );
   }
 }

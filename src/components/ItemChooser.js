@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
 import { message } from 'antd';
 import DeckActions from '../state/actions/deck';
@@ -53,14 +54,15 @@ class ItemChooser extends Component {
     this.change(value);
   }
 
-  onEdit = item => this.props.edit(this.props.type, item.id);
+  onEdit = item => this.props.editItem(this.props.type, item.id);
 
   preprocessOption = (item, id) => ((item.id === id || !this.state.value.includes(item.id)) && this.props.excludeId !== item.id ? item : null);
 
-  renderItem = id => {
+  renderItem = (id, index) => {
     return (
       <Item
         key={ id }
+        index={ index }
         item={{ id }}
         style={{ height: '2.8em' }}
         onEdit={ this.props.edition === true ? this.onEdit : null }
@@ -78,9 +80,13 @@ class ItemChooser extends Component {
     );
   };
 
+  // onDragEnd = item => {
+  //   this.props.updateItem
+  // };
+
   render() {
     return (
-      <Fragment>
+      <DragDropContext onDragEnd={ this.onDragEnd }>
         <ItemSelect
           type={ this.props.type }
           value={ 'Add a model' }
@@ -88,14 +94,24 @@ class ItemChooser extends Component {
           onChange={ this.onAdd }
           key={ 'new' }
         />
-        { this.state.value ? this.state.value.map(this.renderItem) : null }
-      </Fragment>
+        <Droppable droppableId="droppable2">
+          { provided => (
+            <div
+              ref={ provided.innerRef }
+            >
+              { this.state.value ? this.state.value.map(this.renderItem) : null }
+              { provided.placeholder }
+            </div>
+          ) }
+        </Droppable>
+      </DragDropContext>
     );
   }
 }
 
 const actions = {
-  edit: DeckActions.selectItem
+  editItem: DeckActions.selectItem,
+  // updateItem: DeckActions.updateItem
 };
 
 export default connect(null, actions)(ItemChooser);

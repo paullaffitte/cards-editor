@@ -17,6 +17,13 @@ const updateItem = (type, item) => {
   };
 };
 
+const reorderItem = (type, source, destination) => {
+  return {
+    type: ActionsTypes.REORDER_ITEM,
+    payload: { type, source, destination },
+  };
+};
+
 const stageItems = type => {
   return {
     type: ActionsTypes.STAGE_ITEMS,
@@ -27,6 +34,7 @@ const stageItems = type => {
 const actions = {
   selectItem,
   stageItems,
+  reorderItem,
 
   updateCard: card => updateItem(ActionsTypes.Item.CARD, card),
   updateEffect: effect => updateItem(ActionsTypes.Item.EFFECT, effect),

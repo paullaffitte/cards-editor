@@ -21,6 +21,11 @@ class ItemList extends Component {
 
   deleteItem = item => this.props.dispatch(DeckActions.deleteItem(this.props.type, item.id));
 
+  onReorder = async (source, destination) => {
+    const items = this.props.items(this.props.type, this.props.preprocess);
+    await this.props.dispatch(DeckActions.reorderItem(this.props.type, items[source].index, items[destination].index));
+  };
+
   renderItem = item => {
     return (
       <FakeBackground src={ item.thumbnail }>
@@ -46,17 +51,28 @@ class ItemList extends Component {
           return item;
         }) }
         renderItem={ this.renderItem }
-        itemStyle={{ position: 'relative' }}
+        itemStyle={{  }}
         onSelect={ this.selectItem }
         onDelete={ this.deleteItem }
         onEdit={ this.props.onEdit ? this.editItem : null }
+        onReorder={ this.onReorder }
       />
     );
   }
 }
 
 const mapStateToProps = state => ({
-  items: (type, preprocess) => getItems(type, state).map(item => preprocess(item, state)).filter(Boolean)
+  items: (type, preprocess) => getItems(type, state)
+    .map((item, index) => {
+      const preprocessed = preprocess(item, state);
+
+      if (!preprocessed)
+        return null;
+
+      preprocessed.index = index;
+      return preprocessed;
+    })
+    .filter(Boolean)
 });
 
 export default connect(mapStateToProps)(ItemList);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Icon } from 'antd';
 import { Popconfirm } from 'antd';
+import { Draggable } from 'react-beautiful-dnd';
 import '../styles/Item.scss';
 
 class Item extends Component {
@@ -22,25 +23,38 @@ class Item extends Component {
   render() {
     const { className, style } = this.props;
 
+    if (!this.props.item.id) {
+      return null;
+    }
+
     return (
-      <div className={ 'Item ' + (className ? className : '') } style={ style }>
-        { this.props.confirmDelete ? (
-          <Popconfirm className="item-button delete"
-            title={ this.props.confirmDelete === true ? "Are you sure to delete this item ? (it can't be undone)" : this.props.confirmDelete } placement="left"
-            onConfirm={ this.deleteItem }
-            okText="Yes" cancelText="No">
-            <Icon type="close" />
-          </Popconfirm>
-        ) : (
-          <div className="item-button delete">
-            <Icon type="close" onClick={ this.deleteItem } />
+      <Draggable draggableId={ this.props.item.id } index={ this.props.index }>
+        { provided => (
+          <div
+            className={ 'Item ' + (className ? className : '') }
+            style={ style }
+            { ...provided.draggableProps }
+            ref={ provided.innerRef }
+          >
+            { this.props.confirmDelete ? (
+              <Popconfirm className="item-button delete"
+                title={ this.props.confirmDelete === true ? "Are you sure to delete this item ? (it can't be undone)" : this.props.confirmDelete } placement="left"
+                onConfirm={ this.deleteItem }
+                okText="Yes" cancelText="No">
+                <Icon type="close" />
+              </Popconfirm>
+            ) : (
+              <div className="item-button delete">
+                <Icon type="close" onClick={ this.deleteItem } />
+              </div>
+            ) }
+            { !this.props.onEdit ? null : <Icon type="edit" className="item-button edit" onClick={ () => this.selectItem(true) } /> }
+            <div onClick={ () => this.selectItem(false) } className="full-size" { ...provided.dragHandleProps }>
+              { this.props.children }
+            </div>
           </div>
         ) }
-        { !this.props.onEdit ? null : <Icon type="edit" className="item-button edit" onClick={ () => this.selectItem(true) } /> }
-        <div onClick={ () => this.selectItem(false) } className="full-size">
-          { this.props.children }
-        </div>
-      </div>
+      </Draggable>
     );
   }
 }

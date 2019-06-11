@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import ActionsTypes from '../../constants/ActionsTypes';
-import { getEditedItem, getItemById, getCards, getResourceById } from '../selectors/deck';
+import { getEditedItem, getItemById, getCards, getResourceById, getItems } from '../selectors/deck';
 import initialState from '../initialState';
 import uuid from 'uuid/v1';
 
@@ -52,6 +52,15 @@ const deck = {
     return deckUpdate(state, {
       current: { [getItemKey(type, true)]: {$apply: updateItem} },
       edited: { [getItemKey(type)]: {$set: item} }
+    });
+  },
+  [ActionsTypes.REORDER_ITEM]: (state, { type, source, destination }) => {
+    const reorderedItems = [ ...getItems(type, state) ];
+    const [reordered] = reorderedItems.splice(source, 1);
+    reorderedItems.splice(destination, 0, reordered);
+
+    return deckUpdate(state, {
+      current: { [getItemKey(type, true)]: {$set: reorderedItems} }
     });
   },
   [ActionsTypes.STAGE_ITEMS]: (state, type) => {
