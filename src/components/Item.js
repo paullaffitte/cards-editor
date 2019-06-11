@@ -32,8 +32,8 @@ class Item extends Component {
         { provided => (
           <div
             className={ 'Item ' + (className ? className : '') }
-            style={ style }
             { ...provided.draggableProps }
+            style={{ ...provided.draggableProps.style, ...style }}
             ref={ provided.innerRef }
           >
             { this.props.confirmDelete ? (

@@ -80,9 +80,18 @@ class ItemChooser extends Component {
     );
   };
 
-  // onDragEnd = item => {
-  //   this.props.updateItem
-  // };
+  onDragEnd = ({ source, destination }) => {
+    if (!destination)
+      return;
+
+    const value = [ ...this.state.value ];
+    const [reordered] = value.splice(source.index, 1);
+
+    value.splice(destination.index, 0, reordered);
+
+    console.log(this.state.value, value);
+    this.change(value);
+  };
 
   render() {
     return (
@@ -94,7 +103,7 @@ class ItemChooser extends Component {
           onChange={ this.onAdd }
           key={ 'new' }
         />
-        <Droppable droppableId="droppable2">
+        <Droppable droppableId="droppable">
           { provided => (
             <div
               ref={ provided.innerRef }
@@ -110,8 +119,7 @@ class ItemChooser extends Component {
 }
 
 const actions = {
-  editItem: DeckActions.selectItem,
-  // updateItem: DeckActions.updateItem
+  editItem: DeckActions.selectItem
 };
 
 export default connect(null, actions)(ItemChooser);
