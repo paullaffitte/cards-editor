@@ -1,13 +1,22 @@
 const { app, /*crashReporter,*/ BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const isDev = require('electron-is-dev');
 const SystemFonts = require('system-font-families');
+const path = require('path');
+const fs = require('fs');
 const MenuActions = require('./MenuActions');
 
 const systemFonts = new SystemFonts.default();
 
 let mainWindow;
 let quitConfirmed = false;
+const fileToOpen = process.argv[1];
 
+ipcMain.on('ready', () => {
+  if (fileToOpen) {
+    const isDirectory = fs.lstatSync(fileToOpen).isDirectory();
+    sendAppEvent('open', fs.realpathSync(fileToOpen + (isDirectory ? '/deck.json' : '')));
+  }
+});
 ipcMain.on('exportAsPDF', MenuActions.exportAsPDF);
 ipcMain.on('getAvailableFonts', event => event.sender.send('availableFonts', systemFonts.getFontsSync()));
 ipcMain.on('quit', () => {
@@ -15,8 +24,8 @@ ipcMain.on('quit', () => {
   mainWindow.close();
 });
 
-function sendAppEvent(name) {
-  return mainWindow.webContents.send(name);
+function sendAppEvent(name, ...args) {
+  return mainWindow.webContents.send(name, ...args);
 }
 
 function camelize(str) {

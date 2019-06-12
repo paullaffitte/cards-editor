@@ -63,13 +63,26 @@ class DeckStorage {
       if (!fname)
         return null;
 
-      const deck = DeckStorage.read(fname);
-      return deck ? deck : null;
+      let deck;
+      let error = 'unknown error';
+
+      try {
+        deck = DeckStorage.read(fname);
+      } catch (e) {
+        deck = null;
+        error = e.message;
+      }
+
+      if (!deck) {
+        message.error(`Could not open this deck: ${error}`);
+        return null;
+      }
+
+      return deck;
     }
 
     if (filename) {
-      DeckStorage.onOpen(loadDeck(filename));
-      return;
+      return loadDeck(filename);
     }
 
     return Wrapper.openFile({
@@ -96,19 +109,14 @@ class DeckStorage {
       properties: [ 'openDirectory' ],
       shouldBeEmpty: true
     }).then(folder => {
-      if (!folder || folder.error)
-        return folder;
+      if (!folder)
+        return null;
 
       const filename = folder + '/deck.json';
 
       DeckStorage.write(filename);
       return filename;
     });
-
-    if (filename.error) {
-      message.error(filename.error);
-      return null;
-    }
 
     return filename;
   }

@@ -3,6 +3,7 @@ const { dialog } = remote;
 const fs = remote.require('fs');
 const dirname = remote.require('path').dirname;
 const { shell } = window.require('electron');
+const { message } = require('antd');
 
 const getFolders = (filename) => {
   const projectFolder = dirname(filename);
@@ -32,6 +33,9 @@ export default {
   off: (event, callback) => ipcRenderer.removeListener(event, callback),
   send: (event, payload) => ipcRenderer.send(event, payload),
   readDeck: (filename) => {
+    if (!fs.existsSync(filename)) {
+      throw new Error(`File not found (${filename})`);
+    }
     return JSON.parse(fs.readFileSync(filename));
   },
   getResourcesPath: (filename, path) => {
@@ -83,13 +87,22 @@ export default {
         return;
       }
 
-      if (opts.properties.includes('openDirectory') && opts.shouldBeEmpty) {
-        const folderFiles = fs.readdirSync(filenames[0]);
-        if (folderFiles.length)
-          resolve({ error: 'This directory is not empty. You can only save your deck in an empty folder.' });
+      if (!fs.existsSync(filenames[0])) {
+        message.error(`File not found (${filenames[0]})`);
+        resolve(null);
+        return;
       }
 
-      resolve(filenames[0]);
+      if (opts.properties.includes('openDirectory') && opts.shouldBeEmpty) {
+        const folderFiles = fs.readdirSync(filenames[0]);
+        if (folderFiles.length) {
+          message.error('This directory is not empty. You can only save your deck in an empty folder.');
+          resolve(null);
+          return;
+        }
+      }
+
+      resolve(fs.realpathSync(filenames[0]));
     }));
   },
   saveFile: (opts) => {

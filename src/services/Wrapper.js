@@ -15,6 +15,7 @@ class Wrapper {
     });
 
     backend.init();
+    backend.send('ready');
   }
 
   static on(event, callback) {

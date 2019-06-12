@@ -54,8 +54,8 @@ class DeckEditor extends Component {
     }
   };
 
-  onOpen = async () => {
-    const deck = await DeckStorage.open();
+  onOpen = async (event, filename) => {
+    const deck = await DeckStorage.open(filename);
 
     if (deck)
       this.props.dispatch(DeckActions.openDeck(deck));
