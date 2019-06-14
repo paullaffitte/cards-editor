@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon, Modal } from 'antd';
+import { Translation } from 'react-i18next';
 import DeckActions from '../state/actions/deck';
 import { getEditedEffect } from '../state/selectors/deck';
 import ActionsTypes from '../constants/ActionsTypes';
@@ -69,7 +70,7 @@ class EffectPicker extends Component {
     return (
       <div className="EffectPicker">
         <Button onClick={() => this.addEffect()} style={{ marginBottom: '0.5em' }}>
-          <Icon type="plus" /> New effect
+          <Icon type="plus" /> <Translation>{ t => t('effectPicker.newEffect') }</Translation>
         </Button>
         <EffectList
           onSelect={this.onSelect}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
 import { message } from 'antd';
+import { Translation } from 'react-i18next';
 import DeckActions from '../state/actions/deck';
 import ItemSelect from './ItemSelect';
 import Item from './Item';
@@ -30,7 +31,7 @@ class ItemChooser extends Component {
     if (this.state.value.findIndex(itemId => itemId === id) === -1) {
       this.change([ ...this.state.value, id ]);
     } else {
-      message.warning('Model already added');
+      message.warning('Model already added'); // FIXME replace model by this.props.type
     }
   };
 
@@ -39,7 +40,7 @@ class ItemChooser extends Component {
     const value = [ ...this.state.value ];
 
     if (itemIndex === -1) {
-      throw new Error('Item not found');
+      throw new Error('Item not found'); // FIXME replace item by this.props.type
     }
 
     value[itemIndex] = update;
@@ -60,23 +61,26 @@ class ItemChooser extends Component {
 
   renderItem = (id, index) => {
     return (
-      <Item
-        key={ id }
-        index={ index }
-        item={{ id }}
-        style={{ height: '2.8em' }}
-        onEdit={ this.props.edition === true ? this.onEdit : null }
-        onDelete={ this.onDelete }
-        confirmDelete="Are you sure to remove this model from this card?"
-      >
-        <ItemSelect
-          type={ this.props.type }
-          value={ id }
-          preprocess={ item => this.preprocessOption(item, id) }
-          onChange={ update => this.onChange(id, update) }
-          id={ id }
-        />
-      </Item>
+      <Translation key={ id }>
+        { t => (
+          <Item
+            index={ index }
+            item={{ id }}
+            style={{ height: '2.8em' }}
+            onEdit={ this.props.edition === true ? this.onEdit : null }
+            onDelete={ this.onDelete }
+            confirmDelete={ t('cardForm.confirmRemoveModel')}
+          >
+            <ItemSelect
+              type={ this.props.type }
+              value={ id }
+              preprocess={ item => this.preprocessOption(item, id) }
+              onChange={ update => this.onChange(id, update) }
+              id={ id }
+            />
+          </Item>
+        ) }
+      </Translation>
     );
   };
 
@@ -95,25 +99,29 @@ class ItemChooser extends Component {
 
   render() {
     return (
-      <DragDropContext onDragEnd={ this.onDragEnd }>
-        <ItemSelect
-          type={ this.props.type }
-          value={ 'Add a model' }
-          preprocess={ this.preprocessOption }
-          onChange={ this.onAdd }
-          key={ 'new' }
-        />
-        <Droppable droppableId="droppable">
-          { provided => (
-            <div
-              ref={ provided.innerRef }
-            >
-              { this.state.value ? this.state.value.map(this.renderItem) : null }
-              { provided.placeholder }
-            </div>
-          ) }
-        </Droppable>
-      </DragDropContext>
+      <Translation>
+        { t => (
+          <DragDropContext onDragEnd={ this.onDragEnd }>
+            <ItemSelect
+              type={ this.props.type }
+              value={ t('itemChooser.addItem') }
+              preprocess={ this.preprocessOption }
+              onChange={ this.onAdd }
+              key={ 'new' }
+            />
+            <Droppable droppableId="droppable">
+              { provided => (
+                <div
+                  ref={ provided.innerRef }
+                >
+                  { this.state.value ? this.state.value.map(this.renderItem) : null }
+                  { provided.placeholder }
+                </div>
+              ) }
+            </Droppable>
+          </DragDropContext>
+        ) }
+      </Translation>
     );
   }
 }
