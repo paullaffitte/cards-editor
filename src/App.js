@@ -3,6 +3,8 @@ import { createStore, applyMiddleware, bindActionCreators } from 'redux'
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { Layout, Modal } from 'antd';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 import 'antd/dist/antd.css';
 import './App.scss';
 import reducers from './state/reducers/index';
@@ -14,6 +16,18 @@ import ResourceLoader from './components/ResourceLoader';
 import DeckActions from './state/actions/deck';
 import DeckStorage from './services/DeckStorage';
 import Wrapper from './services/Wrapper';
+import locales from './constants/i18n';
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources: locales,
+    lng: 'en',
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 const store = createStore(
   reducers,
