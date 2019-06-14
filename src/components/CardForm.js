@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Form, Input, InputNumber, Row, Col, Select, Tabs } from 'antd'
+import { withTranslation } from "react-i18next";
 import DeckActions from '../state/actions/deck';
 import ResourcePicker from './ResourcePicker';
 import EffectPicker from './EffectPicker';
@@ -114,17 +115,18 @@ class CardForm extends Component {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { t, form } = this.props;
+    const { getFieldDecorator } = form;
 
     return (
       <div>
         <Form>
           <Tabs defaultActiveKey="stats">
-            <TabPane tab="Information & stats" key="stats">
+            <TabPane tab={ t('tabs.infoAndStats') } key="stats">
               {this.renderStats(getFieldDecorator)}
             </TabPane>
 
-            <TabPane tab="Transforms" key="transforms">
+            <TabPane tab={ t('tabs.transforms') } key="transforms">
               {this.renderTransforms(getFieldDecorator)}
               {getFieldDecorator('thumbnailTransform')(<TransformInput name="Thumbnail" scaleUnit="%" disableTextOption={true} />)}
             </TabPane>
@@ -139,7 +141,7 @@ const mapStateToProps = state => ({
   data: getEditedCard(state)
 });
 
-export default connect(mapStateToProps)(Form.create({
+export default withTranslation()(connect(mapStateToProps)(Form.create({
   onFieldsChange(props, changedFields) {
     if (props.onChange)
       props.onChange(changedFields);
@@ -157,4 +159,4 @@ export default connect(mapStateToProps)(Form.create({
 
   onValuesChange(_, values) {
   },
-})(CardForm));
+})(CardForm)));

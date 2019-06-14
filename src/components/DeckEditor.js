@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Layout, Modal, Tabs } from 'antd';
+import { withTranslation } from "react-i18next";
 import 'antd/dist/antd.css';
 import CardList from './CardList';
 import CardEditor from './CardEditor';
@@ -102,6 +103,8 @@ class DeckEditor extends Component {
   onChangeCardType = (type) => this.setState({ cardType: type })
 
   render() {
+    const { t } = this.props;
+
     return (
       <Layout>
         <Content>
@@ -110,8 +113,8 @@ class DeckEditor extends Component {
         </Content>
         <Sider width={250}>
           <Tabs defaultActiveKey={ this.state.cardType } onChange={ this.onChangeCardType }>
-            <TabPane tab="Minions" key="minion"></TabPane>
-            <TabPane tab="Spells" key="spell"></TabPane>
+            <TabPane tab={ t('tabs.minions') } key="minion"></TabPane>
+            <TabPane tab={ t('tabs.spells') } key="spell"></TabPane>
           </Tabs>
           <CardList cardsType={ this.state.cardType } />
           <button className="new" onClick={ this.addCard }>+</button>
@@ -125,4 +128,4 @@ const mapStateToProps = state => ({
   deck: state.deck.current
 });
 
-export default connect(mapStateToProps)(DeckEditor);
+export default withTranslation()(connect(mapStateToProps)(DeckEditor));
