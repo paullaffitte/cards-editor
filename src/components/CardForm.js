@@ -21,9 +21,7 @@ class CardForm extends Component {
     return (
       <Fragment>
         <Form.Item label={ t('cardForm.type') }>
-          {getFieldDecorator('type', {
-            rules: [{ required: true, message: 'Please choose a type type' }],
-          })(
+          {getFieldDecorator('type')(
             <Select>
               <Option value="minion">{ t('cardTypes.minion') }</Option>
               <Option value="spell">{ t('cardTypes.spell') }</Option>
@@ -31,17 +29,13 @@ class CardForm extends Component {
           )}
         </Form.Item>
         <Form.Item label={ t('cardForm.name') }>
-          {getFieldDecorator('name', {
-            rules: [{ required: true, message: 'Please set a name' }],
-          })(
+          {getFieldDecorator('name')(
             <Input placeholder='Zavata' />
           )}
         </Form.Item>
         <Form.Item label={ t('cardForm.description') }>
-          {getFieldDecorator('description', {
-            rules: [{ required: true, message: 'Please set a description' }],
-          })(
-            <Input.TextArea placeholder='Some words about the card' rows={4} />
+          {getFieldDecorator('description')(
+            <Input.TextArea placeholder={ t('cardForm.descriptionPlaceholder') } rows={4} />
           )}
         </Form.Item>
 
@@ -50,19 +44,15 @@ class CardForm extends Component {
             <Row>
               <Col span={12}>
                 <Form.Item label={ t('cardForm.hp') }>
-                  {getFieldDecorator('hp', {
-                    rules: [],
-                  })(
-                  <InputNumber />
+                  {getFieldDecorator('hp')(
+                    <InputNumber />
                   )}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label={ t('cardForm.attack') }>
-                  {getFieldDecorator('attack', {
-                    rules: [],
-                  })(
-                  <InputNumber />
+                  {getFieldDecorator('attack')(
+                    <InputNumber />
                   )}
                 </Form.Item>
               </Col>

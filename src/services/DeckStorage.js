@@ -1,4 +1,5 @@
 import Wrapper from '../services/Wrapper';
+import i18n from '../constants/i18n';
 import { runMigrations } from './DeckMigration';
 import semver from 'semver';
 import { message } from 'antd';
@@ -10,14 +11,14 @@ const handleVersions = deck => {
     deck.version = '0.0.0';
 
   if (!semver.valid(deck.version)) {
-    alert(`Invalid deck version "${deck.version}"`);
+    alert(i18n.t('storage.messages.invalidDeckVersion', { version: deck.version }));
     return null;
   }
 
   if (semver.lt(deck.version, appVersion)) {
     return runMigrations(deck, appVersion);
   } else if (semver.gt(deck.version, appVersion)) {
-    alert(`Your software is outdated (${appVersion}) and thus can't open this deck (${deck.version}).`);
+    alert(i18n.t('storage.messages.updateRequired', { appVersion, deckVersion: deck.version }));
     return null;
   }
 
@@ -64,7 +65,7 @@ class DeckStorage {
         return null;
 
       let deck;
-      let error = 'unknown error';
+      let error = i18n.t('storage.messages.unknownError');
 
       try {
         deck = DeckStorage.read(fname);
@@ -74,7 +75,7 @@ class DeckStorage {
       }
 
       if (!deck) {
-        message.error(`Could not open this deck: ${error}`);
+        message.error(i18n.t('storage.messages.couldNotOpenDeck', { error }));
         return null;
       }
 
@@ -86,11 +87,11 @@ class DeckStorage {
     }
 
     return Wrapper.openFile({
-      title: 'Open',
+      title: i18n.t('storage.open'),
       properties: [ 'openFile' ],
       filters: [
         { name: 'Deck', extensions: ['deck', 'json'] },
-        { name: 'All Files', extensions: ['*'] }
+        { name: i18n.t('storage.allFiles'), extensions: ['*'] }
       ]
     }).then(loadDeck);
   }
@@ -105,7 +106,7 @@ class DeckStorage {
 
   static async saveAs() {
     const filename = await Wrapper.openFile({
-      title: 'Save in a folder',
+      title: i18n.t('storage.saveInFolder'),
       properties: [ 'openDirectory' ],
       shouldBeEmpty: true
     }).then(folder => {
@@ -123,11 +124,11 @@ class DeckStorage {
 
   static exportAsPDF() {
     return new Promise((resolve, reject) => Wrapper.saveFile({
-      title: 'Export',
+      title: i18n.t('export.export'),
       defaultPath: './deck.pdf',
       filters: [
         { name: 'PDF', extensions: ['pdf'] },
-        { name: 'All Files', extensions: ['*'] }
+        { name: i18n.t('storage.allFiles'), extensions: ['*'] }
       ]
     }).then(filename => {
       if (!filename) {

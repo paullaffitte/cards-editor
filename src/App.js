@@ -3,8 +3,6 @@ import { createStore, applyMiddleware, bindActionCreators } from 'redux'
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { Layout, Modal } from 'antd';
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
 import 'antd/dist/antd.css';
 import './App.scss';
 import reducers from './state/reducers/index';
@@ -16,18 +14,7 @@ import ResourceLoader from './components/ResourceLoader';
 import DeckActions from './state/actions/deck';
 import DeckStorage from './services/DeckStorage';
 import Wrapper from './services/Wrapper';
-import locales from './constants/i18n';
-
-i18n
-  .use(initReactI18next)
-  .init({
-    resources: locales,
-    lng: 'en',
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+import i18n from './constants/i18n';
 
 const store = createStore(
   reducers,
@@ -40,8 +27,8 @@ DeckStorage.init(bindActionCreators(DeckActions, store.dispatch));
 Wrapper.init();
 Wrapper.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
 Wrapper.on('quit', () => getCurrentDeck(store.getState()).updated ? Modal.confirm({
-  title: 'Confirmation',
-  content: 'Your deck has unsaved changes. If you quit now, these changes will be lost',
+  title: i18n.t('confirmation'),
+  content: i18n.t('messages.unsavedChanges'),
   okText: 'Quit',
   onOk: quit
 }) : quit());

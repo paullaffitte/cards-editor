@@ -26,10 +26,10 @@ class ExportForm extends Component {
     return (
       <div>
         { invalidSize
-          ? (warning(`This card doesn't has any background. However, this card will take the same size than other cards. (${expectedWidth}x${expectedHeight})`))
+          ? warning(this.props.t('export.messages.cardWithoutBackground', { expectedWidth, expectedHeight }))
           : null }
         { !invalidSize && sizeMismatch
-          ? (warning(`The background's size of this card doesn't match others cards' backgrounds sizes (expected to be ${expectedWidth}x${expectedHeight} but is ${width}x${height})`))
+          ? warning(this.props.t('export.messages.cardBackgroundSizeDoesntMatch', { expectedWidth, expectedHeight, height, width }))
           : null }
         <span>
           { item.name }

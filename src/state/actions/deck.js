@@ -2,6 +2,7 @@ import { message } from 'antd';
 import ActionsTypes from '../../constants/ActionsTypes';
 import Wrapper from '../../services/Wrapper';
 import { getItems, getEditedItem, getCurrentDeck, getCards, getCardsByIds } from '../selectors/deck';
+import i18n from '../../constants/i18n';
 
 const selectItem = (type, id) => {
   return {
@@ -110,7 +111,7 @@ function itemInUse(state, type, id) {
       }).filter(Boolean);
 
       if (childsNames.length)
-        return `A card used as a model can't be deleted (${childsNames.join(', ')})`;
+        return i18n.t('messages.cannotDeleteModelCard', { childNames: childsNames.join(', ') });
 
       break;
     case ActionsTypes.Item.EFFECT:
@@ -126,7 +127,7 @@ const deleteItem = (type, id) => {
     const error = itemInUse(state, type, id);
 
     if (error) {
-      message.error(error === true ? 'Item in use, it cannot be deleted' : error);
+      message.error(error);
       return;
     }
 

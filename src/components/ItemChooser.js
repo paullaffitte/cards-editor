@@ -27,20 +27,21 @@ class ItemChooser extends Component {
     }
   }
 
-  onAdd = id => {
+  onAdd = t => id => {
     if (this.state.value.findIndex(itemId => itemId === id) === -1) {
       this.change([ ...this.state.value, id ]);
     } else {
-      message.warning('Model already added'); // FIXME replace model by this.props.type
+      message.warning(t('itemChooser.messages.alreadyAdded'));
     }
   };
 
-  onChange = (id, update) => {
+  onChange = (id, update, t) => {
     const itemIndex = this.state.value.findIndex(itemId => itemId === id);
     const value = [ ...this.state.value ];
 
     if (itemIndex === -1) {
-      throw new Error('Item not found'); // FIXME replace item by this.props.type
+      message.error(t('itemChooser.messages.notFound'));
+      return;
     }
 
     value[itemIndex] = update;
@@ -69,13 +70,13 @@ class ItemChooser extends Component {
             style={{ height: '2.8em' }}
             onEdit={ this.props.edition === true ? this.onEdit : null }
             onDelete={ this.onDelete }
-            confirmDelete={ t('cardForm.confirmRemoveModel')}
+            confirmDelete={ t('cardForm.messages.confirmRemoveModel')}
           >
             <ItemSelect
               type={ this.props.type }
               value={ id }
               preprocess={ item => this.preprocessOption(item, id) }
-              onChange={ update => this.onChange(id, update) }
+              onChange={ update => this.onChange(id, update, t) }
               id={ id }
             />
           </Item>
@@ -106,7 +107,7 @@ class ItemChooser extends Component {
               type={ this.props.type }
               value={ t('itemChooser.addItem') }
               preprocess={ this.preprocessOption }
-              onChange={ this.onAdd }
+              onChange={ this.onAdd(t) }
               key={ 'new' }
             />
             <Droppable droppableId="droppable">

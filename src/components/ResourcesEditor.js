@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Upload, Icon, Button } from 'antd';
+import { Upload, Icon, Button, message } from 'antd';
 import DeckActions from '../state/actions/deck';
+import i18n from '../constants/i18n';
 
 class ResourcesEditor extends Component {
 
@@ -11,9 +12,9 @@ class ResourcesEditor extends Component {
   };
 
   handleAdd = ({file, onError, onSuccess}) => {
-    const onErrorCustom = error => { onError(error, null, file); alert(error) }
+    const onErrorCustom = error => { onError(error, null, file); message.error(error) }
     if (Object.values(this.props.resources).map(resource => resource.path).includes(file.path))
-      return onErrorCustom('Resource already exists.');
+      return onErrorCustom(i18n.t('resourcePicker.messages.alreadyExists'));
 
     this.props.dispatch(DeckActions.setResource({ path: file.path }));
     onSuccess();

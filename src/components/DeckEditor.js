@@ -42,9 +42,9 @@ class DeckEditor extends Component {
 
     if (this.props.deck.updated) {
       Modal.confirm({
-        title: 'Confirmation',
-        content: 'Your deck has unsaved changes. If you create a new deck now, these changes will be lost',
-        okText: 'New deck',
+        title: this.props.t('confirmation'),
+        content: this.props.t('messages.unsavedChangesNewDeck'),
+        okText: this.props.t('newDeck'),
         onOk : close => {
           newDeck();
           close();

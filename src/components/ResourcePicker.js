@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Modal, Button } from 'antd';
+import { Row, Col, Icon, Modal, Button, message } from 'antd';
 import { Translation } from 'react-i18next';
 import ResourcesEditor from './ResourcesEditor'
 import { getResources, getProjectDirectory } from '../state/selectors/deck';
@@ -29,10 +29,10 @@ class ResourcePicker extends Component {
     this.setState({ preview: {name, url, path} });
   };
 
-  toggleModal = visible => {
+  toggleModal = (visible, t) => {
     if (visible && this.props.value) {
       if (!(this.props.value in this.props.resources))
-        alert(`Error: Resource ${this.props.value} not found`);
+        message.error(t('resourcePicker.messages.notFound', { resourcePath: this.props.value }));
       else {
         const { name, url, path } = this.props.resources[this.props.value];
         const preview = { name, url, path };
@@ -65,7 +65,7 @@ class ResourcePicker extends Component {
         { t => (
           <Fragment>
             <div>{ this.state.value }</div>
-            <Button onClick={() => this.toggleModal(true)}>
+            <Button onClick={() => this.toggleModal(true, t)}>
               <Icon type="search" /> { t('resourcePicker.choose') }
             </Button>
 
