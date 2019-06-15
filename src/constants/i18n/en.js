@@ -31,7 +31,7 @@ export default {
     select: 'Select',
     messages: {
       notFound: 'Resource {{resourcePath}} not found',
-      alreadyExists: 'Resource already exists.',
+      alreadyExists: 'Resource already exists',
     },
   },
   effectPicker: {

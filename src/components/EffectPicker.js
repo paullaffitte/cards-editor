@@ -36,7 +36,10 @@ class EffectPicker extends Component {
     }
   }
 
-  addEffect = () => this.props.dispatch(DeckActions.addItem(ActionsTypes.Item.EFFECT));
+  addEffect = () => {
+    this.props.dispatch(DeckActions.addItem(ActionsTypes.Item.EFFECT));
+    this.toggleModal(true);
+  }
 
   onEdit = item => {
     this.toggleModal(true);
@@ -58,8 +61,6 @@ class EffectPicker extends Component {
       if (!err) {
         this.props.dispatch(DeckActions.updateEffect(effect));
         this.toggleModal(false);
-      } else {
-        console.error(err);
       }
     });
   };

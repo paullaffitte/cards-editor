@@ -12,7 +12,7 @@ class EffectList extends Component {
         renderItem={ item => (
           <div>{ item.description
             ? <span>{ item.description }</span>
-            : <span className="comment">empty</span> }</div>
+            : <span className="comment">...</span> }</div>
         ) }
         onSelect={ this.props.onSelect }
         onEdit={this.props.onEdit}
