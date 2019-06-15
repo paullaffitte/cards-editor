@@ -113,8 +113,8 @@ class DeckEditor extends Component {
         </Content>
         <Sider width={250}>
           <Tabs defaultActiveKey={ this.state.cardType } onChange={ this.onChangeCardType }>
-            <TabPane tab={ t('tabs.minions') } key="minion"></TabPane>
-            <TabPane tab={ t('tabs.spells') } key="spell"></TabPane>
+            <TabPane tab={ t('cardTypes.minion') + 's' } key="minion"></TabPane>
+            <TabPane tab={ t('cardTypes.spell') + 's' } key="spell"></TabPane>
           </Tabs>
           <CardList cardsType={ this.state.cardType } />
           <button className="new" onClick={ this.addCard }>+</button>

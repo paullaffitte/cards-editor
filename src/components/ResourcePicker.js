@@ -66,7 +66,7 @@ class ResourcePicker extends Component {
           <Fragment>
             <div>{ this.state.value }</div>
             <Button onClick={() => this.toggleModal(true)}>
-              <Icon type="search" /> Choose
+              <Icon type="search" /> { t('resourcePicker.choose') }
             </Button>
 
             <Modal

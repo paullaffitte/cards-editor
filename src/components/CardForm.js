@@ -15,87 +15,91 @@ const TabPane = Tabs.TabPane;
 
 class CardForm extends Component {
 
-  renderStats = getFieldDecorator => (
-    <Fragment>
-      <Form.Item label="Type">
-        {getFieldDecorator('type', {
-          rules: [{ required: true, message: 'Please choose a type type' }],
-        })(
-          <Select>
-            <Option value="minion">Minion</Option>
-            <Option value="spell">Spell</Option>
-          </Select>
-        )}
-      </Form.Item>
-      <Form.Item label="Card name">
-        {getFieldDecorator('name', {
-          rules: [{ required: true, message: 'Please set a name' }],
-        })(
-          <Input placeholder='Zavata' />
-        )}
-      </Form.Item>
-      <Form.Item label="Description">
-        {getFieldDecorator('description', {
-          rules: [{ required: true, message: 'Please set a description' }],
-        })(
-          <Input.TextArea placeholder='Some words about the card' rows={4} />
-        )}
-      </Form.Item>
+  renderStats = getFieldDecorator => {
+    const { t } = this.props;
 
-      { this.props.data.type !== 'minion' ? null :
-        (
-          <Row>
-            <Col span={12}>
-              <Form.Item label="HP">
-                {getFieldDecorator('hp', {
-                  rules: [],
-                })(
-                <InputNumber />
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Attack">
-                {getFieldDecorator('attack', {
-                  rules: [],
-                })(
-                <InputNumber />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-        )
-      }
+    return (
+      <Fragment>
+        <Form.Item label={ t('cardForm.type') }>
+          {getFieldDecorator('type', {
+            rules: [{ required: true, message: 'Please choose a type type' }],
+          })(
+            <Select>
+              <Option value="minion">{ t('cardTypes.minion') }</Option>
+              <Option value="spell">{ t('cardTypes.spell') }</Option>
+            </Select>
+          )}
+        </Form.Item>
+        <Form.Item label={ t('cardForm.name') }>
+          {getFieldDecorator('name', {
+            rules: [{ required: true, message: 'Please set a name' }],
+          })(
+            <Input placeholder='Zavata' />
+          )}
+        </Form.Item>
+        <Form.Item label={ t('cardForm.description') }>
+          {getFieldDecorator('description', {
+            rules: [{ required: true, message: 'Please set a description' }],
+          })(
+            <Input.TextArea placeholder='Some words about the card' rows={4} />
+          )}
+        </Form.Item>
 
-      <Row>
-        <Col span={12}>
-          <Form.Item label="Thumbnail">
-            {getFieldDecorator('thumbnail')(<ResourcePicker />)}
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Background">
-            {getFieldDecorator('background')(<ResourcePicker />)}
-          </Form.Item>
-        </Col>
-      </Row>
+        { this.props.data.type !== 'minion' ? null :
+          (
+            <Row>
+              <Col span={12}>
+                <Form.Item label={ t('cardForm.hp') }>
+                  {getFieldDecorator('hp', {
+                    rules: [],
+                  })(
+                  <InputNumber />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label={ t('cardForm.attack') }>
+                  {getFieldDecorator('attack', {
+                    rules: [],
+                  })(
+                  <InputNumber />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+          )
+        }
 
-      <Row>
-        <Col span={12}>
-          <Form.Item label="Effects">
-            {getFieldDecorator('effects')(<EffectPicker />)}
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Models">
-            {getFieldDecorator('models')(
-              <ItemChooser type={ ActionsTypes.Item.CARD } edition={ true } excludeId={ this.props.data.id }/>
-            )}
-          </Form.Item>
-        </Col>
-      </Row>
-    </Fragment>
-  );
+        <Row>
+          <Col span={12}>
+            <Form.Item label={ t('cardForm.thumbnail') }>
+              {getFieldDecorator('thumbnail')(<ResourcePicker />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label={ t('cardForm.background') }>
+              {getFieldDecorator('background')(<ResourcePicker />)}
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={12}>
+            <Form.Item label={ t('cardForm.effects') }>
+              {getFieldDecorator('effects')(<EffectPicker />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label={ t('cardForm.models') }>
+              {getFieldDecorator('models')(
+                <ItemChooser type={ ActionsTypes.Item.CARD } edition={ true } excludeId={ this.props.data.id }/>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+      </Fragment>
+    );
+  }
 
   renderTransforms = getFieldDecorator => [
     'Name',
@@ -107,10 +111,11 @@ class CardForm extends Component {
   ].map(opts => this.renderTransform(opts, getFieldDecorator));
 
   renderTransform = (name, getFieldDecorator) => {
-    const valueName = name.toLowerCase() + 'Transform';
+    const lowerName = name.toLowerCase();
+    const valueName = lowerName + 'Transform';
 
     return getFieldDecorator(valueName)(
-      <TransformInput key={ valueName } name={ name } />
+      <TransformInput key={ valueName } name={ this.props.t(`cardForm.${lowerName}`) } />
     );
   };
 
@@ -122,13 +127,13 @@ class CardForm extends Component {
       <div>
         <Form>
           <Tabs defaultActiveKey="stats">
-            <TabPane tab={ t('tabs.infoAndStats') } key="stats">
+            <TabPane tab={ t('cardForm.tabs.infoAndStats') } key="stats">
               {this.renderStats(getFieldDecorator)}
             </TabPane>
 
-            <TabPane tab={ t('tabs.transforms') } key="transforms">
+            <TabPane tab={ t('cardForm.tabs.transforms') } key="transforms">
               {this.renderTransforms(getFieldDecorator)}
-              {getFieldDecorator('thumbnailTransform')(<TransformInput name="Thumbnail" scaleUnit="%" disableTextOption={true} />)}
+              {getFieldDecorator('thumbnailTransform')(<TransformInput name={ t('cardForm.thumbnail') } scaleUnit="%" disableTextOption={true} />)}
             </TabPane>
           </Tabs>
         </Form>
