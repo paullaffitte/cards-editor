@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, InputNumber, Row, Col, Tooltip, Icon } from 'antd';
+import { withTranslation } from "react-i18next";
 import ItemList from './ItemList';
 import ActionsTypes from '../constants/ActionsTypes';
 import DeckActions from '../state/actions/deck';
@@ -46,20 +47,22 @@ class ExportForm extends Component {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { form, t } = this.props;
+    const { getFieldDecorator } = form;
+
     return (
       <Form>
-        <h2>Print settings</h2>
+        <h2>{ t('export.printSettings') }</h2>
         <Row>
           <Col span={12}>
-            <Form.Item label="DPI">
+            <Form.Item label={ t('export.dpi') }>
               {getFieldDecorator('dpi', {})(
                 <InputNumber min={45} step={5} />
               )}
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Spacing (mm)">
+            <Form.Item label={ `${t('export.spacing')} (mm)`}>
               {getFieldDecorator('spacing', {})(
                 <InputNumber min={5} />
               )}
@@ -67,7 +70,7 @@ class ExportForm extends Component {
           </Col>
         </Row>
 
-        <h2>Cards quantity</h2>
+        <h2>{ t('export.cardsQuantity') }</h2>
         <ItemList
           type={ ActionsTypes.Item.CARD }
           prefix="export"
@@ -97,7 +100,7 @@ const mapStateToProps = state => ({
   getResourceById: id => getResourceById(state, id)
 });
 
-export default connect(mapStateToProps)(Form.create({
+export default withTranslation()(connect(mapStateToProps)(Form.create({
   onFieldsChange(props, changedFields) {
     if (props.onChange)
       props.onChange(changedFields);
@@ -136,4 +139,4 @@ export default connect(mapStateToProps)(Form.create({
 
   onValuesChange(_, values) {
   },
-})(ExportForm));
+})(ExportForm)));
