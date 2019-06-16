@@ -4,7 +4,9 @@ const SystemFonts = require('system-font-families');
 const path = require('path');
 const fs = require('fs');
 const MenuActions = require('./MenuActions');
+const MenuTemplate = require('./MenuTemplate');
 const i18n = require('../constants/i18n');
+const settings = require('electron-settings');
 
 const systemFonts = new SystemFonts.default();
 
@@ -29,71 +31,10 @@ function sendAppEvent(name, ...args) {
   return mainWindow.webContents.send(name, ...args);
 }
 
-function camelize(str) {
-  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
-    return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
-  }).replace(/\s+/g, '');
+function updateMenu() {
+  const menu = Menu.buildFromTemplate(MenuTemplate(sendAppEvent));
+  Menu.setApplicationMenu(menu);
 }
-
-function menuLabelWithEvent(label, accelerator) {
-  const name = camelize(label);
-  return {
-    label,
-    accelerator,
-    click: () => sendAppEvent(name)
-  };
-}
-
-function menuRole(role, accelerator) {
-  return {
-    role,
-    accelerator,
-    label: i18n.t(`electron.menu.${role}`),
-  };
-}
-
-const menuTemplate = [
-  {
-    label: i18n.t('electron.menu.file'),
-    submenu: [
-      menuLabelWithEvent(i18n.t('electron.menu.new'), 'CmdOrCtrl+N'),
-      menuLabelWithEvent(i18n.t('electron.menu.open'), 'CmdOrCtrl+O'),
-      menuLabelWithEvent(i18n.t('electron.menu.save'), 'CmdOrCtrl+S'),
-      menuLabelWithEvent(i18n.t('electron.menu.saveAs'), 'Shift+CmdOrCtrl+S'),
-      {type: 'separator'},
-      menuLabelWithEvent(i18n.t('electron.menu.exportAsPDF'), 'CmdOrCtrl+E'),
-      {type: 'separator'},
-      menuRole('quit', 'Alt+F4'),
-    ]
-  },
-  /*
-  {
-    label: 'Edit',
-    submenu: [
-      {role: 'undo'},
-      {role: 'redo'},
-    ]
-  },
-  */
-  {
-    label: i18n.t('electron.menu.view'),
-    submenu: [
-      menuRole('resetZoom'),
-      menuRole('zoomIn'),
-      menuRole('zoomOut'),
-    ]
-  }
-];
-
-if (isDev)
-  menuTemplate.push({
-    label: i18n.t('electron.menu.devTools'),
-    submenu: [
-      menuRole('reload'),
-      menuRole('forceReload'),
-      menuRole('toggleDevTools'),
-    ]
-  });
 
 app.on('ready', createWindow);
 
@@ -107,6 +48,12 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+i18n.on('languageChanged', (code) => {
+  updateMenu();
+  sendAppEvent('languageChanged', code);
+  settings.set('lang', code);
 });
 
 // crashReporter.start({
@@ -139,11 +86,12 @@ async function createWindow() {
     mainWindow = null;
   });
 
-  mainWindow.once('ready-to-show', async () => {
-    const menu = Menu.buildFromTemplate(menuTemplate)
-    Menu.setApplicationMenu(menu)
-
-    await mainWindow.show();
+  mainWindow.once('ready-to-show', () => {
+    updateMenu();
+    mainWindow.show();
+    if (settings.has('lang')) {
+      i18n.changeLanguage(settings.get('lang'));
+    }
   });
 }
 

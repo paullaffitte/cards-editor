@@ -31,6 +31,7 @@ module.exports = {
     menu: {
       file: 'Fichier',
       view: 'Vue',
+      settings: 'Paramètres',
       devTools: 'Outils de développement',
       new: 'Nouveau',
       open: 'Ouvrir',
@@ -41,6 +42,7 @@ module.exports = {
       resetZoom: 'Réinitializer le zoom',
       zoomIn: 'Zoomer',
       zoomOut: 'Dézoomer',
+      language: 'Langage',
       reload: 'Rafraichir la page',
       forceReload: 'Forcer le rafraichissement',
       toggleDevTools: 'Basculer le mode dev',

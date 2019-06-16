@@ -26,6 +26,7 @@ const quit = () => Wrapper.send('quit');
 DeckStorage.init(bindActionCreators(DeckActions, store.dispatch));
 Wrapper.init();
 Wrapper.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
+Wrapper.on('languageChanged', (e, code) => i18n.changeLanguage(code));
 Wrapper.on('quit', () => getCurrentDeck(store.getState()).updated ? Modal.confirm({
   title: i18n.t('confirmation'),
   content: i18n.t('messages.unsavedChanges', { ifYou: i18n.t('messages.unsavedChangesQuit') }),
