@@ -16,9 +16,15 @@ export default {
     messages: {
       invalidDeckVersion: 'Invalid deck version "{{version}}"',
       updateRequired: "Your software is outdated ({{appVersion}}) and thus can't open this deck ({{deckVersion}}). Please update your software to be able to open this deck.",
-      unknownError: 'Unknown error',
       couldNotOpenDeck: 'Could not open this deck: {{error}}',
     }
+  },
+  migrations: {
+    messages: {
+      migratingDeck: 'migrating deck from {{from}} to {{to}}',
+      oldDeckVersion: 'Deck from an old version',
+      oldDeckVersionDescription: 'This deck is from an older version than your software. This version now save projects in folders instead of plain files. Thus we moved your project in a new folder. ({{projectFolder}})',
+    },
   },
   electron: {
     messages: {
@@ -100,5 +106,5 @@ export default {
     selectFont: 'Select a font',
     scale: 'Scale',
     size: 'Size',
-  }
+  },
 };

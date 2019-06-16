@@ -11,14 +11,14 @@ const handleVersions = deck => {
     deck.version = '0.0.0';
 
   if (!semver.valid(deck.version)) {
-    alert(i18n.t('storage.messages.invalidDeckVersion', { version: deck.version }));
+    message.error(i18n.t('storage.messages.invalidDeckVersion', { version: deck.version }));
     return null;
   }
 
   if (semver.lt(deck.version, appVersion)) {
     return runMigrations(deck, appVersion);
   } else if (semver.gt(deck.version, appVersion)) {
-    alert(i18n.t('storage.messages.updateRequired', { appVersion, deckVersion: deck.version }));
+    message.error(i18n.t('storage.messages.updateRequired', { appVersion, deckVersion: deck.version }));
     return null;
   }
 
@@ -65,7 +65,7 @@ class DeckStorage {
         return null;
 
       let deck;
-      let error = i18n.t('storage.messages.unknownError');
+      let error;
 
       try {
         deck = DeckStorage.read(fname);
@@ -74,8 +74,8 @@ class DeckStorage {
         error = e.message;
       }
 
-      if (!deck) {
-        message.error(i18n.t('storage.messages.couldNotOpenDeck', { error }));
+      if (error) {
+        message.error(i18n.t('storage.messages.couldNotOpenDeck', { error: error }));
         return null;
       }
 

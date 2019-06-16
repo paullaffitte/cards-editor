@@ -1,11 +1,12 @@
 import semver from 'semver';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
+import i18n from '../constants/i18n';
 import Wrapper from './Wrapper';
 
 const makeMigration = (version, migration) => ({
   version,
   migrate: deck => {
-    console.log(`migrating deck from ${deck.version} to ${version}`);
+    message.info(i18n.t('migrations.messages.migratingDeck', { from: deck.version, to: version}));
     return { ...migration(deck), version };
   }
 });
@@ -30,8 +31,8 @@ const migrations = [
 
     newDeck.filename = projectFolder + '/deck.json';
     notification.warning({
-      message: 'Deck from an old version',
-      description: `This deck is from an older version than your software. This version now save projects in folders instead of plain files. Thus we moved your project in a new folder. (${projectFolder})`,
+      message: i18n.t('migrations.messages.oldDeckVersion'),
+      description: i18n.t('migrations.messages.oldDeckVersionDescription', { projectFolder }),
       placement: 'bottomLeft',
       duration: 10
     });
