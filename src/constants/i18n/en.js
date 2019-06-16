@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   confirmation: 'Confirmation',
   noCardSelected: 'No card selected',
   newDeck: 'New deck',
@@ -27,6 +27,24 @@ export default {
     },
   },
   electron: {
+    menu: {
+      file: 'File',
+      view: 'View',
+      devTools: 'Dev tools',
+      new: 'New',
+      open: 'Open',
+      save: 'Save',
+      saveAs: 'Save as',
+      exportAsPDF: 'Export as PDF',
+      quit: 'Quit',
+      resetZoom: 'Reset zoom',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      reload: 'Reload',
+      forceReload: 'Force reload',
+      toggleDevTools: 'Toggle dev tools',
+      inspectElement: 'Inspect element',
+    },
     messages: {
       fileNotFound: 'File not found ({{filename}})',
       directoryNotEmpty: 'This directory is not empty. You can only save your deck in an empty folder',

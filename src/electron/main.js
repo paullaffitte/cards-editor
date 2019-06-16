@@ -4,6 +4,7 @@ const SystemFonts = require('system-font-families');
 const path = require('path');
 const fs = require('fs');
 const MenuActions = require('./MenuActions');
+const i18n = require('../constants/i18n');
 
 const systemFonts = new SystemFonts.default();
 
@@ -34,28 +35,35 @@ function camelize(str) {
   }).replace(/\s+/g, '');
 }
 
-function menuLabelWithEvent(label, accelerator=null) {
-  accelerator = accelerator ? {accelerator} : {};
+function menuLabelWithEvent(label, accelerator) {
   const name = camelize(label);
   return {
     label,
-    ...accelerator,
+    accelerator,
     click: () => sendAppEvent(name)
+  };
+}
+
+function menuRole(role, accelerator) {
+  return {
+    role,
+    accelerator,
+    label: i18n.t(`electron.menu.${role}`),
   };
 }
 
 const menuTemplate = [
   {
-    label: 'File',
+    label: i18n.t('electron.menu.file'),
     submenu: [
-      menuLabelWithEvent('New', 'CmdOrCtrl+N'),
-      menuLabelWithEvent('Open', 'CmdOrCtrl+O'),
-      menuLabelWithEvent('Save', 'CmdOrCtrl+S'),
-      menuLabelWithEvent('Save as', 'Shift+CmdOrCtrl+S'),
+      menuLabelWithEvent(i18n.t('electron.menu.new'), 'CmdOrCtrl+N'),
+      menuLabelWithEvent(i18n.t('electron.menu.open'), 'CmdOrCtrl+O'),
+      menuLabelWithEvent(i18n.t('electron.menu.save'), 'CmdOrCtrl+S'),
+      menuLabelWithEvent(i18n.t('electron.menu.saveAs'), 'Shift+CmdOrCtrl+S'),
       {type: 'separator'},
-      menuLabelWithEvent('Export as PDF', 'CmdOrCtrl+E'),
+      menuLabelWithEvent(i18n.t('electron.menu.exportAsPDF'), 'CmdOrCtrl+E'),
       {type: 'separator'},
-      {role: 'quit', accelerator: 'Alt+F4'},
+      menuRole('quit', 'Alt+F4'),
     ]
   },
   /*
@@ -68,22 +76,22 @@ const menuTemplate = [
   },
   */
   {
-    label: 'View',
+    label: i18n.t('electron.menu.view'),
     submenu: [
-      {role: 'resetZoom'},
-      {role: 'zoomIn'},
-      {role: 'zoomOut' }
+      menuRole('resetZoom'),
+      menuRole('zoomIn'),
+      menuRole('zoomOut'),
     ]
   }
 ];
 
 if (isDev)
   menuTemplate.push({
-    label: 'Dev tools',
+    label: i18n.t('electron.menu.devTools'),
     submenu: [
-      {role: 'reload'},
-      {role: 'forceReload'},
-      {role: 'toggleDevTools'},
+      menuRole('reload'),
+      menuRole('forceReload'),
+      menuRole('toggleDevTools'),
     ]
   });
 
@@ -157,7 +165,7 @@ function openDevTools() {
   mainWindow.webContents.on('context-menu', (e, props) => {
     Menu.buildFromTemplate([
       {
-        label: 'Inspect element',
+        label: i18n.t('electron.menu.inspectElement'),
         click() {
           mainWindow.inspectElement(props.x, props.y);
         },
