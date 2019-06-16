@@ -28,7 +28,7 @@ Wrapper.init();
 Wrapper.on('availableFonts', (e, fonts) => store.dispatch(DeckActions.updateAvailableFonts(fonts)));
 Wrapper.on('quit', () => getCurrentDeck(store.getState()).updated ? Modal.confirm({
   title: i18n.t('confirmation'),
-  content: i18n.t('messages.unsavedChanges'),
+  content: i18n.t('messages.unsavedChanges', { ifYou: i18n.t('messages.unsavedChangesQuit') }),
   okText: 'Quit',
   onOk: quit
 }) : quit());

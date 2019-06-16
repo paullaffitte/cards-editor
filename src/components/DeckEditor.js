@@ -38,13 +38,14 @@ class DeckEditor extends Component {
   }
 
   onNew = () => {
-    const newDeck = () => this.props.dispatch(DeckActions.newDeck());
+    const { dispatch, deck, t } = this.props;
+    const newDeck = () => dispatch(DeckActions.newDeck());
 
-    if (this.props.deck.updated) {
+    if (deck.updated) {
       Modal.confirm({
-        title: this.props.t('confirmation'),
-        content: this.props.t('messages.unsavedChangesNewDeck'),
-        okText: this.props.t('newDeck'),
+        title: t('confirmation'),
+        content: t('messages.unsavedChanges', { ifYou: t('messages.unsavedChangesNew') }),
+        okText: t('newDeck'),
         onOk : close => {
           newDeck();
           close();

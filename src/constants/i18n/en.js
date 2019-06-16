@@ -4,8 +4,9 @@ module.exports = {
   newDeck: 'New deck',
   unsavedChanges: 'unsaved changes',
   messages: {
-    unsavedChanges: 'Your deck has unsaved changes. If you quit now, these changes will be lost',
-    unsavedChangesNewDeck: 'Your deck has unsaved changes. If you create a new deck now, these changes will be lost',
+    unsavedChangesQuit: 'quit',
+    unsavedChangesNew: 'create a new deck',
+    unsavedChanges: 'Your deck has unsaved changes. If you {{ifYou}} now, these changes will be lost',
     cannotDeleteModelCard: "A card used as a model can't be deleted ({{childNames}})",
     confirmDeleteItem: "Are you sure to delete this item ? (it can't be undone)",
   },
@@ -114,7 +115,7 @@ module.exports = {
     messages: {
       multipleCardSizes: 'This deck have multiple card sizes, please fix them before export.',
       confirmAnyway: 'I understand but I still want to export my deck.',
-      cardWithoutBackground: "This card doesn't has any background. However, this card will take the same size than other cards. ({{expectedWidth}}x{{expectedHeight}})",
+      cardWithoutBackground: "This card doesn't has any background. However, it will take the same size than other cards. ({{expectedWidth}}x{{expectedHeight}})",
       cardBackgroundSizeDoesntMatch: "The background's size of this card doesn't match others cards' backgrounds sizes (expected to be {{expectedWidth}}x{{expectedHeight}} but is {{width}}x{{height}})",
     },
   },
