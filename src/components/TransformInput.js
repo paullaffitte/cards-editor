@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, InputNumber, Input, Select, Row, Col } from 'antd'
+import { withTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
@@ -40,15 +41,16 @@ class TransformInput extends Component {
   getScaleConfig(scaleUnit) {
     switch (scaleUnit) {
       case '%':
-        return { label: 'Scale', step: 0.1 };
+        return { label: this.props.t('transform.scale'), step: 0.1 };
       default:
-        return { label: 'Size', step: 1 };
+        return { label: this.props.t('transform.size'), step: 1 };
     }
   }
 
   render() {
-    const scaleConfig = this.getScaleConfig(this.props.scaleUnit);
-    const span = this.props.disableTextOption ? 8 : 5;
+    const { scaleUnit, disableTextOption, t } = this.props;
+    const scaleConfig = this.getScaleConfig(scaleUnit);
+    const span = disableTextOption ? 8 : 5;
 
     return (
       <Row key={this.props.name}>
@@ -80,7 +82,7 @@ class TransformInput extends Component {
 
         { !this.props.disableTextOption ? (
           <Col span={span - 1} style={{ paddingRight: '1em' }}>
-            <Form.Item label="Color">
+            <Form.Item label={ t('transform.color') }>
               <Input
                 type="color"
                 value={this.state.color}
@@ -92,10 +94,10 @@ class TransformInput extends Component {
 
         { !this.props.disableTextOption ? (
           <Col span={span}>
-            <Form.Item label="Font">
+            <Form.Item label={ t('transform.font') }>
               <Select
                 showSearch
-                placeholder="Select a font"
+                placeholder={ t('transform.selectFont') }
                 optionFilterProp="children"
                 value={this.state.font}
                 onChange={ value => this.handleChange({ font: value }) }
@@ -114,4 +116,4 @@ const mapStateToProps = state => ({
   availableFonts: state.availableFonts
 });
 
-export default connect(mapStateToProps)(TransformInput);
+export default withTranslation('translation', { withRef: true })(connect(mapStateToProps)(TransformInput));

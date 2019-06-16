@@ -105,7 +105,7 @@ class ItemChooser extends Component {
           <DragDropContext onDragEnd={ this.onDragEnd }>
             <ItemSelect
               type={ this.props.type }
-              value={ t('itemChooser.addItem') }
+              placeholder={ t('itemChooser.addItem') }
               preprocess={ this.preprocessOption }
               onChange={ this.onAdd(t) }
               key={ 'new' }

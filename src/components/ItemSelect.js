@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Select } from 'antd';
+import { withTranslation } from 'react-i18next';
 import { getItems, getItemById } from '../state/selectors/deck';
 
 const { Option } = Select;
@@ -15,7 +16,7 @@ class ItemSelect extends Component {
         value={ item.id }
         key={ item.id + '-' + parentId }
       >
-        { item.name ? item.name : <span className="comment">no name</span> }
+        { item.name ? item.name : <span className="comment">{this.props.t('itemSelect.noName')}</span> }
       </Option>
     );
   };
@@ -28,17 +29,18 @@ class ItemSelect extends Component {
   };
 
   render() {
+    const { sort, t } = this.props;
     const items = this.props.items(this.props.type, this.props.preprocess ? this.props.preprocess : (i => i));
 
-    if (this.props.sort)
-      items.sort(this.props.sort);
+    if (sort)
+      items.sort(sort);
 
     return (
       <Select
         className="ItemSelect"
         showSearch
         style={{ width: 200, ...(this.props.style ? this.props.style : {}) }}
-        placeholder={ this.props.placeholder ? this.props.placeholder : 'Select an item' }
+        placeholder={ this.props.placeholder ? this.props.placeholder : t('itemSelect.selectAnItem') }
         value={ this.props.value }
         onChange={ this.onChange }
         onFocus={ this.props.onFocus ? this.props.onFocus : null }
@@ -58,4 +60,4 @@ const mapStateToProps = state => ({
   getItem: (type, id) => getItemById({ type, id })
 });
 
-export default connect(mapStateToProps)(ItemSelect);
+export default withTranslation()(connect(mapStateToProps)(ItemSelect));

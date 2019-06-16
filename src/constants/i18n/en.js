@@ -2,6 +2,7 @@ export default {
   confirmation: 'Confirmation',
   noCardSelected: 'No card selected',
   newDeck: 'New deck',
+  unsavedChanges: 'unsaved changes',
   messages: {
     unsavedChanges: 'Your deck has unsaved changes. If you quit now, these changes will be lost',
     unsavedChangesNewDeck: 'Your deck has unsaved changes. If you create a new deck now, these changes will be lost',
@@ -43,6 +44,10 @@ export default {
       alreadyAdded: 'Item already added',
       notFound: 'Item not found',
     },
+  },
+  itemSelect: {
+    selectAnItem: 'Select an item',
+    noName: 'no name',
   },
   cardTypes: {
     minion: 'Minion',
@@ -89,4 +94,11 @@ export default {
       cardBackgroundSizeDoesntMatch: "The background's size of this card doesn't match others cards' backgrounds sizes (expected to be {{expectedWidth}}x{{expectedHeight}} but is {{width}}x{{height}})",
     },
   },
+  transform: {
+    color: 'Color',
+    font: 'Font',
+    selectFont: 'Select a font',
+    scale: 'Scale',
+    size: 'Size',
+  }
 };

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Layout, Button, Tag } from 'antd';
+import { withTranslation } from 'react-i18next';
 import semver from 'semver'
 import Wrapper from '../services/Wrapper';
 import { getCurrentDeck } from '../state/selectors/deck';
@@ -36,9 +37,11 @@ class StatusBar extends Component {
   doUpdate = () => Wrapper.openUrl(this.state.latestUrl);
 
   render() {
+    const { t } = this.props;
+
     return (
       <Footer className="StatusBar" style={{ height: this.props.height, lineHeight: this.props.height}}>
-        { [this.props.filename, this.props.updated ? 'unsaved changes' : ''].filter(Boolean).join(' - ') }
+        { [this.props.filename, this.props.updated ? t('unsavedChanges') : ''].filter(Boolean).join(' - ') }
 
         <div className="version">
           { this.state.latest
@@ -63,4 +66,4 @@ const mapStateToProps = (state, props) => {
   }
 };
 
-export default connect(mapStateToProps)(StatusBar);
+export default withTranslation()(connect(mapStateToProps)(StatusBar));
