@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
 import { message } from 'antd';
-import { Translation } from 'react-i18next';
+import { withTranslation } from "react-i18next";
 import DeckActions from '../state/actions/deck';
 import ItemSelect from './ItemSelect';
 import Item from './Item';
@@ -27,20 +27,20 @@ class ItemChooser extends Component {
     }
   }
 
-  onAdd = t => id => {
+  onAdd = id => {
     if (this.state.value.findIndex(itemId => itemId === id) === -1) {
       this.change([ ...this.state.value, id ]);
     } else {
-      message.warning(t('itemChooser.messages.alreadyAdded'));
+      message.warning(this.props.t('itemChooser.messages.alreadyAdded'));
     }
   };
 
-  onChange = (id, update, t) => {
+  onChange = (id, update) => {
     const itemIndex = this.state.value.findIndex(itemId => itemId === id);
     const value = [ ...this.state.value ];
 
     if (itemIndex === -1) {
-      message.error(t('itemChooser.messages.notFound'));
+      message.error(this.props.t('itemChooser.messages.notFound'));
       return;
     }
 
@@ -62,26 +62,23 @@ class ItemChooser extends Component {
 
   renderItem = (id, index) => {
     return (
-      <Translation key={ id }>
-        { t => (
-          <Item
-            index={ index }
-            item={{ id }}
-            style={{ height: '2.8em' }}
-            onEdit={ this.props.edition === true ? this.onEdit : null }
-            onDelete={ this.onDelete }
-            confirmDelete={ t('cardForm.messages.confirmRemoveModel')}
-          >
-            <ItemSelect
-              type={ this.props.type }
-              value={ id }
-              preprocess={ item => this.preprocessOption(item, id) }
-              onChange={ update => this.onChange(id, update, t) }
-              id={ id }
-            />
-          </Item>
-        ) }
-      </Translation>
+      <Item
+        index={ index }
+        item={{ id }}
+        key={ id }
+        style={{ height: '2.8em' }}
+        onEdit={ this.props.edition === true ? this.onEdit : null }
+        onDelete={ this.onDelete }
+        confirmDelete={ this.props.t('cardForm.messages.confirmRemoveModel')}
+      >
+        <ItemSelect
+          type={ this.props.type }
+          value={ id }
+          preprocess={ item => this.preprocessOption(item, id) }
+          onChange={ update => this.onChange(id, update) }
+          id={ id }
+        />
+      </Item>
     );
   };
 
@@ -99,30 +96,28 @@ class ItemChooser extends Component {
   };
 
   render() {
+    const { t } = this.props;
+
     return (
-      <Translation>
-        { t => (
-          <DragDropContext onDragEnd={ this.onDragEnd }>
-            <ItemSelect
-              type={ this.props.type }
-              placeholder={ t('itemChooser.addItem') }
-              preprocess={ this.preprocessOption }
-              onChange={ this.onAdd(t) }
-              key={ 'new' }
-            />
-            <Droppable droppableId="droppable">
-              { provided => (
-                <div
-                  ref={ provided.innerRef }
-                >
-                  { this.state.value ? this.state.value.map(this.renderItem) : null }
-                  { provided.placeholder }
-                </div>
-              ) }
-            </Droppable>
-          </DragDropContext>
-        ) }
-      </Translation>
+      <DragDropContext onDragEnd={ this.onDragEnd }>
+        <ItemSelect
+          type={ this.props.type }
+          placeholder={ t('itemChooser.addItem') }
+          preprocess={ this.preprocessOption }
+          onChange={ this.onAdd }
+          key={ 'new' }
+        />
+        <Droppable droppableId="droppable">
+          { provided => (
+            <div
+              ref={ provided.innerRef }
+            >
+              { this.state.value ? this.state.value.map(this.renderItem) : null }
+              { provided.placeholder }
+            </div>
+          ) }
+        </Droppable>
+      </DragDropContext>
     );
   }
 }
@@ -131,4 +126,4 @@ const actions = {
   editItem: DeckActions.selectItem
 };
 
-export default connect(null, actions)(ItemChooser);
+export default withTranslation('translation', { withRef: true })(connect(null, actions)(ItemChooser));

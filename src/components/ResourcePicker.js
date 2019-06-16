@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Icon, Modal, Button, message } from 'antd';
-import { Translation } from 'react-i18next';
+import { withTranslation } from "react-i18next";
 import ResourcesEditor from './ResourcesEditor'
 import { getResources, getProjectDirectory } from '../state/selectors/deck';
 
@@ -29,10 +29,10 @@ class ResourcePicker extends Component {
     this.setState({ preview: {name, url, path} });
   };
 
-  toggleModal = (visible, t) => {
+  toggleModal = visible => {
     if (visible && this.props.value) {
       if (!(this.props.value in this.props.resources))
-        message.error(t('resourcePicker.messages.notFound', { resourcePath: this.props.value }));
+        message.error(this.props.t('resourcePicker.messages.notFound', { resourcePath: this.props.value }));
       else {
         const { name, url, path } = this.props.resources[this.props.value];
         const preview = { name, url, path };
@@ -55,44 +55,40 @@ class ResourcePicker extends Component {
 
   render() {
     const { preview, modalOpened } = this.state;
-    const { projectDirectory } = this.props;
+    const { projectDirectory, t } = this.props;
     const previewPath = preview.path && preview.path.indexOf(projectDirectory) === 0
       ? preview.path.slice(projectDirectory.length)
       : preview.path;
 
     return (
-      <Translation>
-        { t => (
-          <Fragment>
-            <div>{ this.state.value }</div>
-            <Button onClick={() => this.toggleModal(true, t)}>
-              <Icon type="search" /> { t('resourcePicker.choose') }
-            </Button>
+      <Fragment>
+        <div>{ this.state.value }</div>
+        <Button onClick={() => this.toggleModal(true)}>
+          <Icon type="search" /> { t('resourcePicker.choose') }
+        </Button>
 
-            <Modal
-              visible={ modalOpened }
-              width='900px'
-              onCancel={ this.onCancel }
-              footer={ [
-                <Button key="back" onClick={ this.onCancel }>{ t('resourcePicker.cancel') }</Button>,
-                <Button key="submit" type="primary" onClick={ this.onSubmit }>{ t('resourcePicker.select') }</Button>,
-              ] }>
-              <h2>Resources</h2>
-              <Row>
-              <Col span={14}>
-                <ResourcesEditor selected={this.state.value} onPreview={this.onPreview} style={{ marginBottom: '1em' }} />
-              </Col>
-              <Col span={9} offset={1}>
-                { preview.url ? (
-                  <img alt="example" style={{ width: '100%' }} src={ preview.url } />
-                ) : null }
-                <span>{ previewPath }</span>
-              </Col>
-              </Row>
-            </Modal>
-          </Fragment>
-        ) }
-      </Translation>
+        <Modal
+          visible={ modalOpened }
+          width='900px'
+          onCancel={ this.onCancel }
+          footer={ [
+            <Button key="back" onClick={ this.onCancel }>{ t('resourcePicker.cancel') }</Button>,
+            <Button key="submit" type="primary" onClick={ this.onSubmit }>{ t('resourcePicker.select') }</Button>,
+          ] }>
+          <h2>Resources</h2>
+          <Row>
+          <Col span={14}>
+            <ResourcesEditor selected={this.state.value} onPreview={this.onPreview} style={{ marginBottom: '1em' }} />
+          </Col>
+          <Col span={9} offset={1}>
+            { preview.url ? (
+              <img alt="example" style={{ width: '100%' }} src={ preview.url } />
+            ) : null }
+            <span>{ previewPath }</span>
+          </Col>
+          </Row>
+        </Modal>
+      </Fragment>
     );
   }
 }
@@ -102,4 +98,4 @@ const mapStateToProps = (state, props) => ({
   resources: getResources(state)
 });
 
-export default connect(mapStateToProps)(ResourcePicker);
+export default withTranslation('translation', { withRef: true })(connect(mapStateToProps)(ResourcePicker));

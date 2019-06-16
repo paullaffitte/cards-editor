@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon, Modal } from 'antd';
-import { Translation } from 'react-i18next';
+import { withTranslation } from "react-i18next";
 import DeckActions from '../state/actions/deck';
 import { getEditedEffect } from '../state/selectors/deck';
 import ActionsTypes from '../constants/ActionsTypes';
@@ -68,10 +68,12 @@ class EffectPicker extends Component {
   onCancel = () => this.toggleModal(false);
 
   render() {
+    const { t } = this.props;
+
     return (
       <div className="EffectPicker">
         <Button onClick={() => this.addEffect()} style={{ marginBottom: '0.5em' }}>
-          <Icon type="plus" /> <Translation>{ t => t('effectPicker.newEffect') }</Translation>
+          <Icon type="plus" /> { t('effectPicker.newEffect') }
         </Button>
         <EffectList
           onSelect={this.onSelect}
@@ -96,4 +98,4 @@ const mapStateToProps = state => ({
   edited: getEditedEffect(state)
 });
 
-export default connect(mapStateToProps)(EffectPicker);
+export default withTranslation('translation', { withRef: true })(connect(mapStateToProps)(EffectPicker));
