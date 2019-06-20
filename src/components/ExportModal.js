@@ -22,9 +22,27 @@ class ExportModal extends Component {
 
   toggleForceExport = forceExport => this.setState({ forceExport });
 
+  getCardsSize(cardSize) {
+    const precision = num => Math.round(num * 100) / 100;
+    const inches = {
+      height: precision(cardSize.height / this.props.exportConfig.dpi),
+      width: precision(cardSize.width / this.props.exportConfig.dpi),
+    };
+    const centimeters = {
+      height: precision(inches.height * 2.54),
+      width: precision(inches.width * 2.54),
+    };
+
+    return {
+      ...cardSize,
+      in: inches,
+      cm: centimeters,
+    };
+  }
+
   render() {
     const { exportConfig, cardSize, t } = this.props;
-    const cardsSize = cardSize;
+    const cardsSize = this.getCardsSize(cardSize);
     const cardsQuantity = Object.values(exportConfig.cardsQuantity).reduce((acc, count) => acc + count, 0);
 
     return (
@@ -52,7 +70,7 @@ class ExportModal extends Component {
             )
             : (
             <React.Fragment>
-              <p>{ t('export.cardsSize') } (px): { cardsSize.width }x{ cardsSize.height }</p>
+              <p>{ t('export.cardsSize') }: { cardsSize.width }x{ cardsSize.height }px - { cardsSize.in.width }x{ cardsSize.in.height }'' - { cardsSize.cm.width }x{ cardsSize.cm.height }cm</p>
               <p>{ t('export.cardsQuantity') }: { cardsQuantity }</p>
             </React.Fragment>
           ) }
