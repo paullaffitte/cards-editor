@@ -21,12 +21,12 @@ const languagesNames = {
 }
 
 module.exports = sendAppEvent => {
-  const menuLabelWithEvent = (label, accelerator) => {
-    const name = camelize(label);
+  const menuLabelWithEvent = (event, accelerator) => {
+    const label = i18n.t('electron.menu.' + event);
     return {
       label,
       accelerator,
-      click: () => sendAppEvent(name)
+      click: () => sendAppEvent(event)
     };
   };
 
@@ -34,12 +34,12 @@ module.exports = sendAppEvent => {
     {
       label: i18n.t('electron.menu.file'),
       submenu: [
-        menuLabelWithEvent(i18n.t('electron.menu.new'), 'CmdOrCtrl+N'),
-        menuLabelWithEvent(i18n.t('electron.menu.open'), 'CmdOrCtrl+O'),
-        menuLabelWithEvent(i18n.t('electron.menu.save'), 'CmdOrCtrl+S'),
-        menuLabelWithEvent(i18n.t('electron.menu.saveAs'), 'Shift+CmdOrCtrl+S'),
+        menuLabelWithEvent('new', 'CmdOrCtrl+N'),
+        menuLabelWithEvent('open', 'CmdOrCtrl+O'),
+        menuLabelWithEvent('save', 'CmdOrCtrl+S'),
+        menuLabelWithEvent('saveAs', 'Shift+CmdOrCtrl+S'),
         {type: 'separator'},
-        menuLabelWithEvent(i18n.t('electron.menu.exportAsPDF'), 'CmdOrCtrl+E'),
+        menuLabelWithEvent('exportAsPDF', 'CmdOrCtrl+E'),
         {type: 'separator'},
         menuRole('quit', 'Alt+F4'),
       ]
