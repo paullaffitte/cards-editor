@@ -113,7 +113,9 @@ module.exports = {
     spacing: 'Spacing',
     export: 'Export',
     cardsSize: 'Cards size',
-    cardsQuantity: 'Cards quantity',
+    cardsPerPage: 'Cards per page',
+    cards: 'Cards',
+    pages: 'Pages',
     messages: {
       multipleCardSizes: 'This deck have multiple card sizes, please fix them before export.',
       confirmAnyway: 'I understand but I still want to export my deck.',

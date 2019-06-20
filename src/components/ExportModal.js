@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Divider, Checkbox } from 'antd';
+import { Modal, Divider, Checkbox, Tag } from 'antd';
 import { withTranslation } from "react-i18next";
 import ExportForm from './ExportForm';
 import { getExportConfig } from '../state/selectors/deck';
+import { paper } from '../constants/sizes';
 import 'antd/dist/antd.css';
+
+const A4 = paper.A4;
 
 class ExportModal extends Component {
 
@@ -40,10 +43,19 @@ class ExportModal extends Component {
     };
   }
 
+  getCardsPerPage(cardsSize) {
+    const { exportConfig } = this.props;
+    const x = A4.width / (cardsSize.cm.width * 10 + exportConfig.spacing);
+    const y = A4.height / (cardsSize.cm.height * 10 + exportConfig.spacing);
+
+    return Math.floor(x) * Math.floor(y);
+  }
+
   render() {
     const { exportConfig, cardSize, t } = this.props;
     const cardsSize = this.getCardsSize(cardSize);
     const cardsQuantity = Object.values(exportConfig.cardsQuantity).reduce((acc, count) => acc + count, 0);
+    const cardsPerPage = this.getCardsPerPage(cardsSize);
 
     return (
       <div>
@@ -70,8 +82,10 @@ class ExportModal extends Component {
             )
             : (
             <React.Fragment>
-              <p>{ t('export.cardsSize') }: { cardsSize.width }x{ cardsSize.height }px - { cardsSize.in.width }x{ cardsSize.in.height }'' - { cardsSize.cm.width }x{ cardsSize.cm.height }cm</p>
-              <p>{ t('export.cardsQuantity') }: { cardsQuantity }</p>
+              <span>{ t('export.cardsSize') }: <Tag>{ cardsSize.width } x { cardsSize.height }px</Tag><Tag>{ cardsSize.in.width } x { cardsSize.in.height }''</Tag><Tag>{ cardsSize.cm.width } x { cardsSize.cm.height }cm</Tag></span><br/>
+              <span>{ t('export.cardsPerPage') }: { cardsPerPage }</span><br/>
+              <span>{ t('export.cards') }: { cardsQuantity }</span><br/>
+              <span>{ t('export.pages') }: { Math.ceil(cardsQuantity / cardsPerPage) }</span><br/>
             </React.Fragment>
           ) }
         </Modal>
