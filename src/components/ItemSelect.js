@@ -45,7 +45,7 @@ class ItemSelect extends Component {
         onBlur={ this.props.onBlur ? this.props.onBlur : null }
         onSearch={ this.props.onSearch ? this.props.onSearch : null }
         optionFilterProp="name"
-        filterOption={ (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 }
+        filterOption={ (input, option) => (typeof option.props.children == 'string' ? option.props.children : '').toLowerCase().indexOf(input.toLowerCase()) >= 0 }
       >
         { items.map(this.renderItem) }
       </Select>
