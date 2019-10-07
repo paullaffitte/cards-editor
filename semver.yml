@@ -1,6 +1,6 @@
 # semver config file -- https://github.com/paullaffitte/semver
 
-version: 1.2.0
+version: 1.2.1
 files:
   README.md: 'latest \([^\(]*\)'
   package.json: '"version": "[^"]*",'
