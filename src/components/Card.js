@@ -101,26 +101,34 @@ function mergeTransforms(t1, t2) {
   return transform;
 }
 
-function mergeCards(...cards) {
-  return cards.reduce((acc, card) => {
-    Object.keys(card).forEach(key => {
-      if (typeof card[key] == 'string' && card[key].length === 0)
-        delete card[key];
+function mergeCardWithModels(state, card) {
+
+  const merge = function(left, right) {
+    Object.keys(left).forEach(key => {
+      if (typeof left[key] == 'string' && left[key].length === 0)
+        delete left[key];
     });
 
-    const mergedCard = { ...card, ...acc };
+    const mergedCard = { ...left, ...right };
     for (let key in mergedCard) {
       if (key.includes('Transform'))
-        mergedCard[key] = mergeTransforms(card[key], acc[key]);
+        mergedCard[key] = mergeTransforms(left[key], right[key]);
     }
 
     return mergedCard;
-  }, {});
+  };
+
+  const models = card.models ? card.models.map(id => getItemById(state, { type: 'CARD', id })) : [];
+
+  return models.reduce((acc, model) => {
+    if (model.models && model.models.length)
+      model = mergeCardWithModels(state, model);
+    return merge(model, acc);
+  }, card);
 };
 
 const mapStateToProps = (state, props) => {
-  const models = props.data.models ? props.data.models.map(id => getItemById(state, { type: 'CARD', id })) : [];
-  const card = mergeCards(props.data, ...models);
+  const card = mergeCardWithModels(state, props.data);
 
   return {
     data: {
