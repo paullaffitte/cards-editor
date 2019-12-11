@@ -5,7 +5,7 @@
     "email": "paul.laffitte@epitech.eu"
   },
   "description": "A cards editor",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "private": true,
   "dependencies": {
     "electron-is-dev": "^1.0.1",
