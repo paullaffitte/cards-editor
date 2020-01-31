@@ -65,7 +65,8 @@
     "files": [
       "build/**/*",
       "node_modules/**/*",
-      "src/electron/**/*"
+      "src/electron/**/*",
+      "src/constants/i18n/**/*"
     ],
     "directories": {
       "buildResources": "./build"
