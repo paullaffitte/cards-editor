@@ -14,7 +14,7 @@
     "i18next": "^17.0.3",
     "immutability-helper": "^3.0.0",
     "key-mirror": "^1.0.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "react": "^16.8.0",
     "react-beautiful-dnd": "^11.0.3",
     "react-dom": "^16.8.0",
